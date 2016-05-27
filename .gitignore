@@ -22,6 +22,7 @@ bin/
 *.dylib
 
 # Executables
+jvm
 *.exe
 *.out
 *.app
