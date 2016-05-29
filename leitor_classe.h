@@ -1,5 +1,5 @@
-#ifndef CLASS_READER_H
-#define CLASS_READER_H
+#ifndef LEITOR_CLASSE_H
+#define LEITOR_CLASSE_H
 
 #include <stdio.h>
 #include <string.h>
@@ -9,10 +9,10 @@
 #include <inttypes.h>
 #include "types.h"
 #include "arquivos.h"
-#include "atributos.h"
-#include "metodos.h"
-#include "campos.h"
-#include "constant_pool.h"
+#include "leitor_atributos.h"
+#include "leitor_metodos.h"
+#include "leitor_campos.h"
+#include "leitor_constant_pool.h"
 #include "validation.h"
 
 #define STR_SIZE 100
@@ -73,4 +73,4 @@ cp_info *carregar_constant_pool(u2 constant_pool_count, FILE *pt_arquivo);
 u2 *ler_interfaces(u2 interfaces_count, FILE *pt_arquivo);
 
 
-#endif /* CLASS_READER_H */
+#endif /* LEITOR_CLASSE_H */

@@ -1,9 +1,7 @@
-#include "constant_pool.h"
+#include "leitor_constant_pool.h"
 
-void inicializar_vetor_funcoes(void (*funcoes_constant[]) (FILE*,cp_info[],u2)) {
-	funcoes_constant[0] = NULL;
+void inicializar_vetor_funcoes(void (*funcoes_constant[]) (FILE*,cp_info[],u2,u1)) {
 	funcoes_constant[1] = criar_utf8_info;
-	funcoes_constant[2] = NULL;
 	funcoes_constant[3] = criar_integer_info;
 	funcoes_constant[4] = criar_float_info;
 	funcoes_constant[5] = criar_long_info;
@@ -16,12 +14,10 @@ void inicializar_vetor_funcoes(void (*funcoes_constant[]) (FILE*,cp_info[],u2)) 
 	funcoes_constant[12] = criar_name_and_type_info;
 }
 
-void criar_class_info(FILE *pt_arquivo, cp_info const_pool[], u2 index) {
+void criar_class_info(FILE *pt_arquivo, cp_info const_pool[], u2 index, u1 tag) {
 	constant_class_info class_info;
-	u1 tag=0x07;
 	u2 name_index = ler_u2(pt_arquivo);
 
-	class_info.tag = tag;
 	class_info.name_index = name_index;
 
 	const_pool[index].tag = tag;
@@ -29,13 +25,11 @@ void criar_class_info(FILE *pt_arquivo, cp_info const_pool[], u2 index) {
 }
 
 
-void criar_fieldref_info(FILE *pt_arquivo, cp_info const_pool[], u2 index) {
+void criar_fieldref_info(FILE *pt_arquivo, cp_info const_pool[], u2 index, u1 tag) {
 	constant_fieldref_info fieldref_info;
-	u1 tag=0x09;
 	u2 class_index=ler_u2(pt_arquivo);
 	u2 name_and_type_index=ler_u2(pt_arquivo);
 
-	fieldref_info.tag = tag;
 	fieldref_info.class_index = class_index;
 	fieldref_info.name_and_type_index = name_and_type_index;
 
@@ -45,13 +39,11 @@ void criar_fieldref_info(FILE *pt_arquivo, cp_info const_pool[], u2 index) {
 }
 
 
-void criar_utf8_info(FILE *pt_arquivo, cp_info const_pool[], u2 index) {
+void criar_utf8_info(FILE *pt_arquivo, cp_info const_pool[], u2 index, u1 tag) {
 	constant_utf8_info utf8_info;
-	u1 tag=0x01;
 	int i;
 	u2 length=ler_u2(pt_arquivo);
 
-	utf8_info.tag = tag;
 	utf8_info.length = length;
 	utf8_info.bytes = (u1*)malloc(sizeof(u1)*length);
 	for(i=0; i<length; i++) {
@@ -63,13 +55,11 @@ void criar_utf8_info(FILE *pt_arquivo, cp_info const_pool[], u2 index) {
 }
 
 
-void criar_methodref_info(FILE *pt_arquivo, cp_info const_pool[], u2 index) {
-	u1 tag=0x0A;
+void criar_methodref_info(FILE *pt_arquivo, cp_info const_pool[], u2 index, u1 tag) {
 	u2 class_index = ler_u2(pt_arquivo);
 	u2 name_and_type_index = ler_u2(pt_arquivo);
 	constant_methodref_info methodref_info;
 
-	methodref_info.tag = tag;
 	methodref_info.class_index = class_index;
 	methodref_info.name_and_type_index = name_and_type_index;
 
@@ -78,12 +68,10 @@ void criar_methodref_info(FILE *pt_arquivo, cp_info const_pool[], u2 index) {
 }
 
 
-void criar_string_info(FILE *pt_arquivo, cp_info const_pool[], u2 index) {
-	u1 tag = 0x08;
+void criar_string_info(FILE *pt_arquivo, cp_info const_pool[], u2 index, u1 tag) {
 	u2 string_index = ler_u2(pt_arquivo);
 	constant_string_info string_info;
 
-	string_info.tag = tag;
 	string_info.string_index = string_index;
 
 	const_pool[index].tag = tag;
@@ -92,13 +80,11 @@ void criar_string_info(FILE *pt_arquivo, cp_info const_pool[], u2 index) {
 }
 
 
-void criar_interface_methodref_info(FILE *pt_arquivo, cp_info const_pool[], u2 index) {
-	u1 tag = 0x0B;
+void criar_interface_methodref_info(FILE *pt_arquivo, cp_info const_pool[], u2 index, u1 tag) {
 	constant_interface_methodref_info interface_methodref_info;
 	u2 class_index = ler_u2(pt_arquivo);
 	u2 name_and_type_index = ler_u2(pt_arquivo);
 
-	interface_methodref_info.tag = tag;
 	interface_methodref_info.class_index = class_index;
 	interface_methodref_info.name_and_type_index = name_and_type_index;
 
@@ -107,26 +93,21 @@ void criar_interface_methodref_info(FILE *pt_arquivo, cp_info const_pool[], u2 i
 }
 
 
-void criar_integer_info(FILE *pt_arquivo, cp_info const_pool[], u2 index) {
-	u1 tag = 0x03;
+void criar_integer_info(FILE *pt_arquivo, cp_info const_pool[], u2 index, u1 tag) {
 	u4 bytes = ler_u4(pt_arquivo);
 	constant_integer_info integer_info;
 
-	integer_info.tag = tag;
 	integer_info.bytes = bytes;
-
 
 	const_pool[index].tag = tag;
 	const_pool[index].info.integer_info = integer_info;
 }
 
 
-void criar_float_info(FILE *pt_arquivo, cp_info const_pool[], u2 index) {
-	u1 tag = 0x04;
+void criar_float_info(FILE *pt_arquivo, cp_info const_pool[], u2 index, u1 tag) {
 	u4 bytes = ler_u4(pt_arquivo);
 	constant_float_info float_info;
 
-	float_info.tag = tag;
 	float_info.bytes = bytes;
 
 	const_pool[index].tag = tag;
@@ -135,27 +116,21 @@ void criar_float_info(FILE *pt_arquivo, cp_info const_pool[], u2 index) {
 }
 
 
-void criar_long_info(FILE *pt_arquivo, cp_info const_pool[], u2 index) {
-	u1 tag = 0x05;
+void criar_long_info(FILE *pt_arquivo, cp_info const_pool[], u2 index, u1 tag) {
 	constant_long_info long_info;
 	u8 bytes = ler_u8(pt_arquivo);
 
-
-	long_info.tag = tag;
 	long_info.bytes = bytes;
 
 	const_pool[index].tag = tag;
 	const_pool[index].info.long_info = long_info;
-
 }
 
 
-void criar_double_info(FILE *pt_arquivo, cp_info const_pool[], u2 index) {
-	u1 tag = 0x06;
+void criar_double_info(FILE *pt_arquivo, cp_info const_pool[], u2 index, u1 tag) {
 	constant_double_info double_info;
 	u8 bytes = ler_u8(pt_arquivo);
 
-	double_info.tag = tag;
 	double_info.bytes = bytes;
 
 	const_pool[index].tag = tag;
@@ -164,13 +139,11 @@ void criar_double_info(FILE *pt_arquivo, cp_info const_pool[], u2 index) {
 }
 
 
-void criar_name_and_type_info(FILE *pt_arquivo, cp_info const_pool[], u2 index) {
-	u1 tag = 0x0C;
+void criar_name_and_type_info(FILE *pt_arquivo, cp_info const_pool[], u2 index, u1 tag) {
 	constant_name_and_type_info name_and_type_info;
 	u2 name_index = ler_u2(pt_arquivo);
 	u2 descriptor_index = ler_u2(pt_arquivo);
 
-	name_and_type_info.tag = tag;
 	name_and_type_info.name_index = name_index;
 	name_and_type_info.descriptor_index = descriptor_index;
 
@@ -183,30 +156,46 @@ void tag_invalida(cp_info const_pool[], u2 index, u2 tag) {
 	const_pool[index].tag = tag;
 }
 
+bool large_numeric(u2 tag) {
+	if((tag==0x06) || (tag==0x05)) return true;
+	return false;
+}
+
 void criar_constant_pool(FILE *pt_arquivo, cp_info const_pool[], u2 tamanho) {
 	u2 i;
 	u1 tag;
-	void (*funcoes_constant[13]) (FILE*,cp_info[],u2);
+	void (*funcoes_constant[13]) (FILE*,cp_info[],u2,u1);
 
 	//Preenche vetor de funcoes
 	inicializar_vetor_funcoes(funcoes_constant);
 
-	//Le e escreve todos os elementos da constant pool no vetor const_pool
-	for(i=0; i<tamanho; i++) {
-		//Le a tag
+	
+	//A primeira entrada de const_pool não é utilizada para facilitar na recuperação
+	//de índices
+	const_pool[0].tag = TAG_0;
+	
+	//Lê e escreve todos os elementos da constant pool no vetor const_pool
+	for(i=1; i<tamanho; i++) {
+		//Lê a tag
 		tag = ler_u1(pt_arquivo);
 
 		if(validar_tag(tag)) {
 			//Executa funcao associada a tag. A funcao ira preencher a entrada.
-			funcoes_constant[tag](pt_arquivo,const_pool,i);
+			funcoes_constant[tag](pt_arquivo,const_pool,i,tag);
+			
+			//Verifica se tag é um double ou long
+			if(large_numeric(tag)) {
+			  const_pool[++i].tag = TAG_LARGE;
+			}
 		} else tag_invalida(const_pool,i,tag);
 	}
 }
 
 cp_info *carregar_constant_pool(u2 constant_pool_count, FILE *pt_arquivo) {
 	  cp_info *const_pool = (cp_info*)malloc(sizeof(cp_info)*constant_pool_count);
-
-	  criar_constant_pool(pt_arquivo,const_pool,constant_pool_count-1);
+	  if (const_pool==NULL) return NULL;
+	  
+	  criar_constant_pool(pt_arquivo,const_pool,constant_pool_count);
 
 	  return const_pool;
 }

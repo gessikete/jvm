@@ -1,5 +1,5 @@
-#ifndef CONSTANT_POOL_H
-#define CONSTANT_POOL_H
+#ifndef LEITOR_CONSTANT_POOL_H
+#define LEITOR_CONSTANT_POOL_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,12 +7,20 @@
 #include "arquivos.h"
 #include "validation.h"
 
+
+//Tag das entradas da constant pool que são precedidas por um double ou um long.
+#define TAG_LARGE 254
+
+//Tag da primeira entrada da constant pool (que não é utilizada para facilitar o acesso
+//elementos da const pool.
+#define TAG_0 255
+
+
 /** Representa uma classe ou interface
 	name_index: um constant_utf8_info representando um nome completo qualificado
 	da classe ou interface nesse arquivo.
 **/
 typedef struct {
-	u1 tag;
 	u2 name_index;
 } constant_class_info;
 
@@ -24,7 +32,6 @@ typedef struct {
 * 	name_and_type_index: indica o nome e o descritor desse field.
 **/
 typedef struct {
-	u1 tag;
 	u2 class_index;
 	u2 name_and_type_index;
 } constant_fieldref_info;
@@ -35,7 +42,6 @@ typedef struct {
 * 	bytes: contem os bytes da string.
 **/
 typedef struct {
-	u1 tag;
 	u2 length;
 	u1 *bytes;			//bytes[length]
 } constant_utf8_info;
@@ -48,7 +54,6 @@ typedef struct {
 * 	name_and_type_index: indica o nome e o descritor do metodo.
 **/
 typedef struct {
-	u1 tag;
 	u2 class_index;
 	u2 name_and_type_index;
 } constant_methodref_info;
@@ -59,7 +64,6 @@ typedef struct {
  * a sequencia de caracteres com a qual o objeto string sera iniciado.
  **/
 typedef struct {
-	u1 tag;
 	u2 string_index;
 } constant_string_info;
 
@@ -71,7 +75,6 @@ typedef struct {
  * do metodo.
  **/
 typedef struct {
-	u1 tag;
 	u2 class_index;
 	u2 name_and_type_index;
 } constant_interface_methodref_info;
@@ -81,7 +84,6 @@ typedef struct {
  *  bytes: representa o valor da constante int.
  **/
 typedef struct {
-	u1 tag;
 	u4 bytes;
 } constant_integer_info;
 
@@ -91,14 +93,12 @@ typedef struct {
  * flutuante padrao IEEE 754.
  **/
 typedef struct {
-	u1 tag;
 	u4 bytes;
 } constant_float_info;
 
 /** Representa uma constante inteira de 8 bytes.
  * */
 typedef struct {
-	u1 tag;
 	u8 bytes;
 } constant_long_info;
 
@@ -107,7 +107,6 @@ typedef struct {
  * de dupla precisao IEEE 754.
  **/
 typedef struct {
-	u1 tag;
 	u8 bytes;
 } constant_double_info;
 
@@ -121,7 +120,6 @@ typedef struct {
 * ou de metodo
 **/
 typedef struct {
-	u1 tag;
 	u2 name_index;
 	u2 descriptor_index;
 } constant_name_and_type_info;
@@ -131,17 +129,17 @@ typedef struct {
 typedef struct {
 	u1 tag;
 	union union_info {
-		constant_class_info class_info;								//tag: 7
-		constant_fieldref_info fieldref_info;						//tag: 9
-		constant_utf8_info utf8_info;								//tag: 1
-		constant_methodref_info methodref_info;						//tag: 10
-		constant_string_info string_info;							//tag: 8
+		constant_class_info class_info;					//tag: 7
+		constant_fieldref_info fieldref_info;				//tag: 9
+		constant_utf8_info utf8_info;					//tag: 1
+		constant_methodref_info methodref_info;				//tag: 10
+		constant_string_info string_info;				//tag: 8
 		constant_interface_methodref_info interface_methodref_info;	//tag: 11
-		constant_integer_info integer_info;							//tag: 3
-		constant_float_info float_info;								//tag: 4
-		constant_long_info long_info;								//tag: 5
-		constant_double_info double_info;							//tag: 6
-		constant_name_and_type_info name_and_type_info;				//tag: 12
+		constant_integer_info integer_info;				//tag: 3
+		constant_float_info float_info;					//tag: 4
+		constant_long_info long_info;					//tag: 5
+		constant_double_info double_info;				//tag: 6
+		constant_name_and_type_info name_and_type_info;			//tag: 12
 	} info;
 } cp_info;
 
@@ -155,7 +153,7 @@ typedef struct {
  * Retorno:
  *       Nada.
  */
-void inicializar_vetor_funcoes(void (*funcoes_constant[]) (FILE*,cp_info[],u2));
+void inicializar_vetor_funcoes(void (*funcoes_constant[]) (FILE*,cp_info[],u2,u1));
 
 
 /*
@@ -182,17 +180,17 @@ void criar_constant_pool(FILE *pt_arquivo, cp_info const_pool[], u2 tamanho);
  * Retorno:
  *       Nada.
  */
-void criar_class_info(FILE *pt_arquivo, cp_info const_pool[], u2 index);
-void criar_fieldref_info(FILE *pt_arquivo, cp_info const_pool[], u2 index);
-void criar_utf8_info(FILE *pt_arquivo, cp_info const_pool[], u2 index);
-void criar_methodref_info(FILE *pt_arquivo, cp_info const_pool[], u2 index);
-void criar_string_info(FILE *pt_arquivo, cp_info const_pool[], u2 index);
-void criar_interface_methodref_info(FILE *pt_arquivo, cp_info const_pool[], u2 index);
-void criar_integer_info(FILE *pt_arquivo, cp_info const_pool[], u2 index);
-void criar_float_info(FILE *pt_arquivo, cp_info const_pool[], u2 index);
-void criar_long_info(FILE *pt_arquivo, cp_info const_pool[], u2 index);
-void criar_double_info(FILE *pt_arquivo, cp_info const_pool[], u2 index);
-void criar_name_and_type_info(FILE *pt_arquivo, cp_info const_pool[], u2 index);
+void criar_class_info(FILE *pt_arquivo, cp_info const_pool[], u2 index, u1 tag);
+void criar_fieldref_info(FILE *pt_arquivo, cp_info const_pool[], u2 index, u1 tag);
+void criar_utf8_info(FILE *pt_arquivo, cp_info const_pool[], u2 index, u1 tag);
+void criar_methodref_info(FILE *pt_arquivo, cp_info const_pool[], u2 index, u1 tag);
+void criar_string_info(FILE *pt_arquivo, cp_info const_pool[], u2 index, u1 tag);
+void criar_interface_methodref_info(FILE *pt_arquivo, cp_info const_pool[], u2 index, u1 tag);
+void criar_integer_info(FILE *pt_arquivo, cp_info const_pool[], u2 index, u1 tag);
+void criar_float_info(FILE *pt_arquivo, cp_info const_pool[], u2 index, u1 tag);
+void criar_long_info(FILE *pt_arquivo, cp_info const_pool[], u2 index, u1 tag);
+void criar_double_info(FILE *pt_arquivo, cp_info const_pool[], u2 index, u1 tag);
+void criar_name_and_type_info(FILE *pt_arquivo, cp_info const_pool[], u2 index, u1 tag);
 
 
 /*
@@ -209,6 +207,16 @@ void tag_invalida(cp_info const_pool[], u2 index, u2 tag);
 
 
 /*
+ * Verifica se tag é um long ou um double.
+ *
+ * Parâmetros:
+ * 	tag: tag a ser avaliada.
+ * Retorno:
+ *       Nada.
+ */
+bool large_numeric(u2 tag);
+
+/*
  * Preenche a constant pool
  *
  * Parâmetros:
@@ -219,4 +227,4 @@ void tag_invalida(cp_info const_pool[], u2 index, u2 tag);
  */
 cp_info *carregar_constant_pool(u2 constant_pool_count, FILE *pt_arquivo);
 
-#endif /* CONSTANT_POOL_H */
+#endif /* LEITOR_CONSTANT_POOL_H */

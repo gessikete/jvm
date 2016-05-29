@@ -1,4 +1,4 @@
-#include "class_reader.h"
+#include "leitor_classe.h"
 
 class_file *carregar_classe(char *nome_arquivo){
 	FILE *pt_arquivo = NULL;
@@ -75,14 +75,17 @@ class_file *carregar_classe(char *nome_arquivo){
 	pt_classe->methods = carregar_methods(pt_classe->methods_count, pt_classe->constant_pool_count,
 						 pt_classe->constant_pool, pt_arquivo);
 
+	
 	// Tentar ler o número de atributos para essa classe
 	pt_classe->attributes_count = ler_u2(pt_arquivo);
+	
 
 	// Tenta carregar o array de atributos. Cada elemento representa uma estrutura
-	// coontendo informações do atributo
-	pt_classe->attributes = carregar_atributos(pt_classe->attributes_count, pt_classe->constant_pool_count,
-							pt_classe->constant_pool, pt_arquivo);
+	// contendo informações do atributo
+	pt_classe->attributes = carregar_atributos(pt_arquivo, pt_classe->attributes_count,
+							pt_classe->constant_pool, pt_classe->constant_pool_count);
 
+	
     // Tenta fechar o arquivo depois que a classe foi completamene carregada
 	fechar_arquivo(pt_arquivo);
 	return pt_classe;

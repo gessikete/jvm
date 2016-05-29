@@ -1,3 +1,7 @@
+# Junk
+*.c~
+*.h~
+
 # Object files
 *.o
 *.ko

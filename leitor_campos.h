@@ -1,9 +1,9 @@
-#ifndef CAMPOS_H
-#define CAMPOS_H
+#ifndef LEITOR_CAMPOS_H
+#define LEITOR_CAMPOS_H
 
 #include "types.h"
-#include "atributos.h"
-#include "constant_pool.h"
+#include "leitor_atributos.h"
+#include "leitor_constant_pool.h"
 
 /* Definição das estruturas de campos */
 typedef struct {
@@ -30,4 +30,4 @@ typedef struct {
  */
 field_info *carregar_fields(u2 fields_count, u2 constant_pool_count, cp_info *constant_pool, FILE *pt_arquivo);
 /* Fim da definição dos métodos de campos */
-#endif
+#endif /* LEITOR_CAMPOS_H */

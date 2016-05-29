@@ -1,9 +1,10 @@
-#ifndef METODOS_H
-#define METODOS_H
+#ifndef LEITOR_METODOS_H
+#define LEITOR_METODOS_H
 
 #include "types.h"
-#include "atributos.h"
-#include "constant_pool.h"
+#include "arquivos.h"
+#include "leitor_atributos.h"
+#include "leitor_constant_pool.h"
 
 /* Definição das estruturas de métodos */
 typedef struct {
@@ -32,4 +33,4 @@ typedef struct {
 method_info *carregar_methods(u2 methods_count, u2 constant_pool_count, cp_info *constant_pool, FILE *pt_arquivo);
 /* Fim da declaração dos métodos */
 
-#endif /* METODOS_H */
+#endif /* LEITOR_METODOS_H */
