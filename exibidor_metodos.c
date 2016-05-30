@@ -1,17 +1,20 @@
 #include "exibidor_metodos.h"
 
-void exibir_metodos(method_info *methods, u2 methods_count){
+void exibir_metodos(method_info *methods, u2 methods_count, cp_info *const_pool){
+	u2 i, j;
 
-	int i;
-	u2 flag = methods->access_flags;
+	for(i = 0; i < methods_count; i++) {
+		u2 name_index = methods->name_index;
+		u2 descriptor_index = methods->descriptor_index;
+		u2 flag = methods->access_flags;
 
-	printf("Metodos - Access Flags: %02x\n",methods->access_flags);
-	printf("Metodos - Name Index: %02x\n",methods->name_index);
-	printf("Metodos - Description Index: %02x\n",methods->descriptor_index);
-	printf("Metodos - Attributes Count: %02x\n",methods->attributes_count);
+		char *method_name = recupera_string(const_pool, name_index);
 
-	for(i = 0; i < methods_count; i++){
-		printf("\tFields - Access Flag: %02x [",flag);
+		printf("\n-----------------\n");
+		printf("\n[%d] %s", i, method_name);
+		printf("\nName: cp_info #%d <%s>", name_index, method_name);
+		printf("\nDescriptor: cp_info #%d <%s>", descriptor_index, recupera_string(const_pool, descriptor_index));
+		printf("\nAccess flags: %06x [", flag);
 		while(flag != 0){
 			if(flag >= SYNTHETIC){
 				flag -= SYNTHETIC;
@@ -48,6 +51,10 @@ void exibir_metodos(method_info *methods, u2 methods_count){
 				printf(" public");
 			}
 		}
-			printf("]\n");
+		printf("]\n\n");
+		for(j = 0; j < methods->attributes_count; j++){
+			exibir_code_attribute(methods->attributes[j], const_pool);
+		}
 	}
+	printf("\n\n\n");
 }

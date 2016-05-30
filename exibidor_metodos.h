@@ -13,12 +13,14 @@
 #include "leitor_metodos.h"
 #include "leitor_campos.h"
 #include "leitor_constant_pool.h"
+#include "exibidor_atributos.h"
 #include "validation.h"
+#include "recuperar_constant_pool.h"
 
 
 /* Parte 1 */
 
-/*  Mostra Na Tela todos os metodos 
+/*  Mostra Na Tela todos os metodos
 	Recebe o Ponteiro de metodos e
 	a quantidade de metodod
  */
@@ -35,6 +37,6 @@
 #define STRICT 0x0800
 #define SYNTHETIC 0x1000
 
-void exibir_metodos(method_info *methods, u2 methods_count);
+void exibir_metodos(method_info *methods, u2 methods_count, cp_info *const_pool);
 
 #endif

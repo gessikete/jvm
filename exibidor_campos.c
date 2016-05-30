@@ -1,13 +1,21 @@
 #include "exibidor_campos.h"
 #include "exibidor_atributos.h"
 
-void exibir_fields(field_info *fields, u2 fields_count){
-	int i;
-	u2 flag = fields->access_flags;
+void exibir_fields(field_info *fields, u2 fields_count, cp_info *const_pool){
+	u2 i;
 
-	for(i=0; i < fields_count; i++){
-	//Access flag para o campo
-		printf("\tFields - Access Flag: %02x [",flag);
+	for(i = 0; i < fields_count; i++) {
+		u2 name_index = fields->name_index;
+		u2 descriptor_index = fields->descriptor_index;
+		u2 flag = fields->access_flags;
+
+		char *field_name = recupera_string(const_pool, name_index);
+
+		printf("\n-----------------\n");
+		printf("\n[%d] %s", i, field_name);
+		printf("\nName: cp_info #%d <%s>", name_index, field_name);
+		printf("\nDescriptor: cp_info #%d <%s>", descriptor_index, recupera_string(const_pool, descriptor_index));
+		printf("\nAccess flags: %06x [", flag);
 		while(flag != 0){
 			if(flag >= ENUM){
 				flag -= ENUM;
@@ -34,19 +42,8 @@ void exibir_fields(field_info *fields, u2 fields_count){
 				flag -= PUBLIC;
 				printf(" public");
 			}
-			printf("]\n");
 		}
-	//index de constant_pool válido, contendo um constant_u8_info
-	printf("\tFields - Name Index: %02x\n", fields->name_index);
-	//index de descrição para o campo
-	printf("\tFields - Descriptor Index: %02x\n", fields->descriptor_index);
-	//número de atributos do campo com mesmo fields->access_flag
-	printf("\tFields - Attributes Count: %02x\n", fields->attributes_count);
-
-		//for(j = 0; j < attributes_count; j++){
-
-				//EXIBIDOR DE ATTRIBUTES
-//}
+		printf("]\n");
 	}
+	printf("\n\n\n");
 }
-

@@ -13,12 +13,13 @@
 #include "leitor_metodos.h"
 #include "leitor_campos.h"
 #include "leitor_constant_pool.h"
+#include "recuperar_constant_pool.h"
 #include "validation.h"
 
 
 /* Parte 1 */
 
-/*  Mostra Na Tela todos os fields 
+/*  Mostra Na Tela todos os fields
 	Recebe o Ponteiro de fields e
 	a quantidade de fields
  */
@@ -31,6 +32,6 @@
 #define TRANSCIENT 0x0080
 #define ENUM 0x4000
 
-void exibir_fields(field_info *fields, u2 fields_count);
+void exibir_fields(field_info *fields, u2 fields_count, cp_info *const_pool);
 
 #endif
