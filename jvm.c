@@ -11,8 +11,7 @@
  *      - Alisson Carvalho              12/0072521
  *      - Ana Carolina Lopes            11/0107578
  *      - Géssica Neves Sodré da Silva  11/0146115
- *      - Ivan                          10/0088031
- *      - Laís                          00/0000000
+ *      - Ivan Sena                     10/0088031
  *
  *  Arquivo fonte principal "jvm.c"
  *
@@ -21,8 +20,7 @@
 
 #include <stdio.h>
 #include "leitor_classe.h"
-#include "exibidor_constant_pool.h"
-#include "exibidor_atributos.h"
+#include "exibidor_classe.h"
 
 int main(int argc, char*argv[]){
 	class_file *class;
@@ -35,10 +33,9 @@ int main(int argc, char*argv[]){
 
 	class = carregar_classe(argv[1]);
 	if(class) {
-		exibir_constant_pool(class->constant_pool,class->constant_pool_count);
-		//exibir_code_attribute(class->attributes[0],class->constant_pool);
-	  
+		exibir_classe(class);
+		// desalocar_classe(class);
 	}
-	
+
     return 0;
 }

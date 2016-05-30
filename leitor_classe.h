@@ -12,7 +12,6 @@
 #include "leitor_atributos.h"
 #include "leitor_metodos.h"
 #include "leitor_campos.h"
-#include "leitor_constant_pool.h"
 #include "validation.h"
 
 #define STR_SIZE 100
@@ -49,18 +48,6 @@ typedef struct {
 class_file *carregar_classe(char *nome_arquivo);
 
 /*
- * Carrega os elementos da constant_pool
- *
- * Parâmetros:
- *       u2 constant_pool_count: número de elementos + 1 da constant_pool
- *       FILE *pt_arquivo: ponteiro para o arquivo binário da classe
- *
- * Retorno:
- *       cp_info *: ponteiro para a estrutura com a constant_pool preenchida
- */
-cp_info *carregar_constant_pool(u2 constant_pool_count, FILE *pt_arquivo);
-
-/*
  * Lê os valores referentes aos índices para a constant_pool das interfaces
  *
  * Parâmetros:
@@ -72,5 +59,25 @@ cp_info *carregar_constant_pool(u2 constant_pool_count, FILE *pt_arquivo);
  */
 u2 *ler_interfaces(u2 interfaces_count, FILE *pt_arquivo);
 
+/*
+ * Desaloca o espaço alocado para o array de interfaces
+ *
+ * Parâmetros:
+ *      u2 *pt_interfaces: ponteiro para o array de interfaces
+ * Retorno:
+ *      Nenhum
+ */
+void desalocar_interfaces(u2 *pt_interfaces);
+
+/*
+ * Desaloca o espaço alocado para a estrutura da classe
+ *
+ * Parâmetros:
+ *      class_file *pt_classe: ponteiro para a estrutura contento as informações da classe
+ *
+ * Retorno:
+ *      Nenhum
+ */
+void desalocar_classe(class_file *pt_classe);
 
 #endif /* LEITOR_CLASSE_H */

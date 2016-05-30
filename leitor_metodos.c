@@ -5,7 +5,7 @@ method_info *carregar_methods(u2 methods_count, u2 constant_pool_count, cp_info 
     int i = 0; // índice para laço for
 
     // Tenta alocar na memória espaço para o vetor de métodos
-    pt_method = (method_info *) malloc(sizeof(method_info) * methods_count); // TODO DESALOCAR DA MEMÓRIA NO FINAL DE TODA A EXECUÇÃO
+    pt_method = (method_info *) malloc(sizeof(method_info) * methods_count);
     if(pt_method == NULL){
         return false;
     }
@@ -32,4 +32,16 @@ method_info *carregar_methods(u2 methods_count, u2 constant_pool_count, cp_info 
     }
 
     return pt_method;
+}
+
+void desalocar_metodos(method_info *methods, u2 methods_count){
+    if(methods != NULL){
+        u2 i = 0; // índice para o loop for
+        // percorre o array de methods procurando por attributes para desalocar
+        for(i = 0; i < methods_count; i++){
+            desalocar_atributos((methods + i)->attributes, (methods + i)->attributes_count);
+        }
+        // desaloca o array de methods
+        free(methods);
+    }
 }

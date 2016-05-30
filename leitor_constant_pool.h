@@ -15,6 +15,8 @@
 //elementos da const pool.
 #define TAG_0 255
 
+#define TAG_UTF8 1
+
 
 /** Representa uma classe ou interface
 	name_index: um constant_utf8_info representando um nome completo qualificado
@@ -226,5 +228,16 @@ bool large_numeric(u2 tag);
  *       Ponteiro para a constant pool.
  */
 cp_info *carregar_constant_pool(u2 constant_pool_count, FILE *pt_arquivo);
+
+/*
+ * Desaloca o espaço alocado para a estrutura constant pool
+ *
+ * Parâmetros:
+ *		cp_info *constant_pool: ponteiro para a estrutura constant_pool
+ *		u2 constant_pool_count: tamanho da constant pool
+ * Retorno:
+ *		Nenhum
+ */
+void desalocar_constant_pool(cp_info *constant_pool, u2 constant_pool_count);
 
 #endif /* LEITOR_CONSTANT_POOL_H */

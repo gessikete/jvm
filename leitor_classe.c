@@ -75,17 +75,17 @@ class_file *carregar_classe(char *nome_arquivo){
 	pt_classe->methods = carregar_methods(pt_classe->methods_count, pt_classe->constant_pool_count,
 						 pt_classe->constant_pool, pt_arquivo);
 
-	
+
 	// Tentar ler o número de atributos para essa classe
 	pt_classe->attributes_count = ler_u2(pt_arquivo);
-	
+
 
 	// Tenta carregar o array de atributos. Cada elemento representa uma estrutura
 	// contendo informações do atributo
 	pt_classe->attributes = carregar_atributos(pt_arquivo, pt_classe->attributes_count,
 							pt_classe->constant_pool, pt_classe->constant_pool_count);
 
-	
+
     // Tenta fechar o arquivo depois que a classe foi completamene carregada
 	fechar_arquivo(pt_arquivo);
 	return pt_classe;
@@ -104,4 +104,25 @@ u2 *ler_interfaces(u2 interfaces_count, FILE *pt_arquivo){
 	}
 
 	return pt_interfaces;
+}
+
+void desalocar_interfaces(u2 *pt_interfaces){
+	if(pt_interfaces != NULL){
+		free(pt_interfaces);
+	}
+}
+
+
+void desalocar_classe(class_file *pt_classe){
+	if(pt_classe != NULL){
+		// desaloca todos as estruturas internas a classe
+		desalocar_constant_pool(pt_classe->constant_pool, pt_classe->constant_pool_count);
+		desalocar_interfaces(pt_classe->interfaces);
+		desalocar_campos(pt_classe->fields, pt_classe->fields_count);
+		desalocar_metodos(pt_classe->methods, pt_classe->methods_count);
+		desalocar_atributos(pt_classe->attributes, pt_classe->attributes_count);
+
+		// desaloca todo o array de classe
+		free(pt_classe);
+	}
 }

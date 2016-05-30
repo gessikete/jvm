@@ -82,9 +82,66 @@ void exibir_code_attribute_exception_table(attribute_info atributo, cp_info cons
 	
 }
 
+void exibir_exception_attribute_table(attribute_info atributo, cp_info constant_pool[]) {
+	exceptions_attribute exception_info = atributo.info.exception_info;
+	u2 number_of_exceptions = exception_info.number_of_exceptions;
+	u2 *exception_table_index;
+	u2 i;
+
+
+	printf("\nNumber of Exceptions: %d",number_of_exceptions);
+	printf("\n-----------------------\n");
+
+	exception_table_index = exception_info.exceptions_index_table;
+
+	//imprime os indeices de exception_table[]
+	for(i=0; i<number_of_exceptions; i++) {
+		//exibe as informações recuperadas
+		printf("\nTable_index[%02x] = %02x ",i,exception_table_index[i]);
+	}
+
+	printf("\n------------------------\n");
+
+}
+
+void exibir_inner_classes_attribute_table(attribute_info atributo, cp_info constant_pool[]) {
+	inner_classes_attribute inner_classes_info = atributo.info.inner_classes_info;
+	u2 number_of_inner_classes = inner_classes_info.number_of_classes;
+	inner_classes_table *classes;
+	u2 i;
+
+
+	printf("\nNumber of Inner Classes: %d",number_of_inner_classes);
+	printf("\n-----------------------\n");
+
+	classes = inner_classes_info.classes;
+
+	//imprime os indeices de exception_table[]
+	for(i=0; i<number_of_inner_classes; i++) {
+		//exibe as informações recuperadas
+		printf("\nInner_Class[%02x].inner_class_info_index = %02x ",i,classes[i].inner_class_info_index);
+		printf("\nInner_Class[%02x].outer_class_info_index = %02x ",i,classes[i].outer_class_info_index);
+		printf("\nInner_Class[%02x].inner_name_index = %02x ",i,classes[i].inner_name_index);
+		printf("\nInner_Class[%02x].inner_class_access_flag = %02x ",i,classes[i].inner_class_access_flags);
+	}
+
+	printf("\n------------------------\n");
+
+}
+
+
 void exibir_code_attribute(attribute_info atributo, cp_info constant_pool[]) {
 	exibir_generic_info(atributo);
 	exibir_code_attribute_bytecode(atributo,constant_pool);
 	exibir_code_attribute_exception_table(atributo,constant_pool);
 	exibir_code_attribute_misc(atributo);
+}
+void exibir_exception_attribute(attribute_info atributo, cp_info constant_pool[]) {
+	exibir_generic_info(atributo);
+	exibir_exception_attribute_table(atributo,constant_pool);
+}
+
+void exibir_inner_classes_attribute(attribute_info atributo, cp_info constant_pool[]){
+	exibir_generic_info(atributo);
+	exibir_inner_classes_attribute_table(atributo,constant_pool);
 }

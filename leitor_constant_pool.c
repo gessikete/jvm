@@ -169,11 +169,11 @@ void criar_constant_pool(FILE *pt_arquivo, cp_info const_pool[], u2 tamanho) {
 	//Preenche vetor de funcoes
 	inicializar_vetor_funcoes(funcoes_constant);
 
-	
+
 	//A primeira entrada de const_pool não é utilizada para facilitar na recuperação
 	//de índices
 	const_pool[0].tag = TAG_0;
-	
+
 	//Lê e escreve todos os elementos da constant pool no vetor const_pool
 	for(i=1; i<tamanho; i++) {
 		//Lê a tag
@@ -182,7 +182,7 @@ void criar_constant_pool(FILE *pt_arquivo, cp_info const_pool[], u2 tamanho) {
 		if(validar_tag(tag)) {
 			//Executa funcao associada a tag. A funcao ira preencher a entrada.
 			funcoes_constant[tag](pt_arquivo,const_pool,i,tag);
-			
+
 			//Verifica se tag é um double ou long
 			if(large_numeric(tag)) {
 			  const_pool[++i].tag = TAG_LARGE;
@@ -194,8 +194,24 @@ void criar_constant_pool(FILE *pt_arquivo, cp_info const_pool[], u2 tamanho) {
 cp_info *carregar_constant_pool(u2 constant_pool_count, FILE *pt_arquivo) {
 	  cp_info *const_pool = (cp_info*)malloc(sizeof(cp_info)*constant_pool_count);
 	  if (const_pool==NULL) return NULL;
-	  
+
 	  criar_constant_pool(pt_arquivo,const_pool,constant_pool_count);
 
 	  return const_pool;
+}
+
+void desalocar_constant_pool(cp_info *constant_pool, u2 constant_pool_count){
+	if(constant_pool != NULL){
+		u2 i = 0; // índice para o for
+		// Percorre toda constant pool em busca de estruturas internas alocadas
+		for(i = 0; i < constant_pool_count; i++){
+			// Caso seja uma string, libera a string
+			if((constant_pool + i)->tag == TAG_UTF8){
+				free((constant_pool + i)->info.utf8_info.bytes);
+			}
+		}
+
+		// Libera a constant pool
+		free(constant_pool);
+	}
 }

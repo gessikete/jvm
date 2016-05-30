@@ -2,36 +2,40 @@
 #include "exibidor_atributos.h"
 
 void exibir_fields(field_info *fields, u2 fields_count){
-	int i, j;
+	int i;
+	u2 flag = fields->access_flags;
 
 	for(i=0; i < fields_count; i++){
 	//Access flag para o campo
-	switch(fields->access_flags){
-		case(PUBLIC):
-			printf("\tFields - Access Flags: Public\n");
-			break;
-		case(PRIVATE):
-			printf("\tFields - Access Flags: Private\n");
-			break;
-		case(PROTECTED):
-			printf("\tFields - Access Flags: Protected\n");
-			break;
-		case(STATIC):
-			printf("\tFields - Access Flags: Static\n");
-			break;
-		case(FINAL):
-			printf("\tFields - Access Flags: Final\n");
-			break;
-		case(VOLATILE):
-			printf("\tFields - Access Flags: Volatile\n");
-			break;
-		case(TRANSCIENT):
-			printf("\tFields - Access Flags: Transcient\n");
-			break;
-		case(ENUM):
-			printf("\tFields - Access Flags: Enum\n");
-			break;
-	}
+		printf("\tFields - Access Flag: %02x [",flag);
+		while(flag != 0){
+			if(flag >= ENUM){
+				flag -= ENUM;
+				printf(" enum");
+			}else if( flag >= TRANSCIENT){
+				flag -= TRANSCIENT;
+				printf(" transient");
+			}else if(flag >= VOLATILE) {
+				flag -= VOLATILE;
+				printf(" volatile");
+			}else if (flag >= FINAL) {
+				flag -= FINAL;
+				printf(" final");
+			}else if (flag >= STATIC) {
+				flag -= STATIC;
+				printf(" static");
+			}else if (flag >= PROTECTED) {
+				flag -= PROTECTED;
+				printf(" protected");
+			}else if (flag >= PRIVATE) {
+				flag -= PRIVATE;
+				printf(" private");
+			} else{
+				flag -= PUBLIC;
+				printf(" public");
+			}
+			printf("]\n");
+		}
 	//index de constant_pool válido, contendo um constant_u8_info
 	printf("\tFields - Name Index: %02x\n", fields->name_index);
 	//index de descrição para o campo
@@ -45,3 +49,4 @@ void exibir_fields(field_info *fields, u2 fields_count){
 //}
 	}
 }
+

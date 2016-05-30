@@ -5,7 +5,7 @@ field_info *carregar_fields(u2 fields_count, u2 constant_pool_count, cp_info *co
     u2 count_index = 0;
 
     /* Tenta alocar memoria para o vetor fields. */
-    pt_fields = (field_info *) malloc(sizeof(field_info) * fields_count); 
+    pt_fields = (field_info *) malloc(sizeof(field_info) * fields_count);
     if(pt_fields == NULL){
         return false;
     }
@@ -34,3 +34,15 @@ field_info *carregar_fields(u2 fields_count, u2 constant_pool_count, cp_info *co
     return pt_fields;
 }
 
+void desalocar_campos(field_info *fields, u2 fields_count){
+    if(fields != NULL){
+        u2 i = 0; // índice para o loop for
+        // Percorre o array de fields em procura de attributes para desalocar
+        for(i = 0; i < fields_count; i++){
+            desalocar_atributos((fields + i)->attributes, (fields + i)->attributes_count);
+        }
+
+        // Desaloca o array de fields
+        free(fields);
+    }
+}

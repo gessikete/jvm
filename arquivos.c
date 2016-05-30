@@ -10,8 +10,10 @@ FILE *abrir_arquivo_leitura(char *nome_arquivo){
         // caso o arquivo tenha sido aberto corretamente, retorna o ponteiro
         // caso contrário retorna null
         if (pt_arquivo != NULL) {
+            printf("Arquivo Aberto com Sucesso!\n");
                 return pt_arquivo;
         }else{
+                printf("Problema na abertura do Arquivo.\n");
                 return NULL;
         }
 }

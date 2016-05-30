@@ -21,7 +21,7 @@
 
 /* Parte 1 */
 /* Recebe a estrutura lida de class file e exibe na tela os binários*/
-void exibe_classe(class_file* cf);
+void exibir_classe(class_file* cf);
 
 
 #endif
