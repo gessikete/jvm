@@ -13,6 +13,7 @@
 #include "leitor_metodos.h"
 #include "leitor_campos.h"
 #include "leitor_constant_pool.h"
+#include "exibidor_atributos.h"
 #include "recuperar_constant_pool.h"
 #include "validation.h"
 

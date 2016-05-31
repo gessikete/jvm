@@ -23,20 +23,39 @@
 #include "leitor_classe.h"
 #include "exibidor_classe.h"
 
+
 int main(int argc, char*argv[]){
 	class_file *class;
 
 	// verifica se o arquivo .class foi passado
-	if(argc == 1){
+	if(argc == 2){
 		printf("Um arquivo .class é esperado como parâmetro.\n");
 		return 0;
 	}
 
-	class = carregar_classe(argv[1]);
-	if(class) {
-		exibir_classe(class);
-		// desalocar_classe(class);
-	}
+	class = carregar_classe(argv[2]);
 
+	if (!strcmp(argv[1], "-l"))
+	{
+		printf("\nLeitura concluída com sucesso!\n");
+	}
+	else if (!strcmp(argv[1], "-e"))
+	{
+		if(class) {
+
+			//abrindo arquivo para gravar a saida
+			arquivo_saida = fopen("saida.txt", "w");
+
+			//gravando no arquivo
+			exibir_classe(class);
+			// desalocar_classe(class);
+
+			printf("\nGravação : 100%%\n");
+
+			fclose(arquivo_saida);
+
+			printf("\nLeitura e gravação concluída com sucesso. Para visualizar o arquivo abra a pasta e localize o arquivo saida.txt!\n\n");
+		}
+	}
     return 0;
 }

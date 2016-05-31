@@ -4,57 +4,58 @@ void exibir_methods(method_info *methods, u2 methods_count, cp_info *const_pool)
 	u2 i, j;
 
 	for(i = 0; i < methods_count; i++) {
-		u2 name_index = methods->name_index;
-		u2 descriptor_index = methods->descriptor_index;
-		u2 flag = methods->access_flags;
+		u2 name_index = methods[i].name_index;
+		u2 descriptor_index = methods[i].descriptor_index;
+		u2 flag = methods[i].access_flags;
 
 		char *method_name = recupera_string(const_pool, name_index);
 
-		printf("\n-----------------\n");
-		printf("\n[%d] %s", i, method_name);
-		printf("\nName: cp_info #%d <%s>", name_index, method_name);
-		printf("\nDescriptor: cp_info #%d <%s>", descriptor_index, recupera_string(const_pool, descriptor_index));
-		printf("\nAccess flags: %06x [", flag);
+		fprintf(arquivo_saida, "\n-----------------\n");
+		fprintf(arquivo_saida, "\n[%d] %s", i, method_name);
+		fprintf(arquivo_saida, "\nName: cp_info #%d <%s>", name_index, method_name);
+		fprintf(arquivo_saida, "\nDescriptor: cp_info #%d <%s>", descriptor_index, recupera_string(const_pool, descriptor_index));
+		fprintf(arquivo_saida, "\nAccess flags: %06x [", flag);
 		while(flag != 0){
 			if(flag >= SYNTHETIC){
 				flag -= SYNTHETIC;
-				printf(" synthetic");
+				fprintf(arquivo_saida, " synthetic");
 			}else if( flag >= ABSTRACT){
 				flag -= ABSTRACT;
-				printf(" abstract");
+				fprintf(arquivo_saida, " abstract");
 			}else if(flag >= NATIVE) {
 				flag -= NATIVE;
-				printf(" native");
+				fprintf(arquivo_saida, " native");
 			}else if (flag >= VARARGS) {
 				flag -= VARARGS;
-				printf(" varargs");
+				fprintf(arquivo_saida, " varargs");
 			}else if (flag >= BRIDGE) {
 				flag -= BRIDGE;
-				printf(" bridge");
+				fprintf(arquivo_saida, " bridge");
 			}else if (flag >= SYNCHRONIZED) {
 				flag -= SYNCHRONIZED;
-				printf(" synchronized");
+				fprintf(arquivo_saida, " synchronized");
 			}else if (flag >= FINAL) {
 				flag -= FINAL;
-				printf(" final");
+				fprintf(arquivo_saida, " final");
 			} else if (flag >= STATIC){
 				flag -= STATIC;
-				printf(" static");
+				fprintf(arquivo_saida, " static");
 			} else if (flag >= PROTECTED){
 				flag -= PROTECTED;
-				printf(" protected");
+				fprintf(arquivo_saida, " protected");
 			} else if (flag >= PRIVATE){
 				flag -= PRIVATE;
-				printf(" private");
+				fprintf(arquivo_saida, " private");
 			} else {
 				flag -= PUBLIC;
-				printf(" public");
+				fprintf(arquivo_saida, " public");
 			}
 		}
-		printf("]\n\n");
-		for(j = 0; j < methods->attributes_count; j++){
-			exibir_code_attribute(methods->attributes[j], const_pool);
+		fprintf(arquivo_saida, "]\n\n");
+		fprintf(arquivo_saida, "\nAttribute Count for methods: %d ", methods[i].attributes_count);
+		for(j = 0; j < methods[i].attributes_count; j++){
+			exibir_code_attribute(methods[i].attributes[j], const_pool);
 		}
 	}
-	printf("\n\n\n");
+	fprintf(arquivo_saida, "\n\n\n");
 }

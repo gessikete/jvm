@@ -17,6 +17,7 @@
 #include "exibidor_constant_pool.h"
 #include "exibidor_campos.h"
 #include "exibidor_metodos.h"
+#include "exibidor_atributos.h"
 #include "recuperar_constant_pool.h"
 #include "validation.h"
 

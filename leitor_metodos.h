@@ -5,7 +5,7 @@
 #include "arquivos.h"
 #include "leitor_atributos.h"
 #include "leitor_constant_pool.h"
-#include "vetor_mnemonicos.h"
+
 
 /* Definição das estruturas de métodos */
 typedef struct {

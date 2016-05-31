@@ -1,5 +1,5 @@
-#include "vetor_mnemonicos.h"
-
+#include "nomes_instrucoes.h"
+#include <string.h>
 
 
 // int main(int argc, char const *argv[])
@@ -13,10 +13,28 @@
 // }
 
 
+u1 acha_tamanho_operando(u1 operando) {
+	switch(operando) {
+		case NO_OP: return 0; //ok
+		case CP2: return 2;   //ok
+		case CP1: return 1;
+		case LV1: return 1;
+		case INT1: return 1;
+		case INT2: return 2;
+		case LV1_INT1: return 2;
+		case OFFSET2: return 2;
+		case OFFSET4: return 4;
+		case CP2_INT1: return 3;
+		case FLAG1: return 1;
+		default: return 0;
+		//TODO: case INTERROG:
+	  
+	}
+}
 
 t_instrucoes* vetorMnemonicos (void)
 {
-	t_instrucoes *vetorRetorno;
+	t_instrucoes *vetorRetorno = (t_instrucoes*)malloc(sizeof(t_instrucoes)*0xCB);
 
 	//declarando o vetor com os mnemonicos
 	t_instrucoes instrucoes[] = 
@@ -46,10 +64,10 @@ t_instrucoes* vetorMnemonicos (void)
 		[0x1C] = {"iload_2", NO_OP},
 		[0x1D] = {"iload_3", NO_OP},
 
-		[0x1E] = {"Iload_0", NO_OP},
-		[0x1F] = {"Iload_1", NO_OP},
-		[0x20] = {"Iload_2", NO_OP},
-		[0x21] = {"Iload_3", NO_OP},
+		[0x1E] = {"lload_0", NO_OP},
+		[0x1F] = {"lload_1", NO_OP},
+		[0x20] = {"lload_2", NO_OP},
+		[0x21] = {"lload_3", NO_OP},
 
 		[0x22] = {"fload_0", NO_OP},
 		[0x23] = {"fload_1", NO_OP},
@@ -219,7 +237,7 @@ t_instrucoes* vetorMnemonicos (void)
 		[0x82] = {"ixor", NO_OP},
 		[0x83] = {"lxor", NO_OP},
 
-		[0x84] = {"iinc", Lv1Int1},
+		[0x84] = {"iinc", LV1_INT1},
 
 		[0xA7] = {"goto", OFFSET2},
 		[0xC8] = {"goto_w", OFFSET4},
@@ -252,13 +270,13 @@ t_instrucoes* vetorMnemonicos (void)
 		[0xA5] = {"if_acmpeq", OFFSET2},
 		[0xA6] = {"if_acmpne", OFFSET2},
 
-		[0xAA] = {"tableswitch", "?"},
-		[0xAB] = {"lookupswitch", "?"},
+		[0xAA] = {"tableswitch", INTERROG},
+		[0xAB] = {"lookupswitch", INTERROG},
 
 		[0xB6] = {"invokevirtual", CP2},
 		[0xB7] = {"invokespecial", CP2},
 		[0xB8] = {"invokestatic", CP2},
-		[0xB9] = {"invokeinterface", Cp2Int1},
+		[0xB9] = {"invokeinterface", CP2_INT1},
 
 		[0xAC] = {"ireturn", NO_OP},
 		[0xAD] = {"lreturn", NO_OP},
@@ -275,7 +293,7 @@ t_instrucoes* vetorMnemonicos (void)
 		[0xBC] = {"newarray", FLAG1},
 		[0xBD] = {"anewarray", CP2},
 
-		[0xC5] = {"multianewarray", Cp2Int1},
+		[0xC5] = {"multianewarray", CP2_INT1},
 		[0xBE] = {"arraylength", NO_OP},
 		[0xA8] = {"jsr", OFFSET2},
 		[0xC9] = {"jsr_w", OFFSET4},
@@ -288,7 +306,7 @@ t_instrucoes* vetorMnemonicos (void)
 		[0xBA] = {"xxxunusedxxx", NO_OP}
 	};
 
-	vetorRetorno = instrucoes;
+	memcpy(vetorRetorno,instrucoes,sizeof instrucoes);
 
 	return vetorRetorno;
 }

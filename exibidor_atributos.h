@@ -3,7 +3,11 @@
 
 #include "leitor_constant_pool.h"
 #include "leitor_atributos.h"
+#include "recuperar_constant_pool.h"
+#include "nomes_instrucoes.h"
 
+//Define tamanho máximo de uma string que mostra o operando de uma instrução
+#define TAM_OPERANDO 250
 
 /*
  * Exibe as informações genéricas do atributo code (índice do nome e o seu tamanho)
@@ -22,7 +26,7 @@ void exibir_generic_info(attribute_info atributo);
  *
  * Parâmetros:
  *       attribute_info atributo: o atributo a ser mostrado
- * 
+ *
  * Retorno:
  *       Nada
  */
@@ -81,7 +85,7 @@ void exibir_code_attribute(attribute_info atributo, cp_info constant_pool[]);
 void exibir_exception_attribute_table(attribute_info atributo, cp_info constant_pool[]);
 
 /*
- * Exibe todas as informações do atributo exceção 
+ * Exibe todas as informações do atributo exceção
  *
  * Parâmetros:
  *       attribute_info atributo: o atributo a ser mostrado
@@ -130,7 +134,7 @@ void exibir_inner_classes_attribute(attribute_info atributo, cp_info constant_po
  * Retorno:
  *       Nada
  */
-void exibir_source_file(attribute_info atributo);
+void exibir_source_file(attribute_info atributo,  cp_info constant_pool[]);
 
 /*
  * Exibe todas as informações do atributo souce_file
@@ -143,4 +147,15 @@ void exibir_source_file(attribute_info atributo);
  *       Nada
  */
 void exibir_source_file_attribute(attribute_info atributo, cp_info constant_pool[]);
+
+/*
+ * Exibe todas as informações do atributo constant_value
+ *
+ * Parâmetros:
+ *       attribute_info atributo: o atributo a ser mostrado
+ *
+ * Retorno:
+ *       Nada
+ */
+void exibir_constant_attribute(attribute_info atributo,  cp_info constant_pool[]);
 #endif

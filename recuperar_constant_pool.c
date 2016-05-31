@@ -69,6 +69,27 @@ u4 recupera_low_bytes(u8 bytes) {
 }
 
 
+u4 recupera_int(cp_info *pt_const_pool, u2 int_index){
+	//recupera valor de int armazenado na constant pool
+	constant_integer_info integer = pt_const_pool[int_index].info.integer_info;
+
+	return (u4) integer.bytes;
+}
+
+u4 recupera_float(cp_info *pt_const_pool, u2 float_index){
+	//recupera valor de float na constant pool
+	constant_float_info float_const = pt_const_pool[float_index].info.float_info;
+
+	return (u4) float_const.bytes;
+}
+
+u8 recupera_long(cp_info *pt_const_pool, u2 long_index){
+	//recupera valor long na constant pool
+	constant_long_info long_const = pt_const_pool[long_index].info.long_info;
+
+	return (u8)long_const.bytes;
+}
+
 char *recupera_string(cp_info *pt_const_pool, u2 string_index) {
 	if(pt_const_pool[string_index].tag==0x01) {
 		//recupera entrada da string

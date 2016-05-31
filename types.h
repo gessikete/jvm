@@ -14,9 +14,13 @@
 #ifndef LIB_TYPES
 #define LIB_TYPES
 
+#include <stdio.h>
 #include <stdint.h>
 // Inclui stdboll para uso de tipos booleanos
 #include <stdbool.h>
+
+//arquivo de saida global ao projeto
+ FILE *arquivo_saida;
 
 /*
  * Definindo as estruturas para manipulação de inteiros tamanhos 8bits, 16bits,
