@@ -120,4 +120,27 @@ void exibir_inner_classes_attribute_table(attribute_info atributo, cp_info const
  */
 void exibir_inner_classes_attribute(attribute_info atributo, cp_info constant_pool[]);
 
+
+/*
+ * Exibe o index correspondente ao source_file na constant pool
+ *
+ * Parâmetros:
+ *       attribute_info atributo: o atributo a ser mostrado
+ *
+ * Retorno:
+ *       Nada
+ */
+void exibir_source_file(attribute_info atributo);
+
+/*
+ * Exibe todas as informações do atributo souce_file
+ *
+ * Parâmetros:
+ *       attribute_info atributo: o atributo a ser mostrado
+ *	 cp_info constant_pool: a constant pool
+ *
+ * Retorno:
+ *       Nada
+ */
+void exibir_source_file_attribute(attribute_info atributo, cp_info constant_pool[]);
 #endif

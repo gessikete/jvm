@@ -129,6 +129,11 @@ void exibir_inner_classes_attribute_table(attribute_info atributo, cp_info const
 
 }
 
+void exibir_source_file(attribute_info atributo){
+	printf("\n------------------------\n");
+	printf("\nSource File Index: %02x",atributo.attribute_name_index);
+	printf("\n------------------------\n");
+}
 
 void exibir_code_attribute(attribute_info atributo, cp_info constant_pool[]) {
 	exibir_generic_info(atributo);
@@ -144,4 +149,9 @@ void exibir_exception_attribute(attribute_info atributo, cp_info constant_pool[]
 void exibir_inner_classes_attribute(attribute_info atributo, cp_info constant_pool[]){
 	exibir_generic_info(atributo);
 	exibir_inner_classes_attribute_table(atributo,constant_pool);
+}
+
+void exibir_source_file_attribute(attribute_info atributo, cp_info constant_pool[]){
+	exibir_generic_info(atributo);
+	exibir_source_file(atributo);
 }

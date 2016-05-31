@@ -37,6 +37,6 @@
 #define STRICT 0x0800
 #define SYNTHETIC 0x1000
 
-void exibir_metodos(method_info *methods, u2 methods_count, cp_info *const_pool);
+void exibir_methods(method_info *methods, u2 methods_count, cp_info *const_pool);
 
 #endif

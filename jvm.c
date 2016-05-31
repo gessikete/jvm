@@ -12,6 +12,7 @@
  *      - Ana Carolina Lopes            11/0107578
  *      - Géssica Neves Sodré da Silva  11/0146115
  *      - Ivan Sena                     10/0088031
+ *		- Laís Mendes Gonçalves			11/0033647
  *
  *  Arquivo fonte principal "jvm.c"
  *

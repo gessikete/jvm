@@ -1,13 +1,16 @@
 #include "exibidor_campos.h"
 #include "exibidor_atributos.h"
 
-void exibir_fields(field_info *fields, u2 fields_count, cp_info *const_pool){
+void exibir_fields(field_info *pt_fields, u2 fields_count, cp_info *const_pool){
 	u2 i;
+	field_info *fields = pt_fields;
 
 	for(i = 0; i < fields_count; i++) {
-		u2 name_index = fields->name_index;
-		u2 descriptor_index = fields->descriptor_index;
-		u2 flag = fields->access_flags;
+		
+	  
+		u2 name_index = fields[i].name_index;
+		u2 descriptor_index = fields[i].descriptor_index;
+		u2 flag = fields[i].access_flags;
 
 		char *field_name = recupera_string(const_pool, name_index);
 

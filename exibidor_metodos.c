@@ -1,6 +1,6 @@
 #include "exibidor_metodos.h"
 
-void exibir_metodos(method_info *methods, u2 methods_count, cp_info *const_pool){
+void exibir_methods(method_info *methods, u2 methods_count, cp_info *const_pool){
 	u2 i, j;
 
 	for(i = 0; i < methods_count; i++) {
