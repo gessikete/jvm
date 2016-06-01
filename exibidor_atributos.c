@@ -50,24 +50,17 @@ char *recupera_operando(cp_info constant_pool[], u1 op, u1 tamanho_operando, u1 
 	operando = (char*)malloc(sizeof(char)*TAM_OPERANDO);
 
 	switch(op) {
-		//TODO TODO TODO TODO: completar os CPS com o elemento da const_pool
-
-		case CP2: sprintf(operando,"#%d",code_u2); break;
-		case CP1: sprintf(operando,"#%d",code_u1); break;
+		case CP2: sprintf(operando,"#%d %s",code_u2,recupera_elemento_como_string_constant_pool(constant_pool,code_u2)); break;
+		case CP1: sprintf(operando,"#%d %s",code_u1,recupera_elemento_como_string_constant_pool(constant_pool,code_u1)); break;
 		case LV1: sprintf(operando,"%d",code_u1); break;
-		case INT1: sprintf(operando,"%d",(int)code_u1); break;
+		case INT1: sprintf(operando,"%d",(signed char)code_u1); break;
 		case INT2: sprintf(operando,"%d",(int)code_u2); break;
 		//case LV1_INT1: return 2; break;
 		case OFFSET2: sprintf(operando,"%d",code_u2); break;
-		case OFFSET4: {
-			  sprintf(operando,"%d",code_u4);
-			  break;
-		}
+		case OFFSET4: sprintf(operando,"%d",code_u4); break;
 		//case CP2_INT1: return 3; break;
 		//case FLAG1: return 1; break;
 		default: sprintf(operando," ");break;
-		//TODO: cases comentados /dontsay:
-
 	}
 
 	return operando;

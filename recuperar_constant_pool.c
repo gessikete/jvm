@@ -136,18 +136,20 @@ char *recupera_string(cp_info *pt_const_pool, u2 string_index) {
 	return NULL;
 }
 
-char *recupera_elemento_como_char_constant_pool(cp_info *pt_const_pool, u2 index) {
+char *recupera_elemento_como_string_constant_pool(cp_info *pt_const_pool, u2 index) {
 	u2 tag = pt_const_pool[index].tag;
 	char *string=NULL;
+	
+	string = (char*) malloc(sizeof(char)*TAM_STRING);
 	
 	switch(tag) {
 		case 1: string = recupera_string(pt_const_pool,index); break;
 		case 3: sprintf(string,"%d",recupera_int(pt_const_pool,index)); break;
 		case 4: sprintf(string,"%f",recupera_float(pt_const_pool,index)); break;
-		case 5: sprintf(string,"%li",recupera_long(pt_const_pool,index));
-		case 6: sprintf(string,"%F",recupera_double(pt_const_pool,index));
+		case 5: sprintf(string,"%li",recupera_long(pt_const_pool,index)); break;
+		case 6: sprintf(string,"%F",recupera_double(pt_const_pool,index)); break;
 		//case 7: class_info
-		case 8: string = recupera_string(pt_const_pool,index); break;
+		case 8: string = recupera_string(pt_const_pool,pt_const_pool[index].info.string_info.string_index); break;
 		//case 9: fieldref
 		//case 10: methodref
 		//case 11: interface_methodref_info

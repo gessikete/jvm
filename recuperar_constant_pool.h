@@ -3,6 +3,11 @@
 
 
 #include "leitor_constant_pool.h"
+
+
+// Tamanho máximo de uma string
+#define TAM_STRING 250
+
 /*
  * Lê o campo bytes de um utf8_info e os salva em uma string.
  *
@@ -95,6 +100,5 @@ double recupera_double(cp_info *pt_const_pool, u2 index);
  */
 char *recupera_string(cp_info *pt_const_pool, u2 string_index);
 
-
-
+char *recupera_elemento_como_string_constant_pool(cp_info *pt_const_pool, u2 index);
 #endif
