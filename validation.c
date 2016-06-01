@@ -21,6 +21,8 @@ bool validar_tag(u2 tag) {
 	if((tag>=1) && (tag!=2) && (tag<=12)) {
 	return true;
 	}
-	fprintf(arquivo_saida, "Arquivo com a tag invalida.\n");
+	if(tag!=254) {
+		fprintf(arquivo_saida, "Arquivo com a tag invalida.\n");
+	}
 	return false;
 }

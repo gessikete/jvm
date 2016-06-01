@@ -66,23 +66,23 @@ u4 recupera_low_bytes(u8 bytes);
  *	u2 bytes: int_index || float_index
  *
  * Retorno:
- *      Um unsigned de 32 bits.
+ *      Um int e um float, respectivamente
  */
-u4 recupera_int(cp_info *pt_const_pool, u2 int_index);
-u4 recupera_float(cp_info *pt_const_pool, u2 float_index);
+int recupera_int(cp_info *pt_const_pool, u2 int_index);
+float recupera_float(cp_info *pt_const_pool, u2 float_index);
 
 /*
- * As funcoes a seguir recuperam valores (long) na constant pool
+ * As funcoes a seguir recuperam valores (long, double) na constant pool
  *
  * Parâmetros:
  *	cp_info: const_pool[]	
- *	u2 bytes: long index_index
+ *	u2 bytes: long_index || double index
  *
  * Retorno:
- *      Um unsigned de 64 bits.
+ *      um long e um double, respectivamente.
  */
-u8 recupera_long(cp_info *pt_const_pool, u2 long_index);
-
+long recupera_long(cp_info *pt_const_pool, u2 long_index);
+double recupera_double(cp_info *pt_const_pool, u2 index);
 /*
  * Recupera a string em utf8_info de acordo com o seu indice no constant pool.
  *

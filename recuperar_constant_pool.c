@@ -69,25 +69,53 @@ u4 recupera_low_bytes(u8 bytes) {
 }
 
 
-u4 recupera_int(cp_info *pt_const_pool, u2 int_index){
+int recupera_int(cp_info *pt_const_pool, u2 int_index){
 	//recupera valor de int armazenado na constant pool
 	constant_integer_info integer = pt_const_pool[int_index].info.integer_info;
+	u4 bytes = integer.bytes;
+	int i;
 
-	return (u4) integer.bytes;
+	//Transforma unsigned int para int
+	memcpy(&i,&bytes,sizeof i);
+	
+	
+	return i;
 }
 
-u4 recupera_float(cp_info *pt_const_pool, u2 float_index){
+float recupera_float(cp_info *pt_const_pool, u2 float_index){
 	//recupera valor de float na constant pool
 	constant_float_info float_const = pt_const_pool[float_index].info.float_info;
-
-	return (u4) float_const.bytes;
+	u4 bytes = float_const.bytes;
+	float f;
+	
+	//copia os bytes para f, transformando-os em um float
+	memcpy(&f,&bytes,sizeof f);
+	
+	return f;
 }
 
-u8 recupera_long(cp_info *pt_const_pool, u2 long_index){
+double recupera_double(cp_info *pt_const_pool, u2 index) {
+	//recupera valor de double na constant pool
+	constant_double_info double_const = pt_const_pool[index].info.double_info;
+	u8 bytes = double_const.bytes;
+	double d;
+
+	//transforma u8 em double
+	memcpy(&d,&bytes,sizeof d);
+	
+	return d;
+}
+
+long recupera_long(cp_info *pt_const_pool, u2 long_index){
 	//recupera valor long na constant pool
 	constant_long_info long_const = pt_const_pool[long_index].info.long_info;
+	u8 bytes = long_const.bytes;
+	long l;
 
-	return (u8)long_const.bytes;
+	//transforma u8 em long
+	memcpy(&l,&bytes,sizeof l);
+	
+	return l;
 }
 
 char *recupera_string(cp_info *pt_const_pool, u2 string_index) {
@@ -104,6 +132,27 @@ char *recupera_string(cp_info *pt_const_pool, u2 string_index) {
 	
 		return string;
 	  
-	}
+	} else printf("\nErro! Indice nao corresponde a uma string");
 	return NULL;
+}
+
+char *recupera_elemento_como_char_constant_pool(cp_info *pt_const_pool, u2 index) {
+	u2 tag = pt_const_pool[index].tag;
+	char *string=NULL;
+	
+	switch(tag) {
+		case 1: string = recupera_string(pt_const_pool,index); break;
+		case 3: sprintf(string,"%d",recupera_int(pt_const_pool,index)); break;
+		case 4: sprintf(string,"%f",recupera_float(pt_const_pool,index)); break;
+		case 5: sprintf(string,"%li",recupera_long(pt_const_pool,index));
+		case 6: sprintf(string,"%F",recupera_double(pt_const_pool,index));
+		//case 7: class_info
+		case 8: string = recupera_string(pt_const_pool,index); break;
+		//case 9: fieldref
+		//case 10: methodref
+		//case 11: interface_methodref_info
+		//case 12: name_and_type 
+	}
+  
+	return string;
 }
