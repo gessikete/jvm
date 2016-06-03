@@ -1,0 +1,237 @@
+Magic Number: cafebabe
+Minor version: 0
+Major version: 46
+Constant pool count: 29
+Access flags: 000020 [ super]
+This class: cp_info #7 <Demo>
+Super class: cp_info #8 <java/lang/Object>
+Interface count: 0
+Fields count: 0
+Methods Count: 2
+Attributes Count: 1
+
+
+##Constant Pool##
+
+[1] CONSTANT_Methodref_info
+	Class Name: cp_info #8 <java/lang/Object>
+	Name and Type: cp_info #17 <<init>()V>
+
+
+[2] CONSTANT_Class_info
+	Class Name: cp_info #18 <Example4>
+
+
+[3] CONSTANT_Methodref_info
+	Class Name: cp_info #2 <Example4>
+	Name and Type: cp_info #17 <<init>()V>
+
+
+[4] CONSTANT_Methodref_info
+	Class Name: cp_info #2 <Example4>
+	Name and Type: cp_info #19 <display1()V>
+
+
+[5] CONSTANT_Interface_Methodref_info
+	Class Name: cp_info #20 <Example1>
+	Name and Type: cp_info #19 <display1()V>
+
+
+[6] CONSTANT_Interface_Methodref_info
+	Class Name: cp_info #21 <Example2>
+	Name and Type: cp_info #22 <display2()V>
+
+
+[7] CONSTANT_Class_info
+	Class Name: cp_info #23 <Demo>
+
+
+[8] CONSTANT_Class_info
+	Class Name: cp_info #24 <java/lang/Object>
+
+
+[9] CONSTANT_Utf8_info
+	Length: 6
+	String: <init>
+
+
+[10] CONSTANT_Utf8_info
+	Length: 3
+	String: ()V
+
+
+[11] CONSTANT_Utf8_info
+	Length: 4
+	String: Code
+
+
+[12] CONSTANT_Utf8_info
+	Length: 15
+	String: LineNumberTable
+
+
+[13] CONSTANT_Utf8_info
+	Length: 4
+	String: main
+
+
+[14] CONSTANT_Utf8_info
+	Length: 22
+	String: ([Ljava/lang/String;)V
+
+
+[15] CONSTANT_Utf8_info
+	Length: 10
+	String: SourceFile
+
+
+[16] CONSTANT_Utf8_info
+	Length: 9
+	String: Demo.java
+
+
+[17] CONSTANT_NameAndType_info
+	Name: cp_info #9 <<init>>
+	Descriptor: cp_info #10 <()V>
+
+
+[18] CONSTANT_Utf8_info
+	Length: 8
+	String: Example4
+
+
+[19] CONSTANT_NameAndType_info
+	Name: cp_info #25 <display1>
+	Descriptor: cp_info #10 <()V>
+
+
+[20] CONSTANT_Class_info
+	Class Name: cp_info #26 <Example1>
+
+
+[21] CONSTANT_Class_info
+	Class Name: cp_info #27 <Example2>
+
+
+[22] CONSTANT_NameAndType_info
+	Name: cp_info #28 <display2>
+	Descriptor: cp_info #10 <()V>
+
+
+[23] CONSTANT_Utf8_info
+	Length: 4
+	String: Demo
+
+
+[24] CONSTANT_Utf8_info
+	Length: 16
+	String: java/lang/Object
+
+
+[25] CONSTANT_Utf8_info
+	Length: 8
+	String: display1
+
+
+[26] CONSTANT_Utf8_info
+	Length: 8
+	String: Example1
+
+
+[27] CONSTANT_Utf8_info
+	Length: 8
+	String: Example2
+
+
+[28] CONSTANT_Utf8_info
+	Length: 8
+	String: display2
+
+
+
+
+##Methods##
+Methods Count: 2
+
+-----------------
+
+[0] <init>
+Name: cp_info #9 <<init>>
+Descriptor: cp_info #10 <()V>
+Access flags: 0x0000 []
+
+
+Attribute Count for methods: 1 
+
+	 -> Code Attribute: 
+	Generic Info: 
+	Attribute Name Index: cp_info #11
+	Attribute Length: 29
+
+	# Bytecode: 
+		0 aload_0
+		1 invokespecial: #1 <java/lang/Object.<init>>
+		4 return
+
+	# Exception Table Length: 0
+
+	# Misc
+	Maximum Stack Depth: 1
+	Maximum Local Variables: 1
+	Code Length: 5
+
+
+-----------------
+
+[1] main
+Name: cp_info #13 <main>
+Descriptor: cp_info #14 <([Ljava/lang/String;)V>
+Access flags: 0x0009 [ static public]
+
+
+Attribute Count for methods: 1 
+
+	 -> Code Attribute: 
+	Generic Info: 
+	Attribute Name Index: cp_info #11
+	Attribute Length: 89
+
+	# Bytecode: 
+		0 new: #2 <Example4>
+		3 dup
+		4 invokespecial: #3 <Example4.<init>>
+		7 astore_1
+		8 new: #2 <Example4>
+		11 dup
+		12 invokespecial: #3 <Example4.<init>>
+		15 astore_2
+		16 new: #2 <Example4>
+		19 dup
+		20 invokespecial: #3 <Example4.<init>>
+		23 astore_3
+		24 aload_1
+		25 invokevirtual: #4 <Example4.display1>
+		28 aload_2
+		29 invokeinterface: #5 <Example1.display1> count 1
+		34 aload_3
+		35 invokeinterface: #6 <Example2.display2> count 1
+		40 return
+
+	# Exception Table Length: 0
+
+	# Misc
+	Maximum Stack Depth: 2
+	Maximum Local Variables: 4
+	Code Length: 41
+
+
+
+
+##Attributes##
+Attributes Count: 1
+
+	 -> Source File Attribute: 
+	Generic Info: 
+	Attribute Name Index: cp_info #15
+	Attribute Length: 2
+	Source File: Demo.java

@@ -55,7 +55,7 @@ int main(int argc, char*argv[]){
 				exibir_classe(pt_classe);
 
 				// Desaloca a classe
-				// desalocar_classe(pt_classe);
+				desalocar_classe(pt_classe);
 
 				printf("\nGravação : 100%%\n");
 

@@ -24,8 +24,9 @@ u1 acha_tamanho_operando(u1 operando) {
 		case LV1_INT1: return 2;
 		case OFFSET2: return 2;
 		case OFFSET4: return 4;
-		case CP2_INT1: return 3;
+		case CP2_INT1: return 4;
 		case FLAG1: return 1;
+		case CP2_INT0: return 4;
 		default: return 0;
 		//TODO: case INTERROG:
 	  
@@ -276,7 +277,7 @@ t_instrucoes* vetorMnemonicos (void)
 		[0xB6] = {"invokevirtual", CP2},
 		[0xB7] = {"invokespecial", CP2},
 		[0xB8] = {"invokestatic", CP2},
-		[0xB9] = {"invokeinterface", CP2_INT1},
+		[0xB9] = {"invokeinterface", CP2_INT0},
 
 		[0xAC] = {"ireturn", NO_OP},
 		[0xAD] = {"lreturn", NO_OP},

@@ -12,15 +12,14 @@
  * Lê o campo bytes de um utf8_info e os salva em uma string.
  *
  * Parâmetros:
- *	char string[]: String a ser escrita
- *	u2 length: Tamanho da string
- *	constant_utf8_info utf8_info: Bytes a serem escritos na string
+ *	cp_info constant_pool[]:
+ *	u2 utf8_index:
  *
  * Retorno:
- *       Nada
+ *	String da entrada utf8
  */
-void recupera_utf8(char string[], u2 length, constant_utf8_info utf8_info);
 
+char *recupera_utf8(cp_info constant_pool[], u2 utf8_index);
 
 
 /*
@@ -47,7 +46,7 @@ char *recupera_class_name(cp_info *pt_const_pool, u2 class_index);
  * Retorno:
  *       Nome e descritor.
  */
-char *recupera_name_and_type_name(cp_info *pt_const_pool, u2 index);
+char *recupera_name_and_type(cp_info *pt_const_pool, u2 index);
 
 
 /*

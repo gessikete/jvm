@@ -11,13 +11,14 @@ void exibir_fields(field_info *pt_fields, u2 fields_count, cp_info *const_pool){
 		u2 descriptor_index = fields[i].descriptor_index;
 		u2 flag = fields[i].access_flags;
 
-		char *field_name = recupera_string(const_pool, name_index);
+		char *field_name = recupera_utf8(const_pool, name_index);
+		char *descriptor = recupera_utf8(const_pool, descriptor_index);
 
 		fprintf(arquivo_saida, "\n-----------------\n");
 		fprintf(arquivo_saida, "\n[%d] %s", i, field_name);
 		fprintf(arquivo_saida, "\nName: cp_info #%d <%s>", name_index, field_name);
-		fprintf(arquivo_saida, "\nDescriptor: cp_info #%d <%s>", descriptor_index, recupera_string(const_pool, descriptor_index));
-		fprintf(arquivo_saida, "\nAccess flags: %06x [", flag);
+		fprintf(arquivo_saida, "\nDescriptor: cp_info #%d <%s>", descriptor_index, descriptor);
+		fprintf(arquivo_saida, "\nAccess flags: 0x%04x [", flag);
 		while(flag != 0){
 			if(flag >= ENUM){
 				flag -= ENUM;
@@ -46,6 +47,8 @@ void exibir_fields(field_info *pt_fields, u2 fields_count, cp_info *const_pool){
 			}
 		}
 		fprintf(arquivo_saida, "]\n");
+		free(descriptor);
+		free(field_name);
 	}
 	fprintf(arquivo_saida, "\n\n\n");
 }

@@ -23,7 +23,8 @@ void criar_code_attribute(FILE *pt_arquivo, attribute_info attributes[], u2 inde
 	u4 code_length = ler_u4(pt_arquivo);
 
 	//Alocação de memória para o código
-	u1 *code = (u1*) malloc(sizeof(u1)*code_length);					//code[code_lenght]
+	u1 *code = NULL;
+	code = (u1*) malloc(sizeof(u1)*code_length);					//code[code_lenght]
 
 	//Leitura byte a byte do código
 	for(i=0; i<code_length; i++) {
@@ -36,20 +37,16 @@ void criar_code_attribute(FILE *pt_arquivo, attribute_info attributes[], u2 inde
 	//Declaração de ponteiro para a exception_table
 	t_exception_table *exception_table = NULL;
 
-	//Se a exception table tiver ao menos um elemento, salvar as informações
-	if(exception_table_length>0) {
-		//Alocação da exception table
-		exception_table = (t_exception_table*) malloc(sizeof(t_exception_table)*exception_table_length);
+	//Alocação da exception table
+	exception_table = (t_exception_table*) malloc(sizeof(t_exception_table)*exception_table_length);
 
-		//Leitura de cada uma das entradas da exception_table
-		for(i=0; i<exception_table_length; i++) {
-			//Leitura das informações de cada um dos elemento da exception table
-			exception_table[i].start_pc = ler_u2(pt_arquivo);
-			exception_table[i].end_pc = ler_u2(pt_arquivo);
-			exception_table[i].handler_pc = ler_u2(pt_arquivo);
-			exception_table[i].catch_type = ler_u2(pt_arquivo);
-		}
-
+	//Leitura de cada uma das entradas da exception_table
+	for(i=0; i<exception_table_length; i++) {
+		//Leitura das informações de cada um dos elemento da exception table
+		exception_table[i].start_pc = ler_u2(pt_arquivo);
+		exception_table[i].end_pc = ler_u2(pt_arquivo);
+		exception_table[i].handler_pc = ler_u2(pt_arquivo);
+		exception_table[i].catch_type = ler_u2(pt_arquivo);
 	}
 
 	//Leitura da quantidade de atributos
@@ -59,11 +56,9 @@ void criar_code_attribute(FILE *pt_arquivo, attribute_info attributes[], u2 inde
 	attribute_info *atributos = NULL;		//attributes[attributes_count]
 
 	//Se houver mais de um atributo, alocar espaço para eles e chamar a função para salvá-los
-	if(attributes_count>0) {
-		atributos = (attribute_info*) malloc (sizeof(attribute_info)*attributes_count);
-		atributos = carregar_atributos(pt_arquivo,attributes_count,constant_pool,constant_pool_count);
-
-	}
+	
+	atributos = carregar_atributos(pt_arquivo,attributes_count,constant_pool,constant_pool_count);
+	
 
 	//Salva as informações lidas na variável code_info
 	code_info.max_stack = max_stack;
@@ -73,6 +68,7 @@ void criar_code_attribute(FILE *pt_arquivo, attribute_info attributes[], u2 inde
 	code_info.exception_table_length = exception_table_length;
 	code_info.exception_table = exception_table;
 	code_info.attributes = atributos;
+	code_info.attributes_count = attributes_count;
 
 	//Entrada corrente da lista de atributos recebe code_info
 	attributes[index].info.code_info = code_info;
@@ -158,20 +154,23 @@ void atributo_invalido(FILE *pt_arquivo, attribute_info attributes[], u2 index, 
 
 
 funcoes_criar escolher_funcao(cp_info constant_pool[], u2 name_index) {
-	char *nome_atributo = recupera_string(constant_pool,name_index);
+	char *nome_atributo = recupera_utf8(constant_pool,name_index);
+	funcoes_criar funcao;
 
 	//Se conseguir recuperar a string
 	if(nome_atributo) {
 		//comparar a string recuperada com os nomes de atributos e retornar a função que trata do atributo encontrado
-		if(strcmp(nome_atributo,CONST_VALUE)==0) return criar_constant_value_attribute;
-		if(strcmp(nome_atributo,CODE)==0) return criar_code_attribute;
-		if(strcmp(nome_atributo,EXCEPTION)==0) return criar_exceptions_attribute;
-		if(strcmp(nome_atributo,INNER_CLASSES)==0) return criar_innner_classes_attribute;
-		if(strcmp(nome_atributo,SOURCE_FILE)==0) return criar_source_file_attribute;
+		if(strcmp(nome_atributo,CONST_VALUE)==0) funcao = criar_constant_value_attribute;
+		else if(strcmp(nome_atributo,CODE)==0) funcao = criar_code_attribute;
+		else if(strcmp(nome_atributo,EXCEPTION)==0) funcao = criar_exceptions_attribute; 
+		else if(strcmp(nome_atributo,INNER_CLASSES)==0) funcao = criar_innner_classes_attribute;
+		else if(strcmp(nome_atributo,SOURCE_FILE)==0) funcao = criar_source_file_attribute;
+		else funcao = atributo_invalido;
 		//if(strcmp(nome_atributo,LINE_NUM_TABLE)==0) return criar_line_number_table_attribute;
+	
+		free(nome_atributo);
 	}
-	//caso atributo seja inválido, chamar a função que não faz nada (trata atributo desconhecido em silêncio)
-	return atributo_invalido;
+	return funcao;
 }
 
 void criar_attribute(FILE *pt_arquivo, cp_info constant_pool[], u2 constant_pool_count, attribute_info atributos[], u2 index) {
@@ -217,7 +216,7 @@ attribute_info *carregar_atributos(FILE *pt_arquivo, u2 attributes_count, cp_inf
 }
 
 void desalocar_atributos(attribute_info *attributes, u2 attributes_count){
-	if(attributes != NULL){
+	if(attributes!=NULL){
 		u2 i = 0; // índice para o loop for
 
 		// percorre o array de attributes procurando por estruturas internas para desalocar

@@ -20,6 +20,7 @@
 #define CP2_INT1 9
 #define FLAG1 10
 #define INTERROG 11
+#define CP2_INT0 12
 
 /**
 #define NO_OP "no_op"

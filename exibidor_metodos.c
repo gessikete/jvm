@@ -8,13 +8,14 @@ void exibir_methods(method_info *methods, u2 methods_count, cp_info *const_pool)
 		u2 descriptor_index = methods[i].descriptor_index;
 		u2 flag = methods[i].access_flags;
 
-		char *method_name = recupera_string(const_pool, name_index);
+		char *method_name = recupera_utf8(const_pool, name_index);
+		char *descriptor_name = recupera_utf8(const_pool, descriptor_index);
 
 		fprintf(arquivo_saida, "\n-----------------\n");
 		fprintf(arquivo_saida, "\n[%d] %s", i, method_name);
 		fprintf(arquivo_saida, "\nName: cp_info #%d <%s>", name_index, method_name);
-		fprintf(arquivo_saida, "\nDescriptor: cp_info #%d <%s>", descriptor_index, recupera_string(const_pool, descriptor_index));
-		fprintf(arquivo_saida, "\nAccess flags: %06x [", flag);
+		fprintf(arquivo_saida, "\nDescriptor: cp_info #%d <%s>", descriptor_index, descriptor_name);
+		fprintf(arquivo_saida, "\nAccess flags: 0x%04x [", flag);
 		while(flag != 0){
 			if(flag >= SYNTHETIC){
 				flag -= SYNTHETIC;
@@ -56,6 +57,9 @@ void exibir_methods(method_info *methods, u2 methods_count, cp_info *const_pool)
 		for(j = 0; j < methods[i].attributes_count; j++){
 			exibir_code_attribute(methods[i].attributes[j], const_pool);
 		}
+	
+		free(method_name);
+		free(descriptor_name);
 	}
 	fprintf(arquivo_saida, "\n\n\n");
 }
