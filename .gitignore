@@ -37,3 +37,4 @@ jvm
 # Debug files
 *.dSYM/
 *.su
+saida.txt
