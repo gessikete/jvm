@@ -74,14 +74,14 @@ void exibir_interfaces(u2 *interfaces, u2 interfaces_count, cp_info *const_pool)
 		char *class_name = recupera_class_name(const_pool, *(interfaces + i));
 		fprintf(arquivo_saida, "\n-----------------\n");
 		fprintf(arquivo_saida, "\nInterface %d: cp_info #%d <%s>", i, *(interfaces + i),class_name);
-	
+
 		free(class_name);
 	}
 	fprintf(arquivo_saida, "\n\n\n");
 }
 
 void exibir_access_flag(u2 flag){
-	fprintf(arquivo_saida, "Access flags: %06x [", flag);
+	fprintf(arquivo_saida, "Access flags: 0x%04x [", flag);
 	while(flag != 0){
 		if(flag >= ENUM){
 			flag -= ENUM;
@@ -114,8 +114,8 @@ void exibir_access_flag(u2 flag){
 
 void exibir_tipo_classe(char *tipo, u2 classe_index, cp_info *const_pool){
 	char *class_name = recupera_class_name(const_pool, classe_index);
-  
+
 	fprintf(arquivo_saida, "\n%s: cp_info #%d <%s>", tipo, classe_index,class_name);
-	
+
 	free(class_name);
 }
