@@ -47,5 +47,14 @@ typedef uint32_t u4;
  */
 typedef uint64_t u8;
 
+typedef uint8_t tipo_boolean;
+typedef int8_t tipo_byte;
+typedef uint16_t tipo_char;
+typedef int16_t tipo_short;
+typedef int32_t tipo_int;
+typedef long long tipo_long;
+typedef float tipo_float;
+typedef double tipo_double;
+
 
 #endif /* LIB_TYPES */

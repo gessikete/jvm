@@ -1,22 +1,19 @@
-#include "nomes_instrucoes.h"
+#include "vetores_instrucoes.h"
 #include <string.h>
 
 
-// int main(int argc, char const *argv[])
-// {
-// 	t_instrucoes *vetorTeste;
+u2 operando_u2 (u1 code[], u4 index) {
+	return ((code[index]<<8)|code[index+1]);
+}
 
-// 	vetorTeste = vetorMnemonicos();
-
-// 	printf("%s\n", vetorTeste[0xB2].nome);
-// 	return 0;
-// }
-
+u4 operando_u4 (u1 code[], u4 index) {
+	return (code[index]<<24)|(code[index+1]<<16)|(code[index+2]<<8)|code[index+3];
+}
 
 u1 acha_tamanho_operando(u1 operando) {
 	switch(operando) {
-		case NO_OP: return 0; //ok
-		case CP2: return 2;   //ok
+		case NO_OP: return 0;
+		case CP2: return 2;
 		case CP1: return 1;
 		case LV1: return 1;
 		case INT1: return 1;
@@ -24,13 +21,29 @@ u1 acha_tamanho_operando(u1 operando) {
 		case LV1_INT1: return 2;
 		case OFFSET2: return 2;
 		case OFFSET4: return 4;
-		case CP2_INT1: return 4;
+		case CP2_INT1: return 3;
 		case FLAG1: return 1;
 		case CP2_INT0: return 4;
-		default: return 0;
-		//TODO: case INTERROG:
-	  
+		default: return 15;
 	}
+}
+
+char *primitive_array_info(u1 type_code) {
+	char *type = (char*)malloc(sizeof(char)*7);
+  
+	switch (type_code) {
+		case 4: strcpy(type,"boolean"); break;
+		case 5: strcpy(type,"char"); break;
+		case 6: strcpy(type,"float"); break;
+		case 7:strcpy(type,"double"); break;
+		case 8:strcpy(type,"byte"); break;
+		case 9:strcpy(type,"short"); break;
+		case 10:strcpy(type,"int"); break;
+		case 11:strcpy(type,"long"); break;
+	}
+  
+  
+	return type;
 }
 
 t_instrucoes* vetorMnemonicos (void)
@@ -271,8 +284,8 @@ t_instrucoes* vetorMnemonicos (void)
 		[0xA5] = {"if_acmpeq", OFFSET2},
 		[0xA6] = {"if_acmpne", OFFSET2},
 
-		[0xAA] = {"tableswitch", INTERROG},
-		[0xAB] = {"lookupswitch", INTERROG},
+		[0xAA] = {"tableswitch", TABLE_SWITCH},
+		[0xAB] = {"lookupswitch", LOOKUP_SWITCH},
 
 		[0xB6] = {"invokevirtual", CP2},
 		[0xB7] = {"invokespecial", CP2},

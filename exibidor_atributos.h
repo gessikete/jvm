@@ -4,7 +4,7 @@
 #include "leitor_constant_pool.h"
 #include "leitor_atributos.h"
 #include "recuperar_constant_pool.h"
-#include "nomes_instrucoes.h"
+#include "vetores_instrucoes.h"
 
 //Define tamanho máximo de uma string que mostra o operando de uma instrução
 #define TAM_OPERANDO 250
@@ -158,4 +158,10 @@ void exibir_source_file_attribute(attribute_info atributo, cp_info constant_pool
  *       Nada
  */
 void exibir_constant_attribute(attribute_info atributo,  cp_info constant_pool[]);
+
+
+void exibe_table_switch(u1 code[], u4 *ref_index);
+void exibe_lookup_switch(u1 code[], u4 *ref_index);
+char *recupera_operando(cp_info constant_pool[], u1 tipo_operando, u4 tamanho_operando, u1 code[], u4 *ref_index);
+
 #endif
