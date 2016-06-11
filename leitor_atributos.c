@@ -1,7 +1,4 @@
 #include "leitor_atributos.h"
-#include "recuperar_constant_pool.h"
-#include <string.h>
-#include <stdlib.h>
 
 void criar_constant_value_attribute(FILE *pt_arquivo, attribute_info attributes[], u2 index, cp_info constant_pool[],  u2 constant_pool_count) {
 	// Define qual o tipo de attribute, necessário para desalocar
@@ -56,9 +53,9 @@ void criar_code_attribute(FILE *pt_arquivo, attribute_info attributes[], u2 inde
 	attribute_info *atributos = NULL;		//attributes[attributes_count]
 
 	//Se houver mais de um atributo, alocar espaço para eles e chamar a função para salvá-los
-	
+
 	atributos = carregar_atributos(pt_arquivo,attributes_count,constant_pool,constant_pool_count);
-	
+
 
 	//Salva as informações lidas na variável code_info
 	code_info.max_stack = max_stack;
@@ -162,12 +159,12 @@ funcoes_criar escolher_funcao(cp_info constant_pool[], u2 name_index) {
 		//comparar a string recuperada com os nomes de atributos e retornar a função que trata do atributo encontrado
 		if(strcmp(nome_atributo,CONST_VALUE)==0) funcao = criar_constant_value_attribute;
 		else if(strcmp(nome_atributo,CODE)==0) funcao = criar_code_attribute;
-		else if(strcmp(nome_atributo,EXCEPTION)==0) funcao = criar_exceptions_attribute; 
+		else if(strcmp(nome_atributo,EXCEPTION)==0) funcao = criar_exceptions_attribute;
 		else if(strcmp(nome_atributo,INNER_CLASSES)==0) funcao = criar_innner_classes_attribute;
 		else if(strcmp(nome_atributo,SOURCE_FILE)==0) funcao = criar_source_file_attribute;
 		else funcao = atributo_invalido;
 		//if(strcmp(nome_atributo,LINE_NUM_TABLE)==0) return criar_line_number_table_attribute;
-	
+
 		free(nome_atributo);
 	}
 	return funcao;

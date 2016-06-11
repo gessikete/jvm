@@ -57,7 +57,7 @@ void exibir_methods(method_info *methods, u2 methods_count, cp_info *const_pool)
 		for(j = 0; j < methods[i].attributes_count; j++){
 			exibir_code_attribute(methods[i].attributes[j], const_pool);
 		}
-	
+
 		free(method_name);
 		free(descriptor_name);
 	}

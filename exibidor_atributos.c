@@ -50,19 +50,19 @@ void exibir_code_attribute_bytecode(attribute_info atributo, cp_info constant_po
 	u4 i;
 
 	init_instrucoes();
-	
+
 	fprintf(arquivo_saida, "\n\t# Bytecode: ");
 	for(i=0; i<code_length; i++) {
 		fprintf(arquivo_saida, "\n\t\t%d %s",i,instrucoes[code[i]].nome);
 		tipo_operando = instrucoes[code[i]].operando;
-		
+
 		if (tipo_operando==TABLE_SWITCH) exibe_table_switch(code,&i);
 		else if (tipo_operando==LOOKUP_SWITCH) exibe_lookup_switch(code,&i);
-		
+
 		else {
-		
+
 			tamanho_operando = acha_tamanho_operando(tipo_operando);
-		
+
 			if (tamanho_operando>0) {
 				//recupera operando de acordo com o seu tipo
 				operando = recupera_operando(constant_pool,tipo_operando,tamanho_operando,code,&i);
@@ -158,9 +158,9 @@ void exibir_inner_classes_attribute_table(attribute_info atributo, cp_info const
 
 void exibir_source_file(attribute_info atributo, cp_info constant_pool[]){
 	char *source_file = recupera_utf8(constant_pool,atributo.attribute_name_index+1);
-  
+
 	fprintf(arquivo_saida, "\n\tSource File: %s",source_file);
-	
+
 	free(source_file);
 }
 
@@ -209,35 +209,35 @@ void exibe_table_switch(u1 code[], u4 *ref_index) {
 	int32_t offset;
 	int32_t indice_inferior;
 	int32_t indice_superior;
-	
+
 	// Quantidade de bytes que procedem o opcode de table switch
 	switch(alinhamento) {
 		case 1: index+=3; break;
 		case 2: index+=2; break;
 		case 3: index+=1; break;
 	}
-	
+
 	// Recupera o offset do default
 	offset_default = operando_u4(code,index);
-	
+
 	// Atualiza o valor de index
 	index+=4;
-	
+
 	// Recupera o índice inferior do switch
 	indice_inferior = operando_u4(code,index);
 	index+=4;
-	
+
 	// Recupera o índice superior do switch
 	indice_superior = operando_u4(code,index);
 	index+=4;
-	
+
 	fprintf(arquivo_saida," %d to %d",indice_inferior,indice_superior);
 
 	// Percorre o code até terminar o switch
 	for(i=indice_inferior; i<=indice_superior; i++) {
 		offset = (int32_t)operando_u4(code,index);
 		index+=4;
-		
+
 		// Exibe uma entrada do case
 		if(offset>=0) {
 			fprintf(arquivo_saida,"\n\t\t\t%d: %d (+%d)",i,index_inicial+offset-1,offset);
@@ -250,7 +250,7 @@ void exibe_table_switch(u1 code[], u4 *ref_index) {
 	} else {
 		fprintf(arquivo_saida,"\n\t\t\tdefault: %d (%d)",offset_default+index_inicial-1,offset_default);
 	}
-	
+
 	*ref_index = index-1;
 }
 
@@ -263,38 +263,38 @@ void exibe_lookup_switch(u1 code[], u4 *ref_index) {
 	int32_t offset;
 	int32_t pair;
 	int32_t npairs;
-	
+
 	// Quantidade de bytes que procedem o opcode de lookup switch
 	switch(alinhamento) {
 		case 1: index+=3; break;
 		case 2: index+=2; break;
 		case 3: index+=1; break;
 	}
-	
+
 	offset_default = operando_u4(code,index);
 	index+=4;
-	
+
 	npairs = operando_u4(code,index);
 	index+=4;
-	
+
 	fprintf(arquivo_saida," %d",npairs);
 	for(i=0; i<npairs; i++) {
 		pair = (int32_t)operando_u4(code,index);
 		index+=4;
 		offset = (int32_t)operando_u4(code,index);
 		index+=4;
-		
+
 		if(offset>0) {
 			fprintf(arquivo_saida,"\n\t\t\t%d: %d (+%d)",pair,index_inicial+offset-1,offset);
 		} else fprintf(arquivo_saida,"\n\t\t\t%d: %d (%d)",pair,index_inicial+offset-1,offset);
 	}
-	
+
 	if(offset_default>0) {
 		fprintf(arquivo_saida,"\n\t\t\tdefault: %d (+%d)",offset_default+index_inicial-1,offset_default);
 	} else {
 		fprintf(arquivo_saida,"\n\t\t\tdefault: %d (%d)",offset_default+index_inicial-1,offset_default);
 	}
-	
+
 	*ref_index = index-1;
 }
 
@@ -304,16 +304,16 @@ char *recupera_operando(cp_info constant_pool[], u1 tipo_operando, u4 tamanho_op
 	u4 index = *ref_index+1;
 
 	operando = (char*)malloc(sizeof(char)*TAM_OPERANDO);
-	
+
 	if(tamanho_operando==1) {
 		u1 code_u1 = code[index];
 		char *type;
-		
+
 		switch(tipo_operando) {
 			case CP1: {
 				elemento_constant_pool = recupera_elemento_como_string_constant_pool(constant_pool,code_u1);
-				sprintf(operando,"#%d <%s>",code_u1,elemento_constant_pool); 
-				
+				sprintf(operando,"#%d <%s>",code_u1,elemento_constant_pool);
+
 				free(elemento_constant_pool);
 				break;
 			}
@@ -322,7 +322,7 @@ char *recupera_operando(cp_info constant_pool[], u1 tipo_operando, u4 tamanho_op
 			case FLAG1: {
 				type = primitive_array_info(code_u1);
 				sprintf(operando,"%d (%s)",code_u1,type); break;
-			
+
 				free(type);
 			}
 		}
@@ -332,52 +332,52 @@ char *recupera_operando(cp_info constant_pool[], u1 tipo_operando, u4 tamanho_op
 		switch(tipo_operando) {
 			case CP2: {
 				elemento_constant_pool = recupera_elemento_como_string_constant_pool(constant_pool,code_u2);
-				sprintf(operando,"#%d <%s>",code_u2,elemento_constant_pool); 
-				
+				sprintf(operando,"#%d <%s>",code_u2,elemento_constant_pool);
+
 				free(elemento_constant_pool);
 				break;
 			}
 			case INT2: sprintf(operando,"%d",code_s2); break;
-			
+
 			case LV1_INT1: sprintf(operando,"%d by %d",code[index],(signed char)code[index+1]); break;
-			
+
 			case OFFSET2: {
 			  if(code_s2>0) {
-				  sprintf(operando,"%d (+%d)",index+code_s2-1,code_s2); 
-			  } else sprintf(operando,"%d (%d)",index+code_s2-1,code_s2); 
+				  sprintf(operando,"%d (+%d)",index+code_s2-1,code_s2);
+			  } else sprintf(operando,"%d (%d)",index+code_s2-1,code_s2);
 			  break;
 			}
 		}
 	} else if (tamanho_operando==3) {
 		u2 code_u2 = operando_u2(code,index);
 		elemento_constant_pool = recupera_elemento_como_string_constant_pool(constant_pool,code_u2);
-		sprintf(operando,"#%d <%s> dim %d",code_u2,elemento_constant_pool,code[index+2]); 
-				
+		sprintf(operando,"#%d <%s> dim %d",code_u2,elemento_constant_pool,code[index+2]);
+
 		free(elemento_constant_pool);
-	  
+
 	} else if(tamanho_operando==4) {
 		switch(tipo_operando) {
 			case OFFSET4: {
 				u4 code_u4 = operando_u4(code,index);
 				int32_t code_s4 = (int32_t)code_u4;
 				if(code_s4>0) {
-					sprintf(operando,"%d (+%d)",index+code_s4-1,code_s4); 
-				} else sprintf(operando,"%d (%d)",index+code_s4-1,code_s4); 
+					sprintf(operando,"%d (+%d)",index+code_s4-1,code_s4);
+				} else sprintf(operando,"%d (%d)",index+code_s4-1,code_s4);
 				break;
 			}
 			case CP2_INT0: {
 				int count = code[index+2];
 				u2 code_u2 = operando_u2(code,index);
 				elemento_constant_pool = recupera_elemento_como_string_constant_pool(constant_pool,code_u2);
-				sprintf(operando,"#%d <%s> count %d",code_u2,elemento_constant_pool,count); 
-				
+				sprintf(operando,"#%d <%s> count %d",code_u2,elemento_constant_pool,count);
+
 				free(elemento_constant_pool);
 				break;
 			}
-			
+
 			default: sprintf(operando," ");
 		}
 	}
-	
+
 	return operando;
 }

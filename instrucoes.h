@@ -45,9 +45,9 @@ typedef struct {
 void init_instrucoes();
 
 /*
- * Preenche um vetor de t_instrucoes com o nome da instrução e o seu tipo de 
+ * Preenche um vetor de t_instrucoes com o nome da instrução e o seu tipo de
  * operando de acordo com o seu opcode
- * 
+ *
  * Parâmetros:
  *       Nenhum
  *
@@ -58,9 +58,9 @@ t_instrucoes* vetorMnemonicos (void);
 
 
 /*
- * Retorna o tamanho de um operando de acordo com o tipo do operando. Se o operando 
+ * Retorna o tamanho de um operando de acordo com o tipo do operando. Se o operando
  * for do tipo LOOKUP_SWITCH ou TABLE_SWITCH, retorna 15.
- * 
+ *
  * Parâmetros:
  *       u1 operando: o tipo do operando
  *
@@ -72,7 +72,7 @@ u1 acha_tamanho_operando(u1 operando);
 
 /*
  * Concatena dois bytes de code.
- * 
+ *
  * Parâmetros:
  *      u1 code[]: vetor com a parte de code de um método
  * 	u4 index: índice onde está o primeiro byte a ser concatenado
@@ -84,7 +84,7 @@ u2 operando_u2 (u1 code[], u4 index);
 
 /*
  * Concatena quatro bytes de code.
- * 
+ *
  * Parâmetros:
  *      u1 code[]: vetor com a parte de code de um método
  * 	u4 index: índice onde está o primeiro byte a ser concatenado
@@ -97,7 +97,7 @@ u4 operando_u4 (u1 code[], u4 index);
 
 /*
  * Relaciona um tipo primitivo de um array com um número inteiro
- * 
+ *
  * Parâmetros:
  *      u1 type_code: o número inteiro a ser relacionado
  *

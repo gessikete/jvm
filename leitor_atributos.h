@@ -3,6 +3,9 @@
 
 #include "types.h"
 #include "leitor_constant_pool.h"
+#include "recuperar_constant_pool.h"
+#include <string.h>
+#include <stdlib.h>
 
 /* Definição das estruturas dos atributos */
 

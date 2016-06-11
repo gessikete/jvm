@@ -1,5 +1,4 @@
 #include "validation.h"
-#include <stdio.h>
 
 bool validar_magic(u4 magic){
 	if(magic == 0xCAFEBABE){

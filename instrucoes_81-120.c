@@ -238,4 +238,3 @@ void dneg(stack_frames *pilha_frames) {
 void ishl(stack_frames *pilha_frames) {
 
 }
-

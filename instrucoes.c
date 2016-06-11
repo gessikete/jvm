@@ -4,7 +4,7 @@
 t_instrucoes instrucoes[0xCB];
 
 void init_instrucoes() {
-	t_instrucoes vetor_instrucoes[] = 
+	t_instrucoes vetor_instrucoes[] =
 	{
 		[0x00] = {"nop", nop, NO_OP},
 		[0x01] = {"aconst_null", aconst_null, NO_OP},
@@ -210,7 +210,7 @@ void init_instrucoes() {
 		[0xC9] = {"jsr_w", jsr_w, OFFSET4},
 		[0xCA] = {"breakpoint", breakpoint, NO_OP}
 	};
-	
+
 	memcpy(instrucoes,vetor_instrucoes,sizeof (instrucoes));
 }
 
@@ -243,7 +243,7 @@ u1 acha_tamanho_operando(u1 operando) {
 
 char *primitive_array_info(u1 type_code) {
 	char *type = (char*)malloc(sizeof(char)*7);
-  
+
 	switch (type_code) {
 		case 4: strcpy(type,"boolean"); break;
 		case 5: strcpy(type,"char"); break;
@@ -254,8 +254,8 @@ char *primitive_array_info(u1 type_code) {
 		case 10:strcpy(type,"int"); break;
 		case 11:strcpy(type,"long"); break;
 	}
-  
-  
+
+
 	return type;
 }
 
@@ -265,7 +265,7 @@ t_instrucoes* vetorMnemonicos (void)
 	t_instrucoes *vetorRetorno = (t_instrucoes*)malloc(sizeof(t_instrucoes)*0xCB);
 
 	//declarando o vetor com os mnemonicos
-	t_instrucoes instrucoes[] = 
+	t_instrucoes instrucoes[] =
 	{
 		[0x00] = {"nop", NO_OP},
 		[0x01] = {"aconst_null ", NO_OP},
@@ -284,7 +284,7 @@ t_instrucoes* vetorMnemonicos (void)
 		[0x0E] = {"dconst_0", NO_OP},
 		[0x0F] = {"dconst_1", NO_OP},
 
-		
+
 		[0x10] = {"bipush", INT1},
 		[0x11] = {"sipush", INT2},
 		[0x12] = {"ldc", CP1},
@@ -301,8 +301,8 @@ t_instrucoes* vetorMnemonicos (void)
 		[0x1D] = {"iload_3", NO_OP},
 		[0x1E] = {"lload_0", NO_OP},
 		[0x1F] = {"lload_1", NO_OP},
-		
-		
+
+
 		[0x20] = {"lload_2", NO_OP},
 		[0x21] = {"lload_3", NO_OP},
 		[0x22] = {"fload_0", NO_OP},
@@ -320,7 +320,7 @@ t_instrucoes* vetorMnemonicos (void)
 		[0x2E] = {"iaload", NO_OP},
 		[0x2F] = {"laload", NO_OP},
 
-		
+
 		[0x30] = {"faload", NO_OP},
 		[0x31] = {"daload", NO_OP},
 		[0x32] = {"aaload", NO_OP},
@@ -337,8 +337,8 @@ t_instrucoes* vetorMnemonicos (void)
 		[0x3D] = {"istore_2", NO_OP},
 		[0x3E] = {"istore_3", NO_OP},
 		[0x3F] = {"lstore_0", NO_OP},
-		
-		
+
+
 		[0x40] = {"lstore_1", NO_OP},
 		[0x41] = {"lstore_2", NO_OP},
 		[0x42] = {"lstore_3", NO_OP},
@@ -355,8 +355,8 @@ t_instrucoes* vetorMnemonicos (void)
 		[0x4D] = {"astore_2", NO_OP},
 		[0x4E] = {"astore_3", NO_OP},
 		[0x4F] = {"iastore", NO_OP},
-		
-		
+
+
 		[0x50] = {"lastore", NO_OP},
 		[0x51] = {"fastore", NO_OP},
 		[0x52] = {"dastore", NO_OP},
@@ -374,7 +374,7 @@ t_instrucoes* vetorMnemonicos (void)
 		[0x5E] = {"dup2_x2", NO_OP},
 		[0x5F] = {"swap", NO_OP},
 
-		
+
 		[0x60] = {"iadd", NO_OP},
 		[0x61] = {"ladd", NO_OP},
 		[0x62] = {"fadd", NO_OP},
@@ -392,7 +392,7 @@ t_instrucoes* vetorMnemonicos (void)
 		[0x6E] = {"fdiv", NO_OP},
 		[0x6F] = {"ddiv", NO_OP},
 
-		
+
 		[0x70] = {"irem", NO_OP},
 		[0x71] = {"lrem", NO_OP},
 		[0x72] = {"frem", NO_OP},
@@ -410,7 +410,7 @@ t_instrucoes* vetorMnemonicos (void)
 		[0x7E] = {"iand", NO_OP},
 		[0x7F] = {"land", NO_OP},
 
-		
+
 		[0x80] = {"ior", NO_OP},
 		[0x81] = {"lor", NO_OP},
 		[0x82] = {"ixor", NO_OP},
@@ -427,8 +427,8 @@ t_instrucoes* vetorMnemonicos (void)
 		[0x8D] = {"f2d", NO_OP},
 		[0x8E] = {"d2i", NO_OP},
 		[0x8F] = {"d2l", NO_OP},
-		
-		
+
+
 		[0x90] = {"d2f", NO_OP},
 		[0x91] = {"i2b", NO_OP},
 		[0x92] = {"i2c", NO_OP},
@@ -463,8 +463,8 @@ t_instrucoes* vetorMnemonicos (void)
 		[0xAD] = {"lreturn", NO_OP},
 		[0xAE] = {"freturn", NO_OP},
 		[0xAF] = {"dreturn", NO_OP},
-		
-		
+
+
 		[0xB0] = {"areturn", NO_OP},
 		[0xB1] = {"return", NO_OP},
 		[0xB2] = {"getstatic", CP2},
@@ -481,8 +481,8 @@ t_instrucoes* vetorMnemonicos (void)
 		[0xBD] = {"anewarray", CP2},
 		[0xBE] = {"arraylength", NO_OP},
 		[0xBF] = {"athrow", NO_OP},
-		
-		
+
+
 		[0xC0] = {"checkcast", CP2},
 		[0xC1] = {"instanceof", CP2},
 		[0xC2] = {"monitorenter", NO_OP},

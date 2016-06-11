@@ -1,16 +1,3 @@
-/*
- *  Universidade de Brasília
- *  Instituto de Ciencias Exatas
- *  Departamento de Ciência da Computação
- *
- *  Software Básico - Turma A - 1/2016
- *
- *  Projeto JVM
- *
- *  Arquivo de cabeçalho "main.c"
- *
- *  Copyright © 2016 UnB. All rights reserved.
- */
 #ifndef LIB_TYPES
 #define LIB_TYPES
 

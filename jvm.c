@@ -46,7 +46,7 @@ int main(int argc, char*argv[]){
 		if ((!strcmp(argv[1], "-l"))&&(pt_classe)){
 			printf("\nLeitura concluída com sucesso!\n");
 			inicializar_jvm(pt_classe);
-			
+
 		} else if (!strcmp(argv[1], "-e")){
 			if(pt_classe) {
 

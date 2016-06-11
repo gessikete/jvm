@@ -1,6 +1,4 @@
 #include "exibidor_constant_pool.h"
-#include "recuperar_constant_pool.h"
-#include <string.h>
 
 void inicializar_vetor_exibidor(void (*funcoes_constant[]) (cp_info*,u2)) {
 	funcoes_constant[1] = exibir_utf8_info;
@@ -48,7 +46,7 @@ void exibir_methodref_info(cp_info *pt_const_pool, u2 index) {
 	u2 name_and_type_index = const_pool.info.methodref_info.name_and_type_index;
 	char *name_and_type = recupera_name_and_type(pt_const_pool,name_and_type_index);
 	char *class_name = recupera_class_name(pt_const_pool,class_index);
-	
+
 	fprintf(arquivo_saida, "\n[%d] CONSTANT_Methodref_info",index);
 	fprintf(arquivo_saida, "\n\tClass Name: cp_info #%d <%s>",class_index,class_name);
 	fprintf(arquivo_saida, "\n\tName and Type: cp_info #%d <%s>",name_and_type_index,name_and_type);
@@ -61,10 +59,10 @@ void exibir_class_info(cp_info *pt_const_pool, u2 index) {
 	cp_info const_pool = pt_const_pool[index];
 	u2 name_index = const_pool.info.class_info.name_index;
 	char *class_name = recupera_class_name(pt_const_pool,index);
-  
+
 	fprintf(arquivo_saida, "\n[%d] CONSTANT_Class_info",index);
 	fprintf(arquivo_saida, "\n\tClass Name: cp_info #%d <%s>",name_index,class_name);
-	
+
 	free(class_name);
 }
 
@@ -75,11 +73,11 @@ void exibir_fieldref_info(cp_info *pt_const_pool, u2 index) {
 	u2 name_and_type_index = const_pool.info.fieldref_info.name_and_type_index;
 	char *name_and_type = recupera_name_and_type(pt_const_pool,name_and_type_index);
 	char *class_name = recupera_class_name(pt_const_pool,class_index);
-  
+
 	fprintf(arquivo_saida, "\n[%d] CONSTANT_Fieldref_info",index);
 	fprintf(arquivo_saida, "\n\tClass Name: cp_info #%d <%s>",class_index,class_name);
 	fprintf(arquivo_saida, "\n\tName and Type: cp_info #%d <%s>",name_and_type_index,name_and_type);
-	
+
 	free(class_name);
 	free(name_and_type);
 }
@@ -111,7 +109,7 @@ void exibir_name_and_type_info(cp_info *pt_const_pool, u2 index) {
 	u2 descriptor_index = const_pool.info.name_and_type_info.descriptor_index;
 	char *name = recupera_utf8(pt_const_pool,name_index);
 	char *descriptor = recupera_utf8(pt_const_pool,descriptor_index);
-	
+
 	fprintf(arquivo_saida, "\n[%d] CONSTANT_NameAndType_info",index);
 	fprintf(arquivo_saida, "\n\tName: cp_info #%d <%s>",name_index,name);
 	fprintf(arquivo_saida, "\n\tDescriptor: cp_info #%d <%s>",descriptor_index,descriptor);
@@ -137,7 +135,7 @@ void exibir_string_info(cp_info *pt_const_pool, u2 index) {
 
 	fprintf(arquivo_saida, "\n[%d] CONSTANT_String_info",index);
 	fprintf(arquivo_saida, "\n\tString: cp_info #%d <%s>",string_index,string);
-	
+
 	free(string);
 }
 
@@ -168,11 +166,11 @@ void exibir_interface_methodref_info(cp_info *pt_const_pool, u2 index) {
 	u2 name_and_type_index = const_pool.info.interface_methodref_info.name_and_type_index;
 	char *class_name = recupera_class_name(pt_const_pool,class_index);
 	char *name_and_type = recupera_name_and_type(pt_const_pool,name_and_type_index);
-	
+
 	fprintf(arquivo_saida, "\n[%d] CONSTANT_Interface_Methodref_info",index);
 	fprintf(arquivo_saida, "\n\tClass Name: cp_info #%d <%s>",class_index,class_name);
 	fprintf(arquivo_saida, "\n\tName and Type: cp_info #%d <%s>",name_and_type_index,name_and_type);
-	
+
 	free(class_name);
 	free(name_and_type);
 }

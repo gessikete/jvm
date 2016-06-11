@@ -27,7 +27,7 @@ char *recupera_utf8(cp_info constant_pool[], u2 utf8_index);
  *
  * Parâmetros:
  *	cp_info *pt_const_pool: ponteiro para a constant pool
- *	u2 class_index: indice da classe 
+ *	u2 class_index: indice da classe
  *
  * Retorno:
  *       Nome da classe
@@ -66,7 +66,7 @@ u4 recupera_low_bytes(u8 bytes);
  * As funcoes a seguir recuperam valores (int,float) na constant pool
  *
  * Parâmetros:
- *	cp_info: const_pool[]	
+ *	cp_info: const_pool[]
  *	u2 bytes: int_index || float_index
  *
  * Retorno:
@@ -79,7 +79,7 @@ float recupera_float(cp_info *pt_const_pool, u2 float_index);
  * As funcoes a seguir recuperam valores (long, double) na constant pool
  *
  * Parâmetros:
- *	cp_info: const_pool[]	
+ *	cp_info: const_pool[]
  *	u2 bytes: long_index || double index
  *
  * Retorno:
@@ -100,4 +100,5 @@ double recupera_double(cp_info *pt_const_pool, u2 index);
 char *recupera_string(cp_info *pt_const_pool, u2 string_index);
 
 char *recupera_elemento_como_string_constant_pool(cp_info *pt_const_pool, u2 index);
+
 #endif
