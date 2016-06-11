@@ -1,11 +1,19 @@
-#ifndef NOMES_INST_H
-#define NOMES_INST_H
+#ifndef INSTRUCOES_H
+#define INSTRUCOES_H
 
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
 #include "types.h"
+
+
+#include "instrucoes_0-40.h"
+#include "instrucoes_41-80.h"
+#include "instrucoes_81-120.h"
+#include "instrucoes_121-160.h"
+#include "instrucoes_161-201.h"
+#include "pilha_frames.h"
 
 
 #define NO_OP 0
@@ -23,12 +31,18 @@
 #define LOOKUP_SWITCH 12
 #define CP2_INT0 13
 
+// ponteiro para as funções que implementam as instruções
+typedef void (*t_funcao_instrucao)(stack_frames*);
+
 //estrutura para guardar os nomes das funções e os tipos de operandos
 typedef struct {
 	char *nome;
+	t_funcao_instrucao funcao_instrucao;
 	u1 operando;
 } t_instrucoes;
 
+
+void init_instrucoes();
 
 /*
  * Preenche um vetor de t_instrucoes com o nome da instrução e o seu tipo de 
@@ -91,4 +105,9 @@ u4 operando_u4 (u1 code[], u4 index);
  *     	String que representa um tipo primitivo
  */
 char *primitive_array_info(u1 type_code);
+
+
+// Declaração do vetor que contém os nomes da instruções, suas respectivas funções e os tipos de seus operandos
+extern t_instrucoes instrucoes[];
+
 #endif

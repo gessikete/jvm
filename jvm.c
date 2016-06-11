@@ -22,7 +22,7 @@
 #include <stdio.h>
 #include "leitor_classe.h"
 #include "exibidor_classe.h"
-
+#include "execucao_jvm.h"
 
 int main(int argc, char*argv[]){
 	class_file *pt_classe;
@@ -43,9 +43,11 @@ int main(int argc, char*argv[]){
 		// Carrega as informações do arquivo .class para a memória
 		pt_classe = carregar_classe(nome_classe);
 
-		if (!strcmp(argv[1], "-l")){
+		if ((!strcmp(argv[1], "-l"))&&(pt_classe)){
 			printf("\nLeitura concluída com sucesso!\n");
-		}else if (!strcmp(argv[1], "-e")){
+			inicializar_jvm(pt_classe);
+			
+		} else if (!strcmp(argv[1], "-e")){
 			if(pt_classe) {
 
 				// Abrindo arquivo para gravar a saida

@@ -4,10 +4,12 @@
 #include "leitor_constant_pool.h"
 #include "leitor_atributos.h"
 #include "recuperar_constant_pool.h"
-#include "vetores_instrucoes.h"
+#include "instrucoes.h"
 
 //Define tamanho máximo de uma string que mostra o operando de uma instrução
 #define TAM_OPERANDO 250
+
+extern t_instrucoes instr[];
 
 /*
  * Exibe as informações genéricas do atributo code (índice do nome e o seu tamanho)

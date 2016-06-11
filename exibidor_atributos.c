@@ -1,5 +1,6 @@
 #include "exibidor_atributos.h"
 
+
 void exibir_generic_info(attribute_info atributo) {
 	//passa as informações do atributo para novas variáveis
 	u2 attribute_name_index = atributo.attribute_name_index;
@@ -40,8 +41,6 @@ void exibir_code_attribute_misc(attribute_info atributo) {
 
 
 void exibir_code_attribute_bytecode(attribute_info atributo, cp_info constant_pool[]) {
-	//recupera vetor de instrucoes
-	t_instrucoes *instrucoes = vetorMnemonicos();
 	code_attribute code_info = atributo.info.code_info;
 	u4 code_length = code_info.code_length;
 	u1 *code = code_info.code;
@@ -50,6 +49,8 @@ void exibir_code_attribute_bytecode(attribute_info atributo, cp_info constant_po
 	char *operando;
 	u4 i;
 
+	init_instrucoes();
+	
 	fprintf(arquivo_saida, "\n\t# Bytecode: ");
 	for(i=0; i<code_length; i++) {
 		fprintf(arquivo_saida, "\n\t\t%d %s",i,instrucoes[code[i]].nome);
@@ -71,8 +72,6 @@ void exibir_code_attribute_bytecode(attribute_info atributo, cp_info constant_po
 			i += tamanho_operando;
 		}
 	}
-
-	free(instrucoes);
 }
 
 void exibir_code_attribute_exception_table(attribute_info atributo, cp_info constant_pool[]) {
@@ -375,14 +374,6 @@ char *recupera_operando(cp_info constant_pool[], u1 tipo_operando, u4 tamanho_op
 				free(elemento_constant_pool);
 				break;
 			}
-			/**case CP2_INT1: {
-				u2 code_u2 = operando_u2(code,index);
-				elemento_constant_pool = recupera_elemento_como_string_constant_pool(constant_pool,code_u2);
-				sprintf(operando,"#%d <%s> dim %d",code_u2,elemento_constant_pool,code[index+2]); 
-				
-				free(elemento_constant_pool);
-				break;
-			}**/
 			
 			default: sprintf(operando," ");
 		}
