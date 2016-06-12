@@ -31,7 +31,7 @@ void exibir_code_attribute_misc(attribute_info atributo) {
 	u2 max_locals = code_info.max_locals;
 	u4 code_length = code_info.code_length;
 
-	fprintf(arquivo_saida, "\n\t# Misc");
+	fprintf(arquivo_saida, "\n\tMisc");
 	//exibe as informaões recuperadas
 	fprintf(arquivo_saida, "\n\tMaximum Stack Depth: %d",max_stack);
 	fprintf(arquivo_saida, "\n\tMaximum Local Variables: %d",max_locals);
@@ -51,7 +51,7 @@ void exibir_code_attribute_bytecode(attribute_info atributo, cp_info constant_po
 
 	init_instrucoes();
 
-	fprintf(arquivo_saida, "\n\t# Bytecode: ");
+	fprintf(arquivo_saida, "\n\tBytecode: ");
 	for(i=0; i<code_length; i++) {
 		fprintf(arquivo_saida, "\n\t\t%d %s",i,instrucoes[code[i]].nome);
 		tipo_operando = instrucoes[code[i]].operando;
@@ -84,7 +84,7 @@ void exibir_code_attribute_exception_table(attribute_info atributo, cp_info cons
 	u2 catch_type;
 	u2 i;
 
-	fprintf(arquivo_saida, "\n\t# Exception Table Length: %d",exception_table_length);
+	fprintf(arquivo_saida, "\n\tException Table Length: %d",exception_table_length);
 
 	//percorre as entradas de exception_table[]
 	for(i=0; i<exception_table_length; i++) {
@@ -131,43 +131,53 @@ void exibir_inner_classes_attribute_table(attribute_info atributo, cp_info const
 	inner_classes_attribute inner_classes_info = atributo.info.inner_classes_info;
 	u2 number_of_inner_classes = inner_classes_info.number_of_classes;
 	inner_classes_table *classes;
-	u2 i;
+	u2 classe_index;
 
 
 	fprintf(arquivo_saida, "\n\tNumber of Inner Classes: %d",number_of_inner_classes);
 
 	classes = inner_classes_info.classes;
 
-	fprintf(arquivo_saida, "\t\tClasses:\n");
+	fprintf(arquivo_saida, "\n\tSpecific info:");
 
 	//imprime os indeices de exception_table[]
-	for(i=0; i<number_of_inner_classes; i++) {
-		//exibe as informações recuperadas
-		fprintf(arquivo_saida, "\t\tClass %d\n", i);
-		// fprintf(arquivo_saida, "\nInner_Class[%d].inner_class_info_index = %d ",i,classes[i].inner_class_info_index);
-		// fprintf(arquivo_saida, "\nInner_Class[%d].outer_class_info_index = %d ",i,classes[i].outer_class_info_index);
-		// fprintf(arquivo_saida, "\nInner_Class[%d].inner_name_index = %s ",i,recupera_string(constant_pool,classes[i].inner_name_index));
-		// fprintf(arquivo_saida, "\nInner_Class[%d].inner_class_access_flag = %d ",i,classes[i].inner_class_access_flags);
+	for(classe_index=0; classe_index<number_of_inner_classes; classe_index++) {
+		u2 inner_class_info_index = classes[classe_index].inner_class_info_index;
+		char *inner_class = recupera_class_name(constant_pool, inner_class_info_index);
+		u2 outer_class_info_index = classes[classe_index].outer_class_info_index;
+		char *outer_class = recupera_class_name(constant_pool, outer_class_info_index);
+		u2 inner_name_index = classes[classe_index].inner_name_index;
+		char *inner_name = recupera_utf8(constant_pool, inner_name_index);
+		u2 inner_class_access_flags = classes[classe_index].inner_class_access_flags;
 
-		fprintf(arquivo_saida, "\n\t\tinner_class_info_index: %d ",classes[i].inner_class_info_index);
-		fprintf(arquivo_saida, "\n\t\touter_class_info_index: %d ",classes[i].outer_class_info_index);
-		fprintf(arquivo_saida, "\n\t\tinner_name_index: %s ",recupera_utf8(constant_pool,classes[i].inner_name_index));
-		fprintf(arquivo_saida, "\n\t\tinner_class_access_flags: %d ",classes[i].inner_class_access_flags);
+		//exibe as informações recuperadas
+		fprintf(arquivo_saida, "\n\tNr. %d ", classe_index);
+		fprintf(arquivo_saida, "inner_class: cp_info #%d %s ", inner_class_info_index, inner_class);
+		fprintf(arquivo_saida, "outer_class: cp_info #%d %s ", outer_class_info_index, outer_class);
+		fprintf(arquivo_saida, "inner_name: cp_info #%d %s ", inner_name_index, inner_name);
+		fprintf(arquivo_saida, "access flags: ");
+		exibir_access_flag_string(inner_class_access_flags);
+
+		free(inner_class);
+		free(outer_class);
+		free(inner_name);
 	}
 }
 
 void exibir_source_file(attribute_info atributo, cp_info constant_pool[]){
-	char *source_file = recupera_utf8(constant_pool,atributo.attribute_name_index+1);
+	char *source_file = recupera_utf8(constant_pool, atributo.attribute_name_index+1);
+	u2 source_file_name_index = atributo.attribute_name_index+1;
 
-	fprintf(arquivo_saida, "\n\tSource File: %s",source_file);
+	fprintf(arquivo_saida, "\n\tSpecific info:");
+	fprintf(arquivo_saida, "\n\tSource file name index: cp_info #%d <%s>", source_file_name_index, source_file);
 
 	free(source_file);
 }
 
 void exibir_code_attribute(attribute_info atributo, cp_info constant_pool[]) {
-	fprintf(arquivo_saida, "\n\n\t -> Code Attribute: ");
+	fprintf(arquivo_saida, "\n\n\tCode Attribute: ");
 	exibir_generic_info(atributo);
-	fprintf(arquivo_saida, "\n");
+	fprintf(arquivo_saida, "\n\tSpecific info:");
 	exibir_code_attribute_bytecode(atributo,constant_pool);
 	fprintf(arquivo_saida, "\n");
 	exibir_code_attribute_exception_table(atributo,constant_pool);
@@ -175,26 +185,27 @@ void exibir_code_attribute(attribute_info atributo, cp_info constant_pool[]) {
 	exibir_code_attribute_misc(atributo);
 	fprintf(arquivo_saida, "\n");
 }
+
 void exibir_exception_attribute(attribute_info atributo, cp_info constant_pool[]) {
-	fprintf(arquivo_saida, "\n\t -> Exception Attribute: ");
+	fprintf(arquivo_saida, "\n\n\tException Attribute: ");
 	exibir_generic_info(atributo);
 	exibir_exception_attribute_table(atributo,constant_pool);
 }
 
 void exibir_inner_classes_attribute(attribute_info atributo, cp_info constant_pool[]){
-	fprintf(arquivo_saida, "\n\t -> Inner Class Attribute: ");
+	fprintf(arquivo_saida, "\n\n\tInner Class Attribute: ");
 	exibir_generic_info(atributo);
 	exibir_inner_classes_attribute_table(atributo,constant_pool);
 }
 
 void exibir_source_file_attribute(attribute_info atributo, cp_info constant_pool[]){
-	fprintf(arquivo_saida, "\n\t -> Source File Attribute: ");
+	fprintf(arquivo_saida, "\n\n\tSource File Attribute: ");
 	exibir_generic_info(atributo);
 	exibir_source_file(atributo,constant_pool);
 }
 
 void exibir_constant_attribute(attribute_info atributo,  cp_info constant_pool[]){
-	fprintf(arquivo_saida, "\n\t -> Constant Attribute: ");
+	fprintf(arquivo_saida, "\n\n\tConstant Attribute: ");
 	exibir_generic_info(atributo);
 	exibir_constant_value_index(atributo);
 }

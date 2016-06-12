@@ -14,7 +14,6 @@ void exibir_fields(field_info *pt_fields, u2 fields_count, cp_info *const_pool){
 		char *field_name = recupera_utf8(const_pool, name_index);
 		char *descriptor = recupera_utf8(const_pool, descriptor_index);
 
-		fprintf(arquivo_saida, "\n-----------------\n");
 		fprintf(arquivo_saida, "\n[%d] %s", i, field_name);
 		fprintf(arquivo_saida, "\nName: cp_info #%d <%s>", name_index, field_name);
 		fprintf(arquivo_saida, "\nDescriptor: cp_info #%d <%s>", descriptor_index, descriptor);
@@ -46,7 +45,7 @@ void exibir_fields(field_info *pt_fields, u2 fields_count, cp_info *const_pool){
 				fprintf(arquivo_saida, " public");
 			}
 		}
-		fprintf(arquivo_saida, "]\n");
+		fprintf(arquivo_saida, "]");
 		free(descriptor);
 		free(field_name);
 	}

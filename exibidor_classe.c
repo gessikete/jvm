@@ -9,7 +9,8 @@ void exibir_classe(class_file* cp){
 	fprintf(arquivo_saida, "Minor version: %d\n", cp->minor_version);
 	fprintf(arquivo_saida, "Major version: %d\n", cp->major_version);
 	fprintf(arquivo_saida, "Constant pool count: %d\n", cp->constant_pool_count);
-	exibir_access_flag(cp->access_flags);
+	fprintf(arquivo_saida, "Access flags: ");
+	exibir_access_flag_string(cp->access_flags);
 	exibir_tipo_classe("This class", cp->this_class, cp->constant_pool);
 	exibir_tipo_classe("Super class", cp->super_class, cp->constant_pool);
 	fprintf(arquivo_saida, "\nInterface count: %d\n", cp->interfaces_count);
@@ -19,34 +20,34 @@ void exibir_classe(class_file* cp){
 
 	//Constant Pool
 	if(cp->constant_pool_count > 0){
-		fprintf(arquivo_saida, "\n\n##Constant Pool##\n");
+		fprintf(arquivo_saida, "\n\nConstant Pool");
 		exibir_constant_pool(cp->constant_pool, cp->constant_pool_count);
 	}
 
 	//Interface
 	if(cp->interfaces_count > 0){
-		fprintf(arquivo_saida, "##Interfaces##\n");
+		fprintf(arquivo_saida, "Interfaces\n");
 		fprintf(arquivo_saida, "Interface Count: %d\n", cp->interfaces_count);
 		exibir_interfaces(cp->interfaces, cp->interfaces_count, cp->constant_pool);
 	}
 
 	//Fields
 	if(cp->fields_count > 0){
-		fprintf(arquivo_saida, "##Fields##\n");
+		fprintf(arquivo_saida, "Fields\n");
 		fprintf(arquivo_saida, "Fields Count: %d\n", cp->fields_count);
 		exibir_fields(cp->fields, cp->fields_count, cp->constant_pool);
 	}
 
 	//Methods
 	if(cp->methods_count > 0){
-		fprintf(arquivo_saida, "##Methods##\n");
+		fprintf(arquivo_saida, "Methods\n");
 		fprintf(arquivo_saida, "Methods Count: %d\n", cp->methods_count);
 		exibir_methods(cp->methods, cp->methods_count, cp->constant_pool);
 	}
 
 	//Attributes
 	if(cp->attributes_count > 0){
-		fprintf(arquivo_saida, "##Attributes##\n");
+		fprintf(arquivo_saida, "Attributes\n");
 		fprintf(arquivo_saida, "Attributes Count: %d\n", cp->attributes_count);
 
 		u2 i = 0;
@@ -72,44 +73,11 @@ void exibir_interfaces(u2 *interfaces, u2 interfaces_count, cp_info *const_pool)
 
 	for(i = 0; i < interfaces_count; i++) {
 		char *class_name = recupera_class_name(const_pool, *(interfaces + i));
-		fprintf(arquivo_saida, "\n-----------------\n");
 		fprintf(arquivo_saida, "\nInterface %d: cp_info #%d <%s>", i, *(interfaces + i),class_name);
 
 		free(class_name);
 	}
 	fprintf(arquivo_saida, "\n\n\n");
-}
-
-void exibir_access_flag(u2 flag){
-	fprintf(arquivo_saida, "Access flags: 0x%04x [", flag);
-	while(flag != 0){
-		if(flag >= ENUM){
-			flag -= ENUM;
-			fprintf(arquivo_saida, " enum");
-		}else if( flag >= ACC_ANNOTATION){
-			flag -= ACC_ANNOTATION;
-			fprintf(arquivo_saida, " annotation");
-		}else if(flag >= ACC_SYNTHETIC) {
-			flag -= ACC_SYNTHETIC;
-			fprintf(arquivo_saida, " synthetic");
-		}else if (flag >= ACC_ABSTRACT) {
-			flag -= ACC_ABSTRACT;
-			fprintf(arquivo_saida, " abstract");
-		}else if (flag >= ACC_INTERFACE) {
-			flag -= ACC_INTERFACE;
-			fprintf(arquivo_saida, " interface");
-		}else if (flag >= ACC_SUPER) {
-			flag -= ACC_SUPER;
-			fprintf(arquivo_saida, " super");
-		}else if (flag >= ACC_FINAL) {
-			flag -= ACC_FINAL;
-			fprintf(arquivo_saida, " final");
-		} else{
-			flag -= ACC_PUBLIC;
-			fprintf(arquivo_saida, " public");
-		}
-	}
-	fprintf(arquivo_saida, "]");
 }
 
 void exibir_tipo_classe(char *tipo, u2 classe_index, cp_info *const_pool){

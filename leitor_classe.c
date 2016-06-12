@@ -25,9 +25,6 @@ class_file *carregar_classe(char *nome_arquivo){
 		return NULL;
 	}
 
-	//printf de feedback para usuario
-	printf("\nLeitura Magic Number : 100%%\n");
-
 	// Tenta ler minor e major version, caso estejam corretos continua a leitura
 	// da classe, caso contrário retorna falso
 	pt_classe->minor_version = ler_u2(pt_arquivo);
@@ -36,38 +33,24 @@ class_file *carregar_classe(char *nome_arquivo){
 		return NULL;
 	}
 
-	//printf de feedback para usuario
-	printf("Leitura Minor e Major Version : 100%%\n");
-
 	// Tentar ler o número de entradas da cosntant pool
 	pt_classe->constant_pool_count = ler_u2(pt_arquivo);
 
 	// Tenta ler as constantes da constant pool
 	pt_classe->constant_pool = carregar_constant_pool(pt_classe->constant_pool_count, pt_arquivo);
 
-	//printf de feedback para usuario
-	printf("Leitura Constant Pool : 100%%\n");
-
 	// TODO é realmente necessário fazer algum tipo de leitura diferente para access flag?
 	// Tenta ler o valor de access flag
 	pt_classe->access_flags = ler_u2(pt_arquivo);
 
-	//printf de feedback para usuario
-	printf("Leitura Acces Flags : 100%%\n");
 
 	// Tenta ler o valor de this class, index para estrutura na constant pool
 	// que representa a classe ou interface
 	pt_classe->this_class = ler_u2(pt_arquivo);
 
-	//printf de feedback para usuario
-	printf("Leitura This Class : 100%%\n");
-
 	// Tenta ler o valor de super_class. Caso seja diferente de zero, é um index
 	// para estrutura na constant_pool que representa a superclasse direta de this_class
 	pt_classe->super_class = ler_u2(pt_arquivo);
-
-	//printf de feedback para usuario
-	printf("Leitura Super Class : 100%%\n");
 
 	// Tenta ler o valor de interfaces_count. Representa o número de superinterfaces
 	// diretas dessa classe ou interface type
@@ -77,9 +60,6 @@ class_file *carregar_classe(char *nome_arquivo){
 	// superinterface direta dessa classe ou interface type
 	pt_classe->interfaces = ler_interfaces(pt_classe->interfaces_count, pt_arquivo);
 
-	//printf de feedback para usuario
-	printf("Leitura Interfaces : 100%%\n");
-
 	// Tenta ler o número de campos para essa classe
 	pt_classe->fields_count = ler_u2(pt_arquivo);
 
@@ -88,9 +68,6 @@ class_file *carregar_classe(char *nome_arquivo){
 	pt_classe->fields = carregar_fields(pt_classe->fields_count, pt_classe->constant_pool_count,
 						pt_classe->constant_pool, pt_arquivo);
 
-	//printf de feedback para usuario
-	printf("Leitura Fields : 100%%\n");
-
 	// Tenta ler o número de métodos para essa classe
 	pt_classe->methods_count = ler_u2(pt_arquivo);
 
@@ -98,10 +75,6 @@ class_file *carregar_classe(char *nome_arquivo){
 	// contendo informações do método
 	pt_classe->methods = carregar_methods(pt_classe->methods_count, pt_classe->constant_pool_count,
 						 pt_classe->constant_pool, pt_arquivo);
-
-
-	//printf de feedback para usuario
-	printf("Leitura Methods : 100%%\n");
 
 	// Tentar ler o número de atributos para essa classe
 	pt_classe->attributes_count = ler_u2(pt_arquivo);
@@ -112,9 +85,6 @@ class_file *carregar_classe(char *nome_arquivo){
 	pt_classe->attributes = carregar_atributos(pt_arquivo, pt_classe->attributes_count,
 							pt_classe->constant_pool, pt_classe->constant_pool_count);
 
-
-	//printf de feedback para usuario
-	printf("Leitura Attributes : 100%%\n");
 
     // Tenta fechar o arquivo depois que a classe foi completamene carregada
 	fechar_arquivo(pt_arquivo);

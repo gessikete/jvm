@@ -31,7 +31,7 @@ void exibir_constant_pool(cp_info *const_pool, u2 constant_pool_count) {
 	for(i=1; i<constant_pool_count; i++) {
 		//fprintf(arquivo_saida, "\n-----------------\n");
 		exibir_elemento_constant_pool(const_pool,i);
-		fprintf(arquivo_saida, "\n\n");
+		//fprintf(arquivo_saida, "\n");
 	}
 	fprintf(arquivo_saida, "\n\n\n");
 }

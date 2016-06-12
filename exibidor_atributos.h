@@ -5,6 +5,7 @@
 #include "leitor_atributos.h"
 #include "recuperar_constant_pool.h"
 #include "instrucoes.h"
+#include "macros.h"
 
 //Define tamanho máximo de uma string que mostra o operando de uma instrução
 #define TAM_OPERANDO 250

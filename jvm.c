@@ -59,8 +59,6 @@ int main(int argc, char*argv[]){
 				// Desaloca a classe
 				desalocar_classe(pt_classe);
 
-				printf("\nGravação : 100%%\n");
-
 				// Fechando arquivo após gravação
 				fclose(arquivo_saida);
 

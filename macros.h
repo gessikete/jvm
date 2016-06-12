@@ -1,6 +1,8 @@
 #ifndef MACROS_H
 #define MACROS_H
 
+#include "types.h"
+
 /* Definição das macros de access flags */
 #define ACC_PUBLIC 0x0001       // Declared public; may be accessed from outside its package.
 #define ACC_FINAL 0x0010        // Declared final; no subclasses allowed.
@@ -11,5 +13,17 @@
 #define ACC_ANNOTATION 0x2000   // Declared as an annotation type.
 #define ACC_ENUM 0x4000         // Declared as an enum type.
 /* Fim das definições das macros de access flags */
+
+/* Declaração dos métodos */
+/*
+ * Exibe uma access flag no formato "0x000 [ value ]"
+ *
+ * Parâmetros:
+ *       u2 flag: máscara da flag
+ *
+ * Retorno:
+ *       Nenhum
+ */
+void exibir_access_flag_string(u2 flag);
 
 #endif /* MACROS_H */
