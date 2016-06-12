@@ -17,35 +17,8 @@ void exibir_fields(field_info *pt_fields, u2 fields_count, cp_info *const_pool){
 		fprintf(arquivo_saida, "\n[%d] %s", i, field_name);
 		fprintf(arquivo_saida, "\nName: cp_info #%d <%s>", name_index, field_name);
 		fprintf(arquivo_saida, "\nDescriptor: cp_info #%d <%s>", descriptor_index, descriptor);
-		fprintf(arquivo_saida, "\nAccess flags: 0x%04x [", flag);
-		while(flag != 0){
-			if(flag >= ENUM){
-				flag -= ENUM;
-				fprintf(arquivo_saida, " enum");
-			}else if( flag >= TRANSCIENT){
-				flag -= TRANSCIENT;
-				fprintf(arquivo_saida, " transient");
-			}else if(flag >= VOLATILE) {
-				flag -= VOLATILE;
-				fprintf(arquivo_saida, " volatile");
-			}else if (flag >= FINAL) {
-				flag -= FINAL;
-				fprintf(arquivo_saida, " final");
-			}else if (flag >= STATIC) {
-				flag -= STATIC;
-				fprintf(arquivo_saida, " static");
-			}else if (flag >= PROTECTED) {
-				flag -= PROTECTED;
-				fprintf(arquivo_saida, " protected");
-			}else if (flag >= PRIVATE) {
-				flag -= PRIVATE;
-				fprintf(arquivo_saida, " private");
-			} else{
-				flag -= PUBLIC;
-				fprintf(arquivo_saida, " public");
-			}
-		}
-		fprintf(arquivo_saida, "]");
+		fprintf(arquivo_saida, "\nAccess flags: ");
+		exibir_access_flag_field(flag);
 		free(descriptor);
 		free(field_name);
 	}

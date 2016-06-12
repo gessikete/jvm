@@ -8,6 +8,7 @@
 #include <stdint.h>
 #include <inttypes.h>
 #include "types.h"
+#include "macros.h"
 #include "arquivos.h"
 #include "leitor_atributos.h"
 #include "leitor_metodos.h"

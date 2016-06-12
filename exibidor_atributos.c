@@ -156,7 +156,7 @@ void exibir_inner_classes_attribute_table(attribute_info atributo, cp_info const
 		fprintf(arquivo_saida, "outer_class: cp_info #%d %s ", outer_class_info_index, outer_class);
 		fprintf(arquivo_saida, "inner_name: cp_info #%d %s ", inner_name_index, inner_name);
 		fprintf(arquivo_saida, "access flags: ");
-		exibir_access_flag_string(inner_class_access_flags);
+		exibir_access_flag_inner_class(inner_class_access_flags);
 
 		free(inner_class);
 		free(outer_class);

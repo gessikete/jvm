@@ -10,7 +10,7 @@ void exibir_classe(class_file* cp){
 	fprintf(arquivo_saida, "Major version: %d\n", cp->major_version);
 	fprintf(arquivo_saida, "Constant pool count: %d\n", cp->constant_pool_count);
 	fprintf(arquivo_saida, "Access flags: ");
-	exibir_access_flag_string(cp->access_flags);
+	exibir_access_flag_class(cp->access_flags);
 	exibir_tipo_classe("This class", cp->this_class, cp->constant_pool);
 	exibir_tipo_classe("Super class", cp->super_class, cp->constant_pool);
 	fprintf(arquivo_saida, "\nInterface count: %d\n", cp->interfaces_count);
