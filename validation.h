@@ -1,6 +1,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include "types.h"
+#include "macros.h"
 
 /*
  * Valida o número mágico
@@ -40,3 +41,14 @@ bool validar_version(u2 minor, u2 major);
  *       bool: falso, caso tag seja inválida, ou true, caso seja válida
  */
 bool validar_tag(u2 tag);
+
+/*
+ * Verifica se as access flags lidas são válida.
+ *
+ * Parâmetros:
+ *       u2 flags: tag a ser verificada
+ *
+ * Retorno:
+ *       bool: falso, caso alguma access flag seja inválida, ou true, caso todas sejam válidas
+ */
+bool validar_access_flag(u2 flags);

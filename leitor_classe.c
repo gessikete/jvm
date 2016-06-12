@@ -39,10 +39,11 @@ class_file *carregar_classe(char *nome_arquivo){
 	// Tenta ler as constantes da constant pool
 	pt_classe->constant_pool = carregar_constant_pool(pt_classe->constant_pool_count, pt_arquivo);
 
-	// TODO é realmente necessário fazer algum tipo de leitura diferente para access flag?
 	// Tenta ler o valor de access flag
 	pt_classe->access_flags = ler_u2(pt_arquivo);
-
+	if(validar_access_flag(pt_classe->access_flags) == false){
+		return NULL;
+	}
 
 	// Tenta ler o valor de this class, index para estrutura na constant pool
 	// que representa a classe ou interface
