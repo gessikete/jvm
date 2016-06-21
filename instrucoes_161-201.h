@@ -3,7 +3,7 @@
 
 #include "instrucoes.h"
 #include "pilha_frames.h"
-#include "leitor_constant_pool.h"
+#include "recuperar_constant_pool.h"
 
 void if_icmplt(stack_frames *pilha_frames);
 void if_icmpge(stack_frames *pilha_frames);

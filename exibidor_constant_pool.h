@@ -1,9 +1,10 @@
 #ifndef EXIBIDOR_CONST_POOL_H
 #define EXIBIDOR_CONST_POOL_H
 
-#include "leitor_constant_pool.h"
 #include "recuperar_constant_pool.h"
-#include <string.h>
+
+
+
 /*
  * Exibe todos os elementos da constant pool
  *

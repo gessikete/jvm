@@ -2,9 +2,7 @@
 #define INSTRUCOES_H
 
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdint.h>
+
 #include "types.h"
 
 
@@ -31,16 +29,13 @@
 #define LOOKUP_SWITCH 12
 #define CP2_INT0 13
 
-// ponteiro para as funções que implementam as instruções
-typedef void (*t_funcao_instrucao)(stack_frames*);
+u4 float_to_u4(float numero_float);
+u8 double_to_u8(double numero_double);
+u8 long_to_u8(long numero_double);
 
-//estrutura para guardar os nomes das funções e os tipos de operandos
-typedef struct {
-	char *nome;
-	t_funcao_instrucao funcao_instrucao;
-	u1 operando;
-} t_instrucoes;
-
+float u4_to_float(u4 numero_u4);
+long u8_to_long(u4 high, u4 low);
+double u8_to_double(u4 low, u4 high);
 
 void init_instrucoes();
 

@@ -45,19 +45,7 @@ void inicializar_jvm(class_file *pt_classe) {
 
 			// Push do método main
 			push_frame(&(methods[methods_count]),constant_pool,pilha_frames);
-
-
-			printf("\n%d\n",pilha_frames->first->pt_metodo->name_index);
-			printf("\n%d\n",pilha_frames->first->next->pt_metodo->name_index);
-
-			int i;
-			printf("\n");
-			pop_frame(pilha_frames);
-			for(i=0; i<pilha_frames->first->code_info->code_length; i++) {
-				printf("%x ",pilha_frames->first->code_info->code[i]);
-			}
-			printf("\n");
-
+	
 			executar_jvm(pilha_frames);
 
 		} else printf("\nClasse informada nao pode ser inicializada (nao possui metodo <init> e/ou <main>)");
@@ -68,6 +56,13 @@ void inicializar_jvm(class_file *pt_classe) {
 }
 
 void executar_jvm(stack_frames *pilha_frames) {
+	init_instrucoes();
+  
+	
+	push_operando(3,pilha_frames->first->operand_stack);
+	instrucoes[pilha_frames->first->code_info->code[pilha_frames->first->pc++]].funcao_instrucao(pilha_frames);
 
-
+	pilha_frames->first->pc+=4;
+	printf("\n%x\n",pilha_frames->first->code_info->code[pilha_frames->first->pc]);
+	instrucoes[pilha_frames->first->code_info->code[pilha_frames->first->pc++]].funcao_instrucao(pilha_frames);
 }

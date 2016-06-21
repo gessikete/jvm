@@ -41,6 +41,21 @@
 
 /* Fim das definições das macros de access flags */
 
+#define CONST_VALUE "ConstantValue"
+#define CODE "Code"
+#define EXCEPTION "Exceptions"
+#define INNER_CLASSES "InnerClasses"
+#define SOURCE_FILE "SourceFile"
+#define LINE_NUM_TABLE "LineNumberTable"
+
+// Macros para identificar o significado do campo tag de um attribute
+#define CONST_VALUE_NUM 1
+#define CODE_NUM 2
+#define EXCEPTION_NUM 3
+#define INNER_CLASSES_NUM 4
+#define SOURCE_FILE_NUM 5
+#define INVALIDO_NUM 6
+
 /* Declaração dos métodos */
 /*
  * Exibe uma access flag das classes no formato "0x000 [ value ]"

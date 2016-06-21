@@ -4,8 +4,6 @@
 #include <stdio.h>
 #include "types.h"
 
-
-
 /*
  * Abre arquivo para leitura
  *

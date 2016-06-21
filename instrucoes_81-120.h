@@ -4,6 +4,7 @@
 #include "instrucoes.h"
 #include "pilha_frames.h"
 #include "leitor_constant_pool.h"
+#include "math.h"
 
 void fastore(stack_frames *pilha_frames);
 void dastore(stack_frames *pilha_frames);

@@ -6,18 +6,6 @@
 #include "leitor_atributos.h"
 #include "leitor_constant_pool.h"
 
-
-/* Definição das estruturas de métodos */
-typedef struct {
-	u2 access_flags;
-	u2 name_index;
-	u2 descriptor_index;
-	u2 attributes_count;
-	attribute_info *attributes;			//attributes[attributes_count]
-} method_info;
-
-/* Fim da definição das estruturas de métodos */
-
 /* Declaração dos métodos */
 /*
  * Carrega as estruturas referentes aos métodos

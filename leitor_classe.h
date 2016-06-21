@@ -1,12 +1,6 @@
 #ifndef LEITOR_CLASSE_H
 #define LEITOR_CLASSE_H
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <stdint.h>
-#include <inttypes.h>
 #include "types.h"
 #include "arquivos.h"
 #include "leitor_atributos.h"
@@ -15,26 +9,6 @@
 #include "validation.h"
 
 #define STR_SIZE 100
-
-/* Definição da estrutura do arquivo de classe */
-typedef struct {
-    u4 magic;
-    u2 minor_version;
-    u2 major_version;
-    u2 constant_pool_count;
-    cp_info *constant_pool;
-    u2 access_flags;
-    u2 this_class;
-    u2 super_class;
-    u2 interfaces_count;
-    u2 *interfaces;
-    u2 fields_count;
-    field_info *fields;
-    u2 methods_count;
-    method_info *methods;
-    u2 attributes_count;
-    attribute_info *attributes;
-} class_file;
 
 /*
  * Organiza a leitura de todos os elementos da classe

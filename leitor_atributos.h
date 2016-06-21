@@ -1,95 +1,10 @@
 #ifndef LEITOR_ATRIBUTOS_H
 #define LEITOR_ATRIBUTOS_H
 
-#include "types.h"
-#include "leitor_constant_pool.h"
-#include "recuperar_constant_pool.h"
 #include <string.h>
-#include <stdlib.h>
-
-/* Definição das estruturas dos atributos */
-
-struct t_attribute_info;
-
-struct inner_classes_table;
-
-typedef struct {
-	u2 source_file_index;
-} source_file_attribute;
-
-typedef struct {
-	u2 constant_value_index;
-} constant_value_attribute;
-
-
-typedef struct {
-		u2 start_pc;
-		u2 end_pc;
-		u2 handler_pc;
-		u2 catch_type;
-} t_exception_table;
-
-
-typedef struct {
-	u2 max_stack;
-	u2 max_locals;
-	u4 code_length;
-	u1 *code;					//code[code_lenght]
-	u2 exception_table_length;
-	t_exception_table *exception_table;				//exception_table[exception_table_length]
-	u2 attributes_count;
-	struct t_attribute_info *attributes;		//attributes[attributes_count]
-} code_attribute;
-
-typedef struct {
-	u2 number_of_exceptions;
-	u2 *exceptions_index_table;
-} exceptions_attribute;
-
-typedef struct {
-	u2 inner_class_info_index;
-	u2 outer_class_info_index;
-	u2 inner_name_index;
-	u2 inner_class_access_flags;			//classes [number_of_classes]
-} inner_classes_table;
-
-typedef struct {
-	u2 number_of_classes;
-
-	inner_classes_table *classes;
-} inner_classes_attribute;
-
-typedef struct t_attribute_info {
-	u2 attribute_name_index;
-	u4 attribute_length;
-	u1 attribute_tag; // útil para desalocar
-
-	union u_info {
-		constant_value_attribute constant_value_info;	// tag: ConstantValue
-		code_attribute code_info;			// tag: Code
-		exceptions_attribute exception_info;		// tag: Exceptions
-		inner_classes_attribute inner_classes_info;	// tag: InnerClasses
-		source_file_attribute source_file_info;		// tag: SourceFile
-	} info;
-
-} attribute_info;
-
-#define CONST_VALUE "ConstantValue"
-#define CODE "Code"
-#define EXCEPTION "Exceptions"
-#define INNER_CLASSES "InnerClasses"
-#define SOURCE_FILE "SourceFile"
-#define LINE_NUM_TABLE "LineNumberTable"
-
-// Macros para identificar o significado do campo tag de um attribute
-#define CONST_VALUE_NUM 1
-#define CODE_NUM 2
-#define EXCEPTION_NUM 3
-#define INNER_CLASSES_NUM 4
-#define SOURCE_FILE_NUM 5
-#define INVALIDO_NUM 6
-
-/* Fim da definição das estruturas dos atributos */
+#include "types.h"
+#include "macros.h"
+#include "recuperar_constant_pool.h"
 
 // Define um ponteiro para as funções de criação de atributos
 typedef void (*funcoes_criar) (FILE*,attribute_info[],u2,cp_info[],u2);

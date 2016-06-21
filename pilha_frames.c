@@ -79,8 +79,7 @@ t_frame *alocar_frame(method_info *pt_metodo, cp_info *pt_constant_pool, t_frame
 			frame->array_variaveis_locais_count = code_info->max_locals;
 			frame->array_variaveis_locais = (u4*) malloc(sizeof(u4)*(code_info->max_locals));
 
-			// Pilha de operandos começa vazia
-			frame->operand_stack = NULL;
+			frame->operand_stack = alocar_operand_stack();
 
 			frame->pt_constant_pool = pt_constant_pool ;
 

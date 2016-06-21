@@ -4,6 +4,7 @@
 #include "instrucoes.h"
 #include "pilha_frames.h"
 #include "leitor_constant_pool.h"
+#include "resolve.h"
 
 void dload_3(stack_frames *pilha_frames);
 void aload_0(stack_frames *pilha_frames);

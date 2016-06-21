@@ -3,6 +3,66 @@
 
 t_instrucoes instrucoes[0xCB];
 
+u4 float_to_u4(float numero_float) {
+	u4 numero_u4;
+	
+	memcpy(&numero_u4,&numero_float,sizeof(numero_u4));
+  
+	return numero_u4;
+}
+
+u8 double_to_u8(double numero_double) {
+	u8 numero_u8;
+	
+	memcpy(&numero_u8,&numero_double,sizeof(numero_u8));
+  
+	return numero_u8;
+}
+
+u8 long_to_u8(long numero_double) {
+	u8 numero_u8;
+	
+	memcpy(&numero_u8,&numero_double,sizeof(numero_u8));
+  
+	return numero_u8;
+}
+
+float u4_to_float(u4 numero_u4) {
+	int32_t numero_s4;
+	float numero_float;
+	
+	memcpy(&numero_s4,&numero_u4,sizeof(numero_s4));
+	memcpy(&numero_float,&numero_s4,sizeof(numero_float));
+	
+	
+	return numero_float;
+}
+
+long u8_to_long(u4 low, u4 high) {
+	int64_t numero_s8;
+	u8 numero_u8 = (((u8)high<<32)|low);
+	long numero_long;
+	
+	memcpy(&numero_s8,&numero_u8,sizeof(numero_s8));
+	memcpy(&numero_long,&numero_s8,sizeof(numero_long));
+	
+	
+	return numero_long;
+}
+
+double u8_to_double(u4 low, u4 high) {
+	int64_t numero_s8;
+	u8 numero_u8 = (((u8)high<<32)|low);
+	double numero_double;
+	
+	memcpy(&numero_s8,&numero_u8,sizeof(numero_s8));
+	memcpy(&numero_double,&numero_s8,sizeof(numero_double));
+	
+	
+	return numero_double;
+}
+
+
 void init_instrucoes() {
 	t_instrucoes vetor_instrucoes[] =
 	{

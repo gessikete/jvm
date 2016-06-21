@@ -1,11 +1,9 @@
 #ifndef EXIBIDOR_ATRIBUTOS_H
 #define EXIBIDOR_ATRIBUTOS_H
 
-#include "leitor_constant_pool.h"
-#include "leitor_atributos.h"
-#include "recuperar_constant_pool.h"
-#include "instrucoes.h"
+#include "types.h"
 #include "macros.h"
+#include "instrucoes.h"
 
 //Define tamanho máximo de uma string que mostra o operando de uma instrução
 #define TAM_OPERANDO 250
