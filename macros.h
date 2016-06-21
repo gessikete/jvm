@@ -56,6 +56,23 @@
 #define SOURCE_FILE_NUM 5
 #define INVALIDO_NUM 6
 
+// Macros que definem tags para identificar os tipos dos operandos
+#define TAG_UTF8 1
+#define TAG_INTEGER 3
+#define TAG_FLOAT 4
+#define TAG_LONG 5
+#define TAG_DOUBLE 6
+#define TAG_CLASS 7
+#define TAG_STRING 8
+#define TAG_FIELD_REF 9
+#define TAG_METHOD_REF 10
+#define TAG_INTERFACE_METHOD_REF 11
+#define TAG_NAME_AND_TYPE 12
+#define TAG_METHOD_HANDLE 15
+#define TAG_METHOD_TYPE 16
+#define TAG_INVOKE_DYNAMIC 18
+#define TAG_OBJECT_REF 19
+#define TAG_NULL 20
 /* Declaração dos métodos */
 /*
  * Exibe uma access flag das classes no formato "0x000 [ value ]"

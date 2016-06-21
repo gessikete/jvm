@@ -6,9 +6,6 @@
 // Inclui stdboll para uso de tipos booleanos
 #include <stdbool.h>
 
-//arquivo de saida global ao projeto
- FILE *arquivo_saida;
-
  /*
   * Definindo as estruturas para manipulação de inteiros tamanhos 8bits, 16bits,
   * 32bits e 64bits da biblioteca stdint.h
@@ -42,6 +39,14 @@
  typedef long long tipo_long;
  typedef float tipo_float;
  typedef double tipo_double;
+
+
+ // arquivo de saida global ao projeto
+  FILE *arquivo_saida;
+
+  // variável global com o valor atual do wide
+  u1 wide_;
+
 
  /* Definições das estruturas necessárias para a execução da JVM */
 
@@ -192,10 +197,10 @@
 
 
  typedef struct {
- 		u2 start_pc;
- 		u2 end_pc;
- 		u2 handler_pc;
- 		u2 catch_type;
+	u2 start_pc;
+	u2 end_pc;
+	u2 handler_pc;
+	u2 catch_type;
  } t_exception_table;
 
 
@@ -370,7 +375,8 @@
 /* Definição das estruturas de frames e operandos */
 
 typedef struct operand {
-	u4 data;
+    u1 tag;
+    u4 data;
 	struct operand *next;
 } t_operand;
 
@@ -404,9 +410,6 @@ typedef struct {
 
 
 /* Definição das estruturas de instruções */
-
-// variável global com o valor atual do wide
-u1 wide_;
 
 // ponteiro para as funções que implementam as instruções
 typedef void (*t_funcao_instrucao)(stack_frames*);

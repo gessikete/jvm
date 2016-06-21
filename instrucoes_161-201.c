@@ -206,7 +206,7 @@ void jsr(stack_frames *pilha_frames) {
 
 	//empilha endereço de retorno da próxima instrução
 	next_code_info = pilha_frames->first->next->code_info;
-	push_operando((u4)next_code_info,pilha_frames->first->operand_stack); //falta empilhar o tipo do operando como referencia
+	push_operando(pilha_frames->first->next->pt_constant_pool->tag, (u4)next_code_info, pilha_frames->first->operand_stack); // TODO falta empilhar o tipo do operando como referencia
 
 	u4 offset_2;
 	u4 offset_1;
@@ -385,7 +385,7 @@ void ireturn(stack_frames *pilha_frames) {
 	free(temp_frame);
 
 	//adicionar tipo de value empilhado
-	push_operando(value,pilha_frames->first->operand_stack);
+	push_operando(temp_operando->tag, value,pilha_frames->first->operand_stack);
 }
 
 
@@ -397,8 +397,10 @@ void lreturn(stack_frames *pilha_frames) {
 
 	temp_operando = pop_operando(pilha_frames->first->operand_stack);
 	u4 value_1 = temp_operando->data;
+	u1 tag_1 = temp_operando->tag;
 	temp_operando = pop_operando(pilha_frames->first->operand_stack);
 	u4 value_2 = temp_operando->data;
+	u1 tag_2 = temp_operando->tag;
 
 	t_frame *temp_frame = NULL;
 	temp_frame = (t_frame*) malloc(sizeof(t_frame));
@@ -406,9 +408,9 @@ void lreturn(stack_frames *pilha_frames) {
 	free(temp_frame);
 
 	//adicionar tipo de value empilhado
-	push_operando(value_2,pilha_frames->first->operand_stack);
+	push_operando(tag_2, value_2,pilha_frames->first->operand_stack);
 	//adicionar tipo de value empilhado
-	push_operando(value_1,pilha_frames->first->operand_stack);
+	push_operando(tag_1, value_1,pilha_frames->first->operand_stack);
 }
 
 
@@ -420,6 +422,7 @@ void freturn(stack_frames *pilha_frames) {
 
 	temp_operando = pop_operando(pilha_frames->first->operand_stack);
 	u4 value = temp_operando->data;
+	u1 tag = temp_operando->tag;
 
 	t_frame *temp_frame = NULL;
 	temp_frame = (t_frame*) malloc(sizeof(t_frame));
@@ -427,7 +430,7 @@ void freturn(stack_frames *pilha_frames) {
 	free(temp_frame);
 
 	//adicionar tipo de value empilhado
-	push_operando(value,pilha_frames->first->operand_stack);
+	push_operando(tag, value,pilha_frames->first->operand_stack);
 }
 
 
@@ -439,8 +442,10 @@ void dreturn(stack_frames *pilha_frames) {
 
 	temp_operando = pop_operando(pilha_frames->first->operand_stack);
 	u4 value_1 = temp_operando->data;
+	u1 tag_1 = temp_operando->tag;
 	temp_operando = pop_operando(pilha_frames->first->operand_stack);
 	u4 value_2 = temp_operando->data;
+	u1 tag_2 = temp_operando->tag;
 
 	t_frame *temp_frame = NULL;
 	temp_frame = (t_frame*) malloc(sizeof(t_frame));
@@ -448,9 +453,9 @@ void dreturn(stack_frames *pilha_frames) {
 	free(temp_frame);
 
 	//adicionar tipo de value empilhado
-	push_operando(value_2,pilha_frames->first->operand_stack);
+	push_operando(tag_2, value_2,pilha_frames->first->operand_stack);
 	//adicionar tipo de value empilhado
-	push_operando(value_1,pilha_frames->first->operand_stack);
+	push_operando(tag_1, value_1,pilha_frames->first->operand_stack);
 }
 
 
@@ -463,6 +468,7 @@ void areturn(stack_frames *pilha_frames) {
 
 	temp_operando = pop_operando(pilha_frames->first->operand_stack);
 	u4 object_ref = temp_operando->data;
+	u1 tag = temp_operando->tag;
 
 	t_frame *temp_frame = NULL;
 	temp_frame = (t_frame*) malloc(sizeof(t_frame));
@@ -470,7 +476,7 @@ void areturn(stack_frames *pilha_frames) {
 	free(temp_frame);
 
 	//adicionar tipo de value empilhado
-	push_operando(object_ref,pilha_frames->first->operand_stack);
+	push_operando(tag, object_ref, pilha_frames->first->operand_stack);
 }
 
 
@@ -488,15 +494,15 @@ void getstatic(stack_frames *pilha_frames) {
 	t_frame *frame = pilha_frames->first;
 	u2 indice_constant_pool = operando_u2(frame->code_info->code,frame->pc);
 	char *name_field;
-  
-	name_field = recupera_elemento_como_string_constant_pool(frame->pt_constant_pool,indice_constant_pool); 
-	
+
+	name_field = recupera_elemento_como_string_constant_pool(frame->pt_constant_pool,indice_constant_pool);
+
 	// Verificando se classe a ser carregada não é de System.out
 	if(!strcmp(name_field,"java/lang/System.out")) {
 		free(name_field);
 		return;
 	}
-	
+
 	free(name_field);
 }
 
@@ -523,56 +529,56 @@ void putfield(stack_frames *pilha_frames) {
 void invokevirtual(stack_frames *pilha_frames) {
 	// Ponteiro para frame para facilitar acesso
 	t_frame *frame = pilha_frames->first;
-	
+
 	// Indice do método na constant pool
 	u2 indice_metodo = operando_u2(frame->code_info->code,frame->pc);
-	
+
 	// Acessa constant pool por meio de indice_metodo e encontra o índice de name_and_type_info
 	u2 indice_nome_tipo = frame->pt_constant_pool[indice_metodo].info.methodref_info.name_and_type_index;
-	
+
 	// Descobre o índice para a string do descritor do método
 	u2 indice_descritor = frame->pt_constant_pool[indice_nome_tipo].info.name_and_type_info.descriptor_index;
 	char *nome_metodo;
 	char *descritor_metodo;
-  
+
 	// Recupera nome do método para checar se é o print
-	nome_metodo = recupera_elemento_como_string_constant_pool(frame->pt_constant_pool,indice_metodo); 
-	
+	nome_metodo = recupera_elemento_como_string_constant_pool(frame->pt_constant_pool,indice_metodo);
+
 	// Recupera descritor para (caso seja o System.out.print) saber o tipo do
 	// elemento que será impresso
 	descritor_metodo = recupera_utf8(frame->pt_constant_pool,indice_descritor);
-	
+
 	// Descobre se o método é de imprimir na tela
 	if((!strcmp(nome_metodo,"java/io/PrintStream.println"))||(!strcmp(nome_metodo,"java/io/PrintStream.print"))) {
 		// Recupera o primeiro operando da operand_stack
 		t_operand *operando_1 = pop_operando(frame->operand_stack);
-		
+
 		// Elemento a ser impresso é um inteiro
 		if(!strcmp(descritor_metodo,"(I)V")) {
 			printf("\n%d",operando_1->data);
-		} 
-		
+		}
+
 		// Elemento a ser impresso é um float
 		else if (!strcmp(descritor_metodo,"(F)V")) {
 			printf("\n%f",u4_to_float(operando_1->data));
-		} 
-		
+		}
+
 		// Elemento a ser impresso é um long
 		else if (!strcmp(descritor_metodo,"(J)V")) {
 			t_operand *operando_2 =  pop_operando(frame->operand_stack);
 			printf("\n%li",u8_to_long(operando_1->data,operando_2->data));
-			
+
 			free(operando_2);
-		} 
-		
+		}
+
 		// Elemento a ser impresso é um double
 		else if (!strcmp(descritor_metodo,"(D)V")) {
 			t_operand *operando_2 =  pop_operando(frame->operand_stack);
-			printf("\n%F",u8_to_double(operando_1->data,operando_2->data));
-			
+			printf("\n%f",u8_to_double(operando_1->data,operando_2->data));
+
 			free(operando_2);
 		}
-		
+
 		// Elemento a ser impresso é uma string
 		else if (!strcmp(descritor_metodo,"(Ljava/lang/String;)V")) {
 			printf("\n%s",recupera_elemento_como_string_constant_pool(frame->pt_constant_pool,operando_1->data));
@@ -583,7 +589,7 @@ void invokevirtual(stack_frames *pilha_frames) {
 		free(operando_1);
 		return;
 	}
-	
+
 	free(nome_metodo);
 	free(descritor_metodo);
 }

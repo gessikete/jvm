@@ -40,7 +40,7 @@ void ddiv(stack_frames *pilha_frames);
 void irem(stack_frames *pilha_frames);
 void lrem(stack_frames *pilha_frames);
 void frem(stack_frames *pilha_frames);
-void drem(stack_frames *pilha_frames);
+void drem_(stack_frames *pilha_frames);
 void ineg(stack_frames *pilha_frames);
 void lneg(stack_frames *pilha_frames);
 void fneg(stack_frames *pilha_frames);

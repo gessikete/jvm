@@ -19,7 +19,7 @@ void aconst_null(stack_frames *pilha_frames) {
     u4 operando = (u4)NULL;
 
     // adiciona o operando a pilha
-    push_operando(operando, pilha_frames->first->operand_stack);
+    push_operando(TAG_NULL, operando, pilha_frames->first->operand_stack);
 
 }
 
@@ -43,7 +43,7 @@ void iconst_m1(stack_frames *pilha_frames) {
     memcpy(&operandoFormatado, &operando, sizeof(u4));
 
     //salva valor na pilha de operandos
-    push_operando(operandoFormatado, pilha_frames->first->operand_stack);
+    push_operando(TAG_INTEGER, operandoFormatado, pilha_frames->first->operand_stack);
 
 }
 
@@ -63,7 +63,7 @@ void iconst_0(stack_frames *pilha_frames) {
     u4 operando = 0;
 
     //empilha operando
-    push_operando(operando, pilha_frames->first->operand_stack);
+    push_operando(TAG_INTEGER, operando, pilha_frames->first->operand_stack);
 
 }
 
@@ -83,7 +83,7 @@ void iconst_1(stack_frames *pilha_frames) {
     u4 operando = 1;
 
     //empilha operando
-    push_operando(operando, pilha_frames->first->operand_stack);
+    push_operando(TAG_INTEGER, operando, pilha_frames->first->operand_stack);
 
 }
 
@@ -103,7 +103,7 @@ void iconst_2(stack_frames *pilha_frames) {
     u4 operando = 2;
 
     //empilha operando
-    push_operando(operando, pilha_frames->first->operand_stack);
+    push_operando(TAG_INTEGER, operando, pilha_frames->first->operand_stack);
 
 }
 
@@ -123,7 +123,7 @@ void iconst_3(stack_frames *pilha_frames) {
     u4 operando = 3;
 
     //empilha operando
-    push_operando(operando, pilha_frames->first->operand_stack);
+    push_operando(TAG_INTEGER, operando, pilha_frames->first->operand_stack);
 
 }
 
@@ -143,7 +143,7 @@ void iconst_4(stack_frames *pilha_frames) {
     u4 operando = 4;
 
     //empilha operando
-    push_operando(operando, pilha_frames->first->operand_stack);
+    push_operando(TAG_INTEGER, operando, pilha_frames->first->operand_stack);
 
 }
 
@@ -163,7 +163,7 @@ void iconst_5(stack_frames *pilha_frames) {
     u4 operando = 5;
 
     //empilha operando
-    push_operando(operando, pilha_frames->first->operand_stack);
+    push_operando(TAG_INTEGER, operando, pilha_frames->first->operand_stack);
 
 }
 
@@ -188,8 +188,8 @@ void lconst_0(stack_frames *pilha_frames) {
     u4 operando_lo = (u4) operando & 0x00000000FFFFFFFF;
 
     //empilha operando
-    push_operando(operando_lo, pilha_frames->first->operand_stack);
-    push_operando(operando_hi, pilha_frames->first->operand_stack);
+    push_operando(TAG_LONG, operando_lo, pilha_frames->first->operand_stack);
+    push_operando(TAG_LONG, operando_hi, pilha_frames->first->operand_stack);
 
 }
 
@@ -214,8 +214,8 @@ void lconst_1(stack_frames *pilha_frames) {
     u4 operando_lo = (u4) operando & 0x00000000FFFFFFFF;
 
     //empilha operando
-    push_operando(operando_lo, pilha_frames->first->operand_stack);
-    push_operando(operando_hi, pilha_frames->first->operand_stack);
+    push_operando(TAG_LONG, operando_lo, pilha_frames->first->operand_stack);
+    push_operando(TAG_LONG, operando_hi, pilha_frames->first->operand_stack);
 
 }
 
@@ -239,7 +239,7 @@ void fconst_0(stack_frames *pilha_frames) {
     memcpy(&operando, &valor, sizeof(float));
 
     //empilha operando
-    push_operando(operando, pilha_frames->first->operand_stack);
+    push_operando(TAG_FLOAT, operando, pilha_frames->first->operand_stack);
 }
 
 
@@ -262,7 +262,7 @@ void fconst_1(stack_frames *pilha_frames) {
     memcpy(&operando, &valor, sizeof(float));
 
     //empilha operando
-    push_operando(operando, pilha_frames->first->operand_stack);
+    push_operando(TAG_FLOAT, operando, pilha_frames->first->operand_stack);
 
 }
 
@@ -286,7 +286,7 @@ void fconst_2(stack_frames *pilha_frames) {
     memcpy(&operando, &valor, sizeof(float));
 
     //empilha operando
-    push_operando(operando, pilha_frames->first->operand_stack);
+    push_operando(TAG_FLOAT, operando, pilha_frames->first->operand_stack);
 
 }
 
@@ -314,8 +314,8 @@ void dconst_0(stack_frames *pilha_frames) {
     u4 operando_lo = (u4) operando & 0x00000000FFFFFFFF;
 
     //empilha operando
-    push_operando(operando_lo, pilha_frames->first->operand_stack);
-    push_operando(operando_hi, pilha_frames->first->operand_stack);
+    push_operando(TAG_DOUBLE, operando_lo, pilha_frames->first->operand_stack);
+    push_operando(TAG_DOUBLE, operando_hi, pilha_frames->first->operand_stack);
 
 }
 
@@ -343,11 +343,11 @@ void dconst_1(stack_frames *pilha_frames) {
     u4 operando_lo = (u4) operando & 0x00000000FFFFFFFF;
 
     //empilha operando
-    push_operando(operando_lo, pilha_frames->first->operand_stack);
-    push_operando(operando_hi, pilha_frames->first->operand_stack);
+    push_operando(TAG_DOUBLE, operando_lo, pilha_frames->first->operand_stack);
+    push_operando(TAG_DOUBLE, operando_hi, pilha_frames->first->operand_stack);
 
 }
-///////////primeiro DIIIIAAAAA
+
 
 /*
     Instrução bipush: empilha um byte na pilha
@@ -372,7 +372,7 @@ void bipush(stack_frames *pilha_frames) {
     u4 operando = (u4)byte;
 
     //empilha operando
-    push_operando(operando, pilha_frames->first->operand_stack);
+    push_operando(TAG_INTEGER, operando, pilha_frames->first->operand_stack);
 }
 
 
@@ -415,7 +415,7 @@ void sipush(stack_frames *pilha_frames) {
     operando = operando | byte2;
 
     //empilha operando
-    push_operando(operando, pilha_frames->first->operand_stack);
+    push_operando(TAG_INTEGER, operando, pilha_frames->first->operand_stack);
 }
 
 
@@ -452,18 +452,18 @@ void ldc(stack_frames *pilha_frames) {
         case 3:
             //operando inteiro
             //empilha operando
-            push_operando((u4)operando.info.integer_info.bytes, pilha_frames->first->operand_stack);
+            push_operando(operando.tag, (u4)operando.info.integer_info.bytes, pilha_frames->first->operand_stack);
             break;
 
         case 4:
             //opernado float
             //empilha operando
-            push_operando((u4)operando.info.float_info.bytes, pilha_frames->first->operand_stack);
+            push_operando(operando.tag, (u4)operando.info.float_info.bytes, pilha_frames->first->operand_stack);
             break;
         case 8:
             //operando string
             //empilha operando
-            push_operando((u4)operando.info.string_info.string_index, pilha_frames->first->operand_stack);
+            push_operando(operando.tag, (u4)operando.info.string_info.string_index, pilha_frames->first->operand_stack);
             break;
 
         default:
@@ -514,18 +514,18 @@ void ldc_w(stack_frames *pilha_frames) {
         case 3:
             //operando inteiro
             //empilha operando
-            push_operando((u4)operando.info.integer_info.bytes, pilha_frames->first->operand_stack);
+            push_operando(operando.tag, (u4)operando.info.integer_info.bytes, pilha_frames->first->operand_stack);
             break;
 
         case 4:
             //opernado float
             //empilha operando
-            push_operando((u4)operando.info.float_info.bytes, pilha_frames->first->operand_stack);
+            push_operando(operando.tag, (u4)operando.info.float_info.bytes, pilha_frames->first->operand_stack);
             break;
         case 8:
             //operando string
             //empilha operando
-            push_operando((u4)operando.info.string_info.string_index, pilha_frames->first->operand_stack);
+            push_operando(operando.tag, (u4)operando.info.string_info.string_index, pilha_frames->first->operand_stack);
             break;
 
         default:
@@ -588,8 +588,8 @@ void ldc2_w(stack_frames *pilha_frames) {
             operando_lo = (u4) numero & 0x00000000FFFFFFFF;
 
             //empilha operando
-            push_operando(operando_lo, pilha_frames->first->operand_stack);
-            push_operando(operando_hi, pilha_frames->first->operand_stack);
+            push_operando(operando.tag, operando_lo, pilha_frames->first->operand_stack);
+            push_operando(operando.tag, operando_hi, pilha_frames->first->operand_stack);
             break;
 
         case 6:
@@ -602,8 +602,8 @@ void ldc2_w(stack_frames *pilha_frames) {
             operando_lo = (u4) numero & 0x00000000FFFFFFFF;
 
             //empilha operando
-            push_operando(operando_lo, pilha_frames->first->operand_stack);
-            push_operando(operando_hi, pilha_frames->first->operand_stack);
+            push_operando(operando.tag, operando_lo, pilha_frames->first->operand_stack);
+            push_operando(operando.tag, operando_hi, pilha_frames->first->operand_stack);
             break;
 
         default:
@@ -710,7 +710,7 @@ void aload(stack_frames *pilha_frames) {
 */
 void iload_0(stack_frames *pilha_frames) {
 
-    push_operando(pilha_frames->first->array_variaveis_locais[0], pilha_frames->first->operand_stack);
+    push_operando(TAG_INTEGER, pilha_frames->first->array_variaveis_locais[0], pilha_frames->first->operand_stack);
 
 }
 
@@ -727,7 +727,7 @@ void iload_0(stack_frames *pilha_frames) {
 */
 void iload_1(stack_frames *pilha_frames) {
 
-    push_operando(pilha_frames->first->array_variaveis_locais[1], pilha_frames->first->operand_stack);
+    push_operando(TAG_INTEGER, pilha_frames->first->array_variaveis_locais[1], pilha_frames->first->operand_stack);
 
 }
 
@@ -744,7 +744,7 @@ void iload_1(stack_frames *pilha_frames) {
 */
 void iload_2(stack_frames *pilha_frames) {
 
-    push_operando(pilha_frames->first->array_variaveis_locais[2], pilha_frames->first->operand_stack);
+    push_operando(TAG_INTEGER, pilha_frames->first->array_variaveis_locais[2], pilha_frames->first->operand_stack);
 }
 
 
@@ -760,7 +760,7 @@ void iload_2(stack_frames *pilha_frames) {
 */
 void iload_3(stack_frames *pilha_frames) {
 
-    push_operando(pilha_frames->first->array_variaveis_locais[3], pilha_frames->first->operand_stack);
+    push_operando(TAG_INTEGER, pilha_frames->first->array_variaveis_locais[3], pilha_frames->first->operand_stack);
 
 }
 
@@ -777,8 +777,8 @@ void iload_3(stack_frames *pilha_frames) {
 */
 void lload_0(stack_frames *pilha_frames) {
 
-    push_operando(pilha_frames->first->array_variaveis_locais[1], pilha_frames->first->operand_stack);
-    push_operando(pilha_frames->first->array_variaveis_locais[0], pilha_frames->first->operand_stack);
+    push_operando(TAG_LONG, pilha_frames->first->array_variaveis_locais[1], pilha_frames->first->operand_stack);
+    push_operando(TAG_LONG, pilha_frames->first->array_variaveis_locais[0], pilha_frames->first->operand_stack);
 
 }
 
@@ -795,8 +795,8 @@ void lload_0(stack_frames *pilha_frames) {
 */
 void lload_1(stack_frames *pilha_frames) {
 
-    push_operando(pilha_frames->first->array_variaveis_locais[2], pilha_frames->first->operand_stack);
-    push_operando(pilha_frames->first->array_variaveis_locais[1], pilha_frames->first->operand_stack);
+    push_operando(TAG_LONG, pilha_frames->first->array_variaveis_locais[2], pilha_frames->first->operand_stack);
+    push_operando(TAG_LONG, pilha_frames->first->array_variaveis_locais[1], pilha_frames->first->operand_stack);
 
 }
 
@@ -813,8 +813,8 @@ void lload_1(stack_frames *pilha_frames) {
 */
 void lload_2(stack_frames *pilha_frames) {
 
-    push_operando(pilha_frames->first->array_variaveis_locais[3], pilha_frames->first->operand_stack);
-    push_operando(pilha_frames->first->array_variaveis_locais[2], pilha_frames->first->operand_stack);
+    push_operando(TAG_LONG, pilha_frames->first->array_variaveis_locais[3], pilha_frames->first->operand_stack);
+    push_operando(TAG_LONG, pilha_frames->first->array_variaveis_locais[2], pilha_frames->first->operand_stack);
 
 }
 
@@ -831,8 +831,8 @@ void lload_2(stack_frames *pilha_frames) {
 */
 void lload_3(stack_frames *pilha_frames) {
 
-    push_operando(pilha_frames->first->array_variaveis_locais[4], pilha_frames->first->operand_stack);
-    push_operando(pilha_frames->first->array_variaveis_locais[3], pilha_frames->first->operand_stack);
+    push_operando(TAG_LONG, pilha_frames->first->array_variaveis_locais[4], pilha_frames->first->operand_stack);
+    push_operando(TAG_LONG, pilha_frames->first->array_variaveis_locais[3], pilha_frames->first->operand_stack);
 
 }
 
@@ -848,7 +848,7 @@ void fload_0(stack_frames *pilha_frames) {
     u4 value = pilha_frames->first->array_variaveis_locais[0];
 
     // Acidiona o operando a pilha
-    push_operando(value, pilha_frames->first->operand_stack);
+    push_operando(TAG_FLOAT, value, pilha_frames->first->operand_stack);
 }
 
 
@@ -863,7 +863,7 @@ void fload_1(stack_frames *pilha_frames) {
     u4 value = pilha_frames->first->array_variaveis_locais[1];
 
     // Acidiona o operando a pilha
-    push_operando(value, pilha_frames->first->operand_stack);
+    push_operando(TAG_FLOAT, value, pilha_frames->first->operand_stack);
 }
 
 
@@ -878,7 +878,7 @@ void fload_2(stack_frames *pilha_frames) {
     u4 value = pilha_frames->first->array_variaveis_locais[2];
 
     // Acidiona o operando a pilha
-    push_operando(value, pilha_frames->first->operand_stack);
+    push_operando(TAG_FLOAT, value, pilha_frames->first->operand_stack);
 }
 
 
@@ -893,7 +893,7 @@ void fload_3(stack_frames *pilha_frames) {
     u4 value = pilha_frames->first->array_variaveis_locais[3];
 
     // Acidiona o operando a pilha
-    push_operando(value, pilha_frames->first->operand_stack);
+    push_operando(TAG_FLOAT, value, pilha_frames->first->operand_stack);
 }
 
 
@@ -912,8 +912,8 @@ void dload_0(stack_frames *pilha_frames) {
     low_bytes = pilha_frames->first->array_variaveis_locais[1];
 
     // empilha big endian
-    push_operando(high_bytes, pilha_frames->first->operand_stack);
-    push_operando(low_bytes, pilha_frames->first->operand_stack);
+    push_operando(TAG_DOUBLE, high_bytes, pilha_frames->first->operand_stack);
+    push_operando(TAG_DOUBLE, low_bytes, pilha_frames->first->operand_stack);
 }
 
 
@@ -932,8 +932,8 @@ void dload_1(stack_frames *pilha_frames) {
     low_bytes = pilha_frames->first->array_variaveis_locais[2];
 
     // empilha big endian
-    push_operando(high_bytes, pilha_frames->first->operand_stack);
-    push_operando(low_bytes, pilha_frames->first->operand_stack);
+    push_operando(TAG_DOUBLE, high_bytes, pilha_frames->first->operand_stack);
+    push_operando(TAG_DOUBLE, low_bytes, pilha_frames->first->operand_stack);
 }
 
 
@@ -952,6 +952,6 @@ void dload_2(stack_frames *pilha_frames) {
     low_bytes = pilha_frames->first->array_variaveis_locais[3];
 
     // empilha big endian
-    push_operando(high_bytes, pilha_frames->first->operand_stack);
-    push_operando(low_bytes, pilha_frames->first->operand_stack);
+    push_operando(TAG_DOUBLE, high_bytes, pilha_frames->first->operand_stack);
+    push_operando(TAG_DOUBLE, low_bytes, pilha_frames->first->operand_stack);
 }

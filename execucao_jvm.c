@@ -45,7 +45,7 @@ void inicializar_jvm(class_file *pt_classe) {
 
 			// Push do método main
 			push_frame(&(methods[methods_count]),constant_pool,pilha_frames);
-	
+
 			executar_jvm(pilha_frames);
 
 		} else printf("\nClasse informada nao pode ser inicializada (nao possui metodo <init> e/ou <main>)");
@@ -57,9 +57,9 @@ void inicializar_jvm(class_file *pt_classe) {
 
 void executar_jvm(stack_frames *pilha_frames) {
 	init_instrucoes();
-  
-	
-	push_operando(3,pilha_frames->first->operand_stack);
+
+
+	push_operando(TAG_INTEGER, 3, pilha_frames->first->operand_stack);
 	instrucoes[pilha_frames->first->code_info->code[pilha_frames->first->pc++]].funcao_instrucao(pilha_frames);
 
 	pilha_frames->first->pc+=4;

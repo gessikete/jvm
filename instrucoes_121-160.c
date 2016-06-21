@@ -2,30 +2,30 @@
 
 void lshl(stack_frames *pilha_frames) {
 	t_frame *frame = pilha_frames->first;
-	
+
 	// Tamanho do shift
 	t_operand *operando2_low = pop_operando(frame->operand_stack);
 	t_operand *operando2_high = pop_operando(frame->operand_stack);
-	
+
 	// Número que sofrerá shift
 	t_operand *operando1_low = pop_operando(frame->operand_stack);
 	t_operand *operando1_high = pop_operando(frame->operand_stack);
-	
+
 	long operando1_long;
 	long operando2_long;
 	u8 resultado;
-	
+
 	// Transforma os operandos em longs
 	operando1_long = u8_to_long(operando1_low->data,operando1_high->data);
 	operando2_long = u8_to_long(operando2_low->data,operando2_high->data);
-	
+
 	// Realiza shift
 	resultado = operando1_long<<operando2_long;
-  
+
 	// Armazena resultado do shift na pilha de operandos
-	push_operando(resultado>>32,frame->operand_stack);
-	push_operando(resultado,frame->operand_stack);
-	
+	push_operando(TAG_LONG, resultado>>32,frame->operand_stack);
+	push_operando(TAG_LONG, resultado,frame->operand_stack);
+
 	// Desaloca operandos que foram desempilhados
 	free(operando1_high);
 	free(operando1_low);
@@ -37,27 +37,27 @@ void lshl(stack_frames *pilha_frames) {
 
 void ishr(stack_frames *pilha_frames) {
 	t_frame *frame = pilha_frames->first;
-	
+
 	// Tamanho do shift
 	t_operand *operando2 = pop_operando(frame->operand_stack);
-	
+
 	// Número a ser shiftado
 	t_operand *operando1 = pop_operando(frame->operand_stack);
 
 	int operando1_int;
 	int operando2_int;
 	u4 resultado;
-	
+
 	// Transforma os operandos em ints
 	operando1_int = (int32_t)operando1->data;
 	operando2_int = (int32_t)operando2->data;
-	
+
 	// Realiza operação de shift
 	resultado = operando1_int>>operando2_int;
-  
+
 	// Armazena o resultado na pilha de operandos
-	push_operando(resultado,frame->operand_stack);
-	
+	push_operando(TAG_INTEGER, resultado,frame->operand_stack);
+
 	// Desaloca operandos que foram desempilhados
 	free(operando1);
 	free(operando2);
@@ -67,30 +67,30 @@ void ishr(stack_frames *pilha_frames) {
 
 void lshr(stack_frames *pilha_frames) {
 	t_frame *frame = pilha_frames->first;
-	
+
 	// Tamanho do shift
 	t_operand *operando2_low = pop_operando(frame->operand_stack);
 	t_operand *operando2_high = pop_operando(frame->operand_stack);
-	
+
 	// Número que sofrerá shift
 	t_operand *operando1_low = pop_operando(frame->operand_stack);
 	t_operand *operando1_high = pop_operando(frame->operand_stack);
-	
+
 	long operando1_long;
 	long operando2_long;
 	u8 resultado;
-	
+
 	// Transforma os operandos em longs
 	operando1_long = u8_to_long(operando1_low->data,operando1_high->data);
 	operando2_long = u8_to_long(operando2_low->data,operando2_high->data);
-	
+
 	// Realiza shift
 	resultado = operando1_long>>operando2_long;
-  
+
 	// Armazena resultado do shift na pilha de operandos
-	push_operando(resultado>>32,frame->operand_stack);
-	push_operando(resultado,frame->operand_stack);
-	
+	push_operando(TAG_LONG, resultado>>32,frame->operand_stack);
+	push_operando(TAG_LONG, resultado,frame->operand_stack);
+
 	// Desaloca operandos que foram desempilhados
 	free(operando1_high);
 	free(operando1_low);
@@ -102,25 +102,25 @@ void lshr(stack_frames *pilha_frames) {
 
 void iushr(stack_frames *pilha_frames) {
 	t_frame *frame = pilha_frames->first;
-	
+
 	// Tamanho do shift
 	t_operand *operando2 = pop_operando(frame->operand_stack);
-	
+
 	// Número a ser shiftado
 	t_operand *operando1 = pop_operando(frame->operand_stack);
 
 	int operando2_int;
 	u4 resultado;
-	
+
 	// Transforma o operando do tamanho do shift em int
 	operando2_int = (int32_t)operando2->data;
-	
+
 	// Realiza operação de shift no inteiro unsigned
 	resultado = (operando1->data)>>operando2_int;
-  
+
 	// Armazena o resultado na pilha de operandos
-	push_operando(resultado,frame->operand_stack);
-	
+	push_operando(TAG_INTEGER, resultado,frame->operand_stack);
+
 	// Desaloca operandos que foram desempilhados
 	free(operando1);
 	free(operando2);
@@ -130,30 +130,30 @@ void iushr(stack_frames *pilha_frames) {
 
 void lushr(stack_frames *pilha_frames) {
 	t_frame *frame = pilha_frames->first;
-	
+
 	// Tamanho do shift
 	t_operand *operando2_low = pop_operando(frame->operand_stack);
 	t_operand *operando2_high = pop_operando(frame->operand_stack);
-	
+
 	// Número que sofrerá shift
 	t_operand *operando1_low = pop_operando(frame->operand_stack);
 	t_operand *operando1_high = pop_operando(frame->operand_stack);
-	
+
 	unsigned long operando1_ulong;
 	long operando2_long;
 	u8 resultado;
-	
+
 	// Transforma os operandos em longs
 	operando1_ulong = u8_to_long(operando1_low->data,operando1_high->data);
 	operando2_long = u8_to_long(operando2_low->data,operando2_high->data);
-	
+
 	// Realiza shift
 	resultado = operando1_ulong>>operando2_long;
 
 	// Armazena resultado do shift na pilha de operandos
-	push_operando(resultado>>32,frame->operand_stack);
-	push_operando(resultado,frame->operand_stack);
-	
+	push_operando(TAG_LONG, resultado>>32,frame->operand_stack);
+	push_operando(TAG_LONG, resultado,frame->operand_stack);
+
 	// Desaloca operandos que foram desempilhados
 	free(operando1_high);
 	free(operando1_low);
@@ -165,27 +165,27 @@ void lushr(stack_frames *pilha_frames) {
 
 void iand(stack_frames *pilha_frames) {
 	t_frame *frame = pilha_frames->first;
-	
+
 	// Recupera segundo operando
 	t_operand *operando2 = pop_operando(frame->operand_stack);
-	
+
 	// Recupera primeiro operando
 	t_operand *operando1 = pop_operando(frame->operand_stack);
 
 	int operando1_int;
 	int operando2_int;
 	u4 resultado;
-	
+
 	// Transforma os operandos em ints
 	operando1_int = (int32_t)operando1->data;
 	operando2_int = (int32_t)operando2->data;
-	
+
 	// Realiza operação de and
 	resultado = operando1_int&operando2_int;
-  
+
 	// Armazena o resultado na pilha de operandos
-	push_operando(resultado,frame->operand_stack);
-	
+	push_operando(TAG_INTEGER, resultado,frame->operand_stack);
+
 	// Desaloca operandos que foram desempilhados
 	free(operando1);
 	free(operando2);
@@ -195,30 +195,30 @@ void iand(stack_frames *pilha_frames) {
 
 void land(stack_frames *pilha_frames) {
 	t_frame *frame = pilha_frames->first;
-	
+
 	// Recupera segundo operando
 	t_operand *operando2_low = pop_operando(frame->operand_stack);
 	t_operand *operando2_high = pop_operando(frame->operand_stack);
-	
+
 	// Recupera primeiro operando
 	t_operand *operando1_low = pop_operando(frame->operand_stack);
 	t_operand *operando1_high = pop_operando(frame->operand_stack);
-	
+
 	long operando1_long;
 	long operando2_long;
 	u8 resultado;
-	
+
 	// Transforma os operandos em longs
 	operando1_long = u8_to_long(operando1_low->data,operando1_high->data);
 	operando2_long = u8_to_long(operando2_low->data,operando2_high->data);
-	
+
 	// Realiza operação and
 	resultado = operando1_long&operando2_long;
-  
+
 	// Armazena resultado do and na pilha de operandos
-	push_operando(resultado>>32,frame->operand_stack);
-	push_operando(resultado,frame->operand_stack);
-	
+	push_operando(TAG_LONG, resultado>>32,frame->operand_stack);
+	push_operando(TAG_LONG, resultado,frame->operand_stack);
+
 	// Desaloca operandos que foram desempilhados
 	free(operando1_high);
 	free(operando1_low);
@@ -230,27 +230,27 @@ void land(stack_frames *pilha_frames) {
 
 void ior(stack_frames *pilha_frames) {
 	t_frame *frame = pilha_frames->first;
-	
+
 	// Recupera segundo operando
 	t_operand *operando2 = pop_operando(frame->operand_stack);
-	
+
 	// Recupera primeiro operando
 	t_operand *operando1 = pop_operando(frame->operand_stack);
 
 	int operando1_int;
 	int operando2_int;
 	u4 resultado;
-	
+
 	// Transforma os operandos em ints
 	operando1_int = (int32_t)operando1->data;
 	operando2_int = (int32_t)operando2->data;
-	
+
 	// Realiza operação or
 	resultado = operando1_int|operando2_int;
-  
+
 	// Armazena o resultado na pilha de operandos
-	push_operando(resultado,frame->operand_stack);
-	
+	push_operando(TAG_INTEGER, resultado,frame->operand_stack);
+
 	// Desaloca operandos que foram desempilhados
 	free(operando1);
 	free(operando2);
@@ -260,30 +260,30 @@ void ior(stack_frames *pilha_frames) {
 
 void lor(stack_frames *pilha_frames) {
 	t_frame *frame = pilha_frames->first;
-	
+
 	// Recupera segundo operando
 	t_operand *operando2_low = pop_operando(frame->operand_stack);
 	t_operand *operando2_high = pop_operando(frame->operand_stack);
-	
+
 	// Recupera primeiro operando
 	t_operand *operando1_low = pop_operando(frame->operand_stack);
 	t_operand *operando1_high = pop_operando(frame->operand_stack);
-	
+
 	long operando1_long;
 	long operando2_long;
 	u8 resultado;
-	
+
 	// Transforma os operandos em longs
 	operando1_long = u8_to_long(operando1_low->data,operando1_high->data);
 	operando2_long = u8_to_long(operando2_low->data,operando2_high->data);
-	
+
 	// Realiza operação or
 	resultado = operando1_long|operando2_long;
-  
+
 	// Armazena resultado do or na pilha de operandos
-	push_operando(resultado>>32,frame->operand_stack);
-	push_operando(resultado,frame->operand_stack);
-	
+	push_operando(TAG_LONG, resultado>>32,frame->operand_stack);
+	push_operando(TAG_LONG, resultado,frame->operand_stack);
+
 	// Desaloca operandos que foram desempilhados
 	free(operando1_high);
 	free(operando1_low);
@@ -295,27 +295,27 @@ void lor(stack_frames *pilha_frames) {
 
 void ixor(stack_frames *pilha_frames) {
 	t_frame *frame = pilha_frames->first;
-	
+
 	// Recupera segundo operando
 	t_operand *operando2 = pop_operando(frame->operand_stack);
-	
+
 	// Recupera primeiro operando
 	t_operand *operando1 = pop_operando(frame->operand_stack);
 
 	int operando1_int;
 	int operando2_int;
 	u4 resultado;
-	
+
 	// Transforma os operandos em ints
 	operando1_int = (int32_t)operando1->data;
 	operando2_int = (int32_t)operando2->data;
-	
+
 	// Realiza operação de xor
 	resultado = operando1_int^operando2_int;
-  
+
 	// Armazena o resultado na pilha de operandos
-	push_operando(resultado,frame->operand_stack);
-	
+	push_operando(TAG_INTEGER, resultado,frame->operand_stack);
+
 	// Desaloca operandos que foram desempilhados
 	free(operando1);
 	free(operando2);
@@ -325,30 +325,30 @@ void ixor(stack_frames *pilha_frames) {
 
 void lxor(stack_frames *pilha_frames) {
 	t_frame *frame = pilha_frames->first;
-	
+
 	// Recupera segundo operando
 	t_operand *operando2_low = pop_operando(frame->operand_stack);
 	t_operand *operando2_high = pop_operando(frame->operand_stack);
-	
+
 	// Recupera primeiro operando
 	t_operand *operando1_low = pop_operando(frame->operand_stack);
 	t_operand *operando1_high = pop_operando(frame->operand_stack);
-	
+
 	long operando1_long;
 	long operando2_long;
 	u8 resultado;
-	
+
 	// Transforma os operandos em longs
 	operando1_long = u8_to_long(operando1_low->data,operando1_high->data);
 	operando2_long = u8_to_long(operando2_low->data,operando2_high->data);
-	
+
 	// Realiza operação xor
 	resultado = operando1_long^operando2_long;
-  
+
 	// Armazena resultado do xor na pilha de operandos
-	push_operando(resultado>>32,frame->operand_stack);
-	push_operando(resultado,frame->operand_stack);
-	
+	push_operando(TAG_LONG, resultado>>32,frame->operand_stack);
+	push_operando(TAG_LONG, resultado,frame->operand_stack);
+
 	// Desaloca operandos que foram desempilhados
 	free(operando1_high);
 	free(operando1_low);
@@ -360,13 +360,13 @@ void lxor(stack_frames *pilha_frames) {
 
 void iinc(stack_frames *pilha_frames) {
 	t_frame *frame = pilha_frames->first;
-	
+
 	// Recupera do code índice da variável a ser incrementada
 	u1 indice_variavel = frame->code_info->code[pilha_frames->first->pc++];
-	
+
 	// Recupera do code o tamanho do incremento
 	signed char incremento = frame->code_info->code[pilha_frames->first->pc++];
-	
+
 	// Realiza incremento
 	frame->array_variaveis_locais[indice_variavel] += incremento;
 }
@@ -375,12 +375,12 @@ void iinc(stack_frames *pilha_frames) {
 
 void i2l(stack_frames *pilha_frames) {
 	t_frame *frame = pilha_frames->first;
-	
+
 	// Recupera operando
 	t_operand *operando = pop_operando(frame->operand_stack);
 	long operando_long;
 	u8 resultado;
-	
+
 	// Realiza conversão por meio de casting
 	operando_long = (signed)operando->data;
 
@@ -388,9 +388,9 @@ void i2l(stack_frames *pilha_frames) {
 	resultado = long_to_u8(operando_long);
 
 	// Armazena resultado na pilha de operandos
-	push_operando(resultado>>32,frame->operand_stack);
-	push_operando(resultado,frame->operand_stack);
-	
+	push_operando(TAG_LONG, resultado>>32,frame->operand_stack);
+	push_operando(TAG_LONG, resultado,frame->operand_stack);
+
 	// Desaloca operando que foi desempilhado
 	free(operando);
 }
@@ -399,12 +399,12 @@ void i2l(stack_frames *pilha_frames) {
 
 void i2f(stack_frames *pilha_frames) {
 	t_frame *frame = pilha_frames->first;
-	
+
 	// Recupera operando
 	t_operand *operando = pop_operando(frame->operand_stack);
 	float operando_float;
 	u4 resultado;
-	
+
 	// Realiza conversão por meio de casting
 	operando_float = (signed)operando->data;
 
@@ -412,8 +412,8 @@ void i2f(stack_frames *pilha_frames) {
 	resultado = float_to_u4(operando_float);
 
 	// Armazena resultado na pilha de operandos
-	push_operando(resultado,frame->operand_stack);
-	
+	push_operando(TAG_FLOAT, resultado,frame->operand_stack);
+
 	// Desaloca operando que foi desempilhado
 	free(operando);
 }
@@ -422,12 +422,12 @@ void i2f(stack_frames *pilha_frames) {
 
 void i2d(stack_frames *pilha_frames) {
 	t_frame *frame = pilha_frames->first;
-	
+
 	// Recupera operando
 	t_operand *operando = pop_operando(frame->operand_stack);
 	double operando_double;
 	u8 resultado;
-	
+
 	// Realiza conversão por meio de casting
 	operando_double = (signed)operando->data;
 
@@ -435,9 +435,9 @@ void i2d(stack_frames *pilha_frames) {
 	resultado = double_to_u8(operando_double);
 
 	// Armazena resultado na pilha de operandos
-	push_operando(resultado>>32,frame->operand_stack);
-	push_operando(resultado,frame->operand_stack);
-	
+	push_operando(TAG_DOUBLE, resultado>>32,frame->operand_stack);
+	push_operando(TAG_DOUBLE, resultado,frame->operand_stack);
+
 	// Desaloca operando que foi desempilhado
 	free(operando);
 }
@@ -446,20 +446,20 @@ void i2d(stack_frames *pilha_frames) {
 
 void l2i(stack_frames *pilha_frames) {
 	t_frame *frame = pilha_frames->first;
-	
+
 	// Recupera operandos
 	t_operand *operando_low = pop_operando(frame->operand_stack);
 	t_operand *operando_high = pop_operando(frame->operand_stack);
-	
+
 	// Concatena high e low em um long
 	long operando = u8_to_long(operando_low->data,operando_high->data);
-	
+
 	// Realiza conversão por meior de casting
 	int resultado = (int) operando;
-	
+
 	// Armazena resultado na operand stack
-	push_operando(resultado,frame->operand_stack);
-	
+	push_operando(TAG_INTEGER, resultado,frame->operand_stack);
+
 	// Desaloca operandos que foram desempilhados
 	free(operando_low);
 	free(operando_high);
@@ -469,30 +469,29 @@ void l2i(stack_frames *pilha_frames) {
 
 void l2f(stack_frames *pilha_frames) {
 	t_frame *frame = pilha_frames->first;
-	
+
 	// Recupera operandos
 	t_operand *operando_low = pop_operando(frame->operand_stack);
 	t_operand *operando_high = pop_operando(frame->operand_stack);
-	
+
 	// Concatena high e low em um long
 	long operando = u8_to_long(operando_low->data,operando_high->data);
-	
+
 	// Realiza conversão por meior de casting
 	float resultado_float = (float) operando;
-	
+
 	u4 resultado = float_to_u4(resultado_float);
-	
+
 	// Armazena resultado na operand stack
-	push_operando(resultado,frame->operand_stack);
-	
+	push_operando(TAG_FLOAT, resultado,frame->operand_stack);
+
 	// Desaloca operandos que foram desempilhados
 	free(operando_low);
 	free(operando_high);
 }
 
 
-//ivan
-//ivan
+
 void l2d(stack_frames *pilha_frames) {
 	t_operand *temp_operando = NULL;
 	temp_operando = (t_operand*) malloc(sizeof(t_operand));
@@ -521,9 +520,9 @@ void l2d(stack_frames *pilha_frames) {
 	//empilha em big endian
 	aux = (u8)temp_double;
 	temp_high = (u4)(aux>>32 & 0x0000ffff);
-	push_operando(temp_high,pilha_frames->first->operand_stack);
+	push_operando(TAG_DOUBLE, temp_high, pilha_frames->first->operand_stack);
 	temp_low = (u4)(aux & 0x0000ffff);
-	push_operando(temp_low,pilha_frames->first->operand_stack);
+	push_operando(TAG_DOUBLE, temp_low, pilha_frames->first->operand_stack);
 
 	free(temp_operando);
 }
@@ -539,7 +538,7 @@ void f2i(stack_frames *pilha_frames) {
 	temp_float = (tipo_float)temp_operando->data;
 	//conversão via cast
 	temp_int = (tipo_int)temp_float;
-	push_operando((u4)temp_int,pilha_frames->first->operand_stack);
+	push_operando(TAG_INTEGER, (u4)temp_int,pilha_frames->first->operand_stack);
 }
 
 
@@ -559,9 +558,9 @@ void f2l(stack_frames *pilha_frames) {
 
 	//empilha em big endian
 	temp_32 = (u4)(temp_long >> 32);
-	push_operando(temp_32,pilha_frames->first->operand_stack);
+	push_operando(TAG_LONG, temp_32,pilha_frames->first->operand_stack);
 	temp_32 = (u4)temp_long;
-	push_operando(temp_32,pilha_frames->first->operand_stack);
+	push_operando(TAG_LONG, temp_32,pilha_frames->first->operand_stack);
 }
 
 
@@ -583,9 +582,9 @@ void f2d(stack_frames *pilha_frames) {
 	//empilha em big endian
 	aux = (u8)temp_double;
 	temp_high = (u4)(aux>>32 & 0x0000ffff);
-	push_operando(temp_high,pilha_frames->first->operand_stack);
+	push_operando(TAG_DOUBLE, temp_high,pilha_frames->first->operand_stack);
 	temp_low = (u4)(aux & 0x0000ffff);
-	push_operando(temp_low,pilha_frames->first->operand_stack);
+	push_operando(TAG_DOUBLE, temp_low,pilha_frames->first->operand_stack);
 }
 
 
@@ -612,7 +611,7 @@ void d2i(stack_frames *pilha_frames) { //problema com o tamanho do data!!
 	temp_double_var = (tipo_double)temp_double;
 	temp_int = (tipo_int)temp_double_var;
 
-	push_operando((u4)temp_int,pilha_frames->first->operand_stack);
+	push_operando(TAG_INTEGER, (u4)temp_int,pilha_frames->first->operand_stack);
 }
 
 
@@ -645,9 +644,9 @@ void d2l(stack_frames *pilha_frames) { //problema com o tamanho do data!!
 	//empilha em big endian
 	aux = (u8)temp_long;
 	temp_high = (u4)(aux>>32 & 0x0000ffff);
-	push_operando(temp_high,pilha_frames->first->operand_stack);
+	push_operando(TAG_LONG, temp_high,pilha_frames->first->operand_stack);
 	temp_low = (u4)(aux & 0x0000ffff);
-	push_operando(temp_low,pilha_frames->first->operand_stack);
+	push_operando(TAG_LONG, temp_low,pilha_frames->first->operand_stack);
 }
 
 
@@ -676,7 +675,7 @@ void d2f(stack_frames *pilha_frames) { //problema com o tamanho do data!!
 	temp_double_var = (tipo_double)temp_double;
 	temp_float = (tipo_float)temp_double_var;
 
-	push_operando((u4)temp_float,pilha_frames->first->operand_stack);
+	push_operando(TAG_FLOAT, (u4)temp_float,pilha_frames->first->operand_stack);
 }
 
 
@@ -697,7 +696,7 @@ void i2b(stack_frames *pilha_frames) {
 	else{
 		temp_byte = 0xffff & (temp_byte >> 24);
 	}
-	push_operando(temp_byte,pilha_frames->first->operand_stack);
+	push_operando(TAG_INTEGER, temp_byte,pilha_frames->first->operand_stack);
 }
 
 
@@ -714,7 +713,7 @@ void i2c(stack_frames *pilha_frames) {
 	temp = (u4)temp_operando->data;
 
 	temp_char = 0x000f & (temp >> 24);
-	push_operando(temp_char,pilha_frames->first->operand_stack);
+	push_operando(TAG_INTEGER, temp_char,pilha_frames->first->operand_stack);
 }
 
 
@@ -733,7 +732,7 @@ void i2s(stack_frames *pilha_frames) {
 	else{
 		temp = 0xffff & (temp >> 16);
 	}
-	push_operando(temp,pilha_frames->first->operand_stack);
+	push_operando(TAG_INTEGER, temp,pilha_frames->first->operand_stack);
 }
 
 
@@ -774,9 +773,8 @@ void lcmp(stack_frames *pilha_frames) {
 
 	n = memcmp(p_long1,p_long2,sizeof(u8));
 
-	push_operando(n,pilha_frames->first->operand_stack);
+	push_operando(TAG_INTEGER, n, pilha_frames->first->operand_stack);
 }
-
 
 
 
@@ -794,7 +792,7 @@ void fcmpl(stack_frames *pilha_frames) {
 	temp_operando = pop_operando(pilha_frames->first->operand_stack);
 	temp_float1 = (tipo_float)temp_operando->data;
 
-	//:::::::::::::::::::::::::::::::::::::::::falta fazer a comparação de not a number::::::::::::::::::::::::::::::::://
+	// TODO falta fazer a comparação de not a number
 	// se algum operando for NAN, empilha -1
 
 	u4 n;
@@ -803,7 +801,7 @@ void fcmpl(stack_frames *pilha_frames) {
 
 	n = memcmp(p_float1,p_float2,sizeof(u4));
 
-	push_operando(n,pilha_frames->first->operand_stack);
+	push_operando(TAG_INTEGER, n, pilha_frames->first->operand_stack);
 }
 
 
@@ -822,7 +820,7 @@ void fcmpg(stack_frames *pilha_frames) {
 	temp_operando = pop_operando(pilha_frames->first->operand_stack);
 	temp_float1 = (tipo_float)temp_operando->data;
 
-	//:::::::::::::::::::::::::::::::::::::::::falta fazer a comparação de not a number::::::::::::::::::::::::::::::::://
+	// TODO falta fazer a comparação de not a number
 	// se algum operando for NAN, empilha 1
 
 	u4 n;
@@ -831,7 +829,7 @@ void fcmpg(stack_frames *pilha_frames) {
 
 	n = memcmp(p_float1,p_float2,sizeof(u4));
 
-	push_operando(n,pilha_frames->first->operand_stack);
+	push_operando(TAG_INTEGER, n,pilha_frames->first->operand_stack);
 
 }
 
@@ -873,7 +871,7 @@ void dcmpl(stack_frames *pilha_frames) {
 	double2 = (tipo_double)temp_double2;
 	double1 = (tipo_double)temp_double1;
 
-	//:::::::::::::::::::::::::::::::::::::::::falta fazer a comparação de not a number::::::::::::::::::::::::::::::::://
+	// TODO falta fazer a comparação de not a number
 	// se algum operando for NAN, empilha -1
 
 	tipo_double *p_double1 = &double1;
@@ -882,7 +880,7 @@ void dcmpl(stack_frames *pilha_frames) {
 
 	n = memcmp(p_double1,p_double2,sizeof(u8));
 
-	push_operando(n,pilha_frames->first->operand_stack);
+	push_operando(TAG_INTEGER, n, pilha_frames->first->operand_stack);
 }
 
 
@@ -923,7 +921,7 @@ void dcmpg(stack_frames *pilha_frames) {
 	double2 = (tipo_double)temp_double2;
 	double1 = (tipo_double)temp_double1;
 
-	//:::::::::::::::::::::::::::::::::::::::::falta fazer a comparação de not a number::::::::::::::::::::::::::::::::://
+	// TODO falta fazer a comparação de not a number
 	// se algum operando for NAN, empilha 1
 
 	tipo_double *p_double1 = &double1;
@@ -932,7 +930,7 @@ void dcmpg(stack_frames *pilha_frames) {
 
 	n = memcmp(p_double1,p_double2,sizeof(u8));
 
-	push_operando(n,pilha_frames->first->operand_stack);
+	push_operando(TAG_INTEGER, n, pilha_frames->first->operand_stack);
 }
 
 
@@ -1173,4 +1171,3 @@ void if_icmpne(stack_frames *pilha_frames) {
 		pilha_frames->first->pc = pilha_frames->first->pc + (tipo_int)offset_16bit;
 	}
 }
-

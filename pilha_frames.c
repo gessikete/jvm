@@ -27,12 +27,13 @@ t_operand_stack* alocar_operand_stack() {
 	return operand_stack;
 }
 
-t_operand *alocar_operando(u4 data, t_operand *next) {
+t_operand *alocar_operando(u1 tag, u4 data, t_operand *next) {
 	t_operand *operando;
 
 	operando = (t_operand*) malloc(sizeof(t_operand));
 
 	if(operando) {
+		operando->tag = tag;
 		operando->data = data;
 		operando->next = next;
 	} else printf("\nNao foi possivel alocar espaco para operando\n");
@@ -103,8 +104,8 @@ t_operand *pop_operando(t_operand_stack *pilha_operandos) {
 	return operando;
 }
 
-void push_operando(u4 data, t_operand_stack *operand_stack) {
-	operand_stack->first = alocar_operando(data,operand_stack->first);
+void push_operando(u1 tag, u4 data, t_operand_stack *operand_stack) {
+	operand_stack->first = alocar_operando(tag, data, operand_stack->first);
 }
 
 void push_frame(method_info *pt_metodo, cp_info *pt_constant_pool, stack_frames *pilha_frames) {
