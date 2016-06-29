@@ -92,18 +92,37 @@ void atributo_invalido(FILE *pt_arquivo, attribute_info attributes[], u2 index, 
 void desalocar_atributos(attribute_info *attributes, u2 attributes_count);
 
 /*
- * As funções a seguir desalocam suas respectivas estruturas de acordo com a tag
- * do atributo
+ * Desaloca uma estrutura de code attibute
  *
  * Parâmetros:
- *		attribute_info *attributes: ponteiro para o array de attributos
+ *		code_attribute *code_info: ponteiro para o array de code info
  *
  * Retorno:
  *       Nenhum
  */
-void desalocar_code_attribute(attribute_info *attributes);
-void desalocar_exceptions_attribute(attribute_info *attributes);
-void desalocar_innner_classes_attribute(attribute_info *attributes);
+void desalocar_code_attribute(code_attribute *code_info);
+
+/*
+ * Desaloca uma estrutura de exceptions attribute
+ *
+ * Parâmetros:
+ *		exceptions_attribute *exception_info: ponteiro para o array de excepton info
+ *
+ * Retorno:
+ *       Nenhum
+ */
+void desalocar_exceptions_attribute(exceptions_attribute *exception_info);
+
+/*
+ * Desaloca uma estrutura de inner classes attribute
+ *
+ * Parâmetros:
+ *		inner_classes_attribute *inner_classes_info: ponteiro para o array de inner classes info
+ *
+ * Retorno:
+ *       Nenhum
+ */
+void desalocar_innner_classes_attribute(inner_classes_attribute *inner_classes_info);
 /* Fim da declaração dos métodos dos atributos */
 
 #endif /* LEITOR_ATRIBUTOS_H */

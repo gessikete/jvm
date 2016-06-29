@@ -105,4 +105,27 @@ char *primitive_array_info(u1 type_code);
 // Declaração do vetor que contém os nomes da instruções, suas respectivas funções e os tipos de seus operandos
 extern t_instrucoes instrucoes[];
 
+
+/*!
+   \brief Descobre o tipo de um multiarray com base no class name
+
+   \param name_class nome da classe do multiarray
+   \param dimensao dimensao do array multidimensional
+
+   \return Ponteiro para uma lista de arrays.
+*/
+u1 tipo_multiarray(char *name_class, u1 dimensao);
+
+
+/*!
+   \brief Função recursiva que cria os subarrays de um multiarray.
+
+   \param nivel nível do subarray atual
+   \param tamanho vetor que armazena o tamanho de cada subarray
+   \param subarray vetor de ponteiros do tipo t_array; usado para criar os subarrays
+   \param tag tipo do subarray no nível zero (int, float, etc).
+
+   \return Nada
+*/
+void for_array_multidimensional(u4 nivel, u4 tamanho[], t_array *subarray[], u1 tag);
 #endif

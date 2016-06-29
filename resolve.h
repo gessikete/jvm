@@ -33,16 +33,5 @@ bool verificar_classe_carregada(char *nome_classe, elemento_tabela_classes *tabe
  */
 void inserir_elemento_tabela_classes(elemento_tabela_classes **tabela_classes, class_file *pt_classe);
 
-/*
- * Recupera um array na lista de arrays dado um index
- *
- * Parâmetros:
- *		elemento_lista_arrays *lista_arrays: ponteiro para a lista de arrays
- *		u4 index: index para o array a ser recuperado
- *
- * Retorno:
- *      array *: array do índex
- */
-array *recupera_array_index(elemento_lista_arrays *lista_arrays, u4 index);
 
 #endif /* CLASSE_H */

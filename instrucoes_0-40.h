@@ -1,3 +1,17 @@
+/*!
+   \file instrucoes_0-40.h
+   \brief Protótipo das funções para o módulo de frames.
+
+   Esse arquivo contém os protótipos das funções que definem as instruções executadas
+   pela JVM.
+
+   \author Alisson Carvalho                 12/0072521
+   \author Ana Carolina Lopes               11/0107578
+   \author Géssica Neves Sodré da Silva     11/0146115
+   \author Ivan Sena                        10/0088031
+   \author Laís Mendes Gonçalves            11/0033647
+*/
+
 #ifndef INSTRUCOES_0_40_H
 #define INSTRUCOES_0_40_H
 
@@ -39,12 +53,71 @@ void lload_0(stack_frames *pilha_frames);
 void lload_1(stack_frames *pilha_frames);
 void lload_2(stack_frames *pilha_frames);
 void lload_3(stack_frames *pilha_frames);
+
+/*!
+   \brief Instrução fload_0. Recupera um float no array de variáveis locais com índice 0 e empilha na pilha de operandos.
+
+   \param pilha_frames ponteiro para a pilha de frames.
+
+   \return Nenhum
+*/
 void fload_0(stack_frames *pilha_frames);
+
+/*!
+   \brief Instrução fload_1. Recupera um float no array de variáveis locais com índice 1 e empilha na pilha de operandos.
+
+   \param pilha_frames ponteiro para a pilha de frames.
+
+   \return Nenhum
+*/
 void fload_1(stack_frames *pilha_frames);
+
+/*!
+   \brief Instrução fload_2. Recupera um float no array de variáveis locais com índice 2 e empilha na pilha de operandos.
+
+   \param pilha_frames ponteiro para a pilha de frames.
+
+   \return Nenhum
+*/
 void fload_2(stack_frames *pilha_frames);
+
+/*!
+   \brief Instrução fload_3. Recupera um float no array de variáveis locais com índice 3 e empilha na pilha de operandos.
+
+   \param pilha_frames ponteiro para a pilha de frames.
+
+   \return Nenhum
+*/
 void fload_3(stack_frames *pilha_frames);
+
+/*!
+   \brief Instrução dload_0. Recupera um double no array de variáveis locais com índice 0 e 1 com notação big endian
+   e empilha na pilha de operandos.
+
+   \param pilha_frames ponteiro para a pilha de frames.
+
+   \return Nenhum
+*/
 void dload_0(stack_frames *pilha_frames);
+
+/*!
+   \brief Instrução dload_1. Recupera um double no array de variáveis locais com índice 1 e 2 com notação big endian
+   e empilha na pilha de operandos.
+
+   \param pilha_frames ponteiro para a pilha de frames.
+
+   \return Nenhum
+*/
 void dload_1(stack_frames *pilha_frames);
+
+/*!
+   \brief Instrução dload_2. Recupera um double no array de variáveis locais com índice 2 e 3 com notação big endian
+   e empilha na pilha de operandos.
+
+   \param pilha_frames ponteiro para a pilha de frames.
+
+   \return Nenhum
+*/
 void dload_2(stack_frames *pilha_frames);
 
-#endif
+#endif /* INSTRUCOES_0_40_H */

@@ -58,11 +58,8 @@ void inicializar_jvm(class_file *pt_classe) {
 void executar_jvm(stack_frames *pilha_frames) {
 	init_instrucoes();
 
-
-	push_operando(TAG_INTEGER, 3, pilha_frames->first->operand_stack);
-	instrucoes[pilha_frames->first->code_info->code[pilha_frames->first->pc++]].funcao_instrucao(pilha_frames);
-
-	pilha_frames->first->pc+=4;
-	printf("\n%x\n",pilha_frames->first->code_info->code[pilha_frames->first->pc]);
-	instrucoes[pilha_frames->first->code_info->code[pilha_frames->first->pc++]].funcao_instrucao(pilha_frames);
+	while (strcmp(pilha_frames->first->nome_metodo,"<init>")) {
+		instrucoes[pilha_frames->first->code_info->code[pilha_frames->first->pc++]].funcao_instrucao(pilha_frames);
+	}
+	printf("\n");
 }

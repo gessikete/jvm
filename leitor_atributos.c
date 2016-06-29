@@ -220,11 +220,11 @@ void desalocar_atributos(attribute_info *attributes, u2 attributes_count){
 		for(i = 0; i < attributes_count; i++){
 			// Verfica qual é o tipo de atributo para desalocar
 			if((attributes + i)->attribute_tag == CODE_NUM){
-				desalocar_code_attribute(attributes + i);
+				desalocar_code_attribute(&(attributes + i)->info.code_info);
 			}else if((attributes + i)->attribute_tag == EXCEPTION_NUM){
-				desalocar_exceptions_attribute(attributes + i);
+				desalocar_exceptions_attribute(&(attributes + i)->info.exception_info);
 			}else if((attributes + i)->attribute_tag == INNER_CLASSES_NUM){
-				desalocar_innner_classes_attribute(attributes + i);
+				desalocar_innner_classes_attribute(&(attributes + i)->info.inner_classes_info);
 			}
 		}
 		// desaloca o array de attributes
@@ -232,16 +232,16 @@ void desalocar_atributos(attribute_info *attributes, u2 attributes_count){
 	}
 }
 
-void desalocar_code_attribute(attribute_info *attributes){
-	free(attributes->info.code_info.code);
-	free(attributes->info.code_info.exception_table);
-	desalocar_atributos(attributes->info.code_info.attributes, attributes->info.code_info.attributes_count);
+void desalocar_code_attribute(code_attribute *code_info){
+	free(code_info->code);
+	free(code_info->exception_table);
+	desalocar_atributos(code_info->attributes, code_info->attributes_count);
 }
 
-void desalocar_exceptions_attribute(attribute_info *attributes){
-	free(attributes->info.exception_info.exceptions_index_table);
+void desalocar_exceptions_attribute(exceptions_attribute *exception_info){
+	free(exception_info->exceptions_index_table);
 }
 
-void desalocar_innner_classes_attribute(attribute_info *attributes){
-	free(attributes->info.inner_classes_info.classes);
+void desalocar_innner_classes_attribute(inner_classes_attribute *inner_classes_info){
+	free(inner_classes_info->classes);
 }

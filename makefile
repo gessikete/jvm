@@ -1,5 +1,5 @@
 RM := rm -rf
-CC := gcc
+CC := gcc -m32
 CFLAGS := -g -Wall -std=c99
 LDLIBS := -lm
 MKDIR = mkdir -p

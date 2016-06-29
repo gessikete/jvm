@@ -1,3 +1,17 @@
+/*!
+   \file instrucoes_161-201.h
+   \brief Protótipo das funções para o módulo de frames.
+
+   Esse arquivo contém os protótipos das funções que definem as instruções executadas
+   pela JVM.
+
+   \author Alisson Carvalho                 12/0072521
+   \author Ana Carolina Lopes               11/0107578
+   \author Géssica Neves Sodré da Silva     11/0146115
+   \author Ivan Sena                        10/0088031
+   \author Laís Mendes Gonçalves            11/0033647
+*/
+
 #ifndef INSTRUCOES_181_201_H
 #define INSTRUCOES_181_201_H
 
@@ -48,4 +62,4 @@ void goto_w(stack_frames *pilha_frames);
 void jsr_w(stack_frames *pilha_frames);
 void breakpoint(stack_frames *pilha_frames);
 
-#endif
+#endif /* INSTRUCOES_161-201_H */

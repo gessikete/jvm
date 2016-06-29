@@ -318,3 +318,70 @@ char *primitive_array_info(u1 type_code) {
 
 	return type;
 }
+
+u1 tipo_multiarray(char *class_name, u1 dimensao) {
+	u1 contador;
+	char colchetes[dimensao+2];
+		
+	for(contador=0; contador<dimensao; contador++) {
+		colchetes[contador] = '[';
+	}
+	colchetes[contador+1] = '\0';
+		
+	colchetes[contador] = 'Z'; //boolean
+	if(!strcmp(colchetes,class_name)) return BOOLEAN_ARRAY;
+	
+	colchetes[contador] = 'B';
+	if(!strcmp(colchetes,class_name)) return BYTE_ARRAY;
+	
+	colchetes[contador] = 'C';
+	if(!strcmp(colchetes,class_name)) return CHAR_ARRAY;
+	
+	colchetes[contador] = 'S';
+	if(!strcmp(colchetes,class_name)) return SHORT_ARRAY;
+	
+	colchetes[contador] = 'I';
+	if(!strcmp(colchetes,class_name)) return INT_ARRAY;
+	
+	colchetes[contador] = 'L';
+	if(!strcmp(colchetes,class_name)) return LONG_ARRAY;
+	
+	colchetes[contador] = 'F';
+	if(!strcmp(colchetes,class_name)) return FLOAT_ARRAY;
+	
+	colchetes[contador] = 'D';
+	if(!strcmp(colchetes,class_name)) return DOUBLE_ARRAY;
+	
+	else 
+	printf("Erro: tipo de multianewarray nao identificado\n");  
+	return -1;
+}
+
+void for_array_multidimensional(u4 nivel, u4 tamanho[], t_array *subarray[], u1 tag) {
+	u4 i;
+  
+	//nivel é inicializado com dimensao-1 quando for_array_multidimensional() é chamado.
+	//O menor nível possível é zero, que correspone ao nível do subarray do tipo do 
+	//multiarray em si (int, float, etc); os demais níveis correspondem a arrays de arrays.
+	if(nivel<0) return;
+	for(i=0; i<tamanho[nivel]; i++) {
+		//cria-se um subarray no nível inferior. Esse subarray é criado diversas vezes,
+		//de acordo com o tamanho do array no nível atual (por isso o for varia de 0
+		//até tamanho[nivel], que é o tamanho do array do nível atual. 
+		//Isso é necessário porque cada entrada da lista de arrays do array atual precisa
+		//receber um subarray.
+		if(nivel!=1) subarray[nivel-1] = criar_array(ARRAY_ARRAY,tamanho[nivel-1],nivel);
+		
+		// Caso o nível seja um, não será array de array e a tag deve ser a que foi 
+		// encontrada anteriormente.
+		else subarray[nivel-1] = criar_array(tag,tamanho[nivel-1],nivel);
+		
+		//a posicao i do subarray do nivel atual recebe o subarray criado
+		subarray[nivel]->info.array_array[i] = *subarray[nivel-1];
+		
+		//Se não esteja no penúltimo subnível, chama-se for_array_multidimensional() novamente.
+		//Caso esteja no penúltimo subnível, esse é o for mais interno; não é necessário criar
+		//novos subarrays, pois o próximo nível corresponde ao nível do tipo em si (int, float, etc)
+		if(nivel!=1) for_array_multidimensional(nivel-1,tamanho,subarray,tag);
+	}
+}

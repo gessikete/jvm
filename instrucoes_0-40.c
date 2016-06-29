@@ -1,3 +1,17 @@
+/*!
+   \file instrucoes_0-40.c
+   \brief Instruções da Máquina Virtual Java.
+
+   Módulo responsável por parte das instruções que definem as operações a serem
+   executadas pela JVM.
+
+   \author Alisson Carvalho                 12/0072521
+   \author Ana Carolina Lopes               11/0107578
+   \author Géssica Neves Sodré da Silva     11/0146115
+   \author Ivan Sena                        10/0088031
+   \author Laís Mendes Gonçalves            11/0033647
+*/
+
 #include "instrucoes_0-40.h"
 
 void nop(stack_frames *pilha_frames) {
@@ -16,7 +30,7 @@ void nop(stack_frames *pilha_frames) {
 */
 void aconst_null(stack_frames *pilha_frames) {
 
-    u4 operando = (u4)NULL;
+    u4 operando = 0;
 
     // adiciona o operando a pilha
     push_operando(TAG_NULL, operando, pilha_frames->first->operand_stack);
@@ -175,7 +189,7 @@ void iconst_5(stack_frames *pilha_frames) {
         stack_frames *pilha_frames --> ponteiro para a pilha de frames
 
     Obs.1: não incrementa o PC
-    Obs.2: guarda primeiro lower e depois higher
+    Obs.2: guarda primeiro higher e depois lower
 
 */
 void lconst_0(stack_frames *pilha_frames) {
@@ -188,8 +202,8 @@ void lconst_0(stack_frames *pilha_frames) {
     u4 operando_lo = (u4) operando & 0x00000000FFFFFFFF;
 
     //empilha operando
-    push_operando(TAG_LONG, operando_lo, pilha_frames->first->operand_stack);
     push_operando(TAG_LONG, operando_hi, pilha_frames->first->operand_stack);
+    push_operando(TAG_LONG, operando_lo, pilha_frames->first->operand_stack);
 
 }
 
@@ -201,7 +215,7 @@ void lconst_0(stack_frames *pilha_frames) {
         stack_frames *pilha_frames --> ponteiro para a pilha de frames
 
     Obs.1: não incrementa o PC
-    Obs.2: guarda primeiro lower e depois higher
+    Obs.2: guarda primeiro higher e depois lower
 
 */
 void lconst_1(stack_frames *pilha_frames) {
@@ -214,8 +228,8 @@ void lconst_1(stack_frames *pilha_frames) {
     u4 operando_lo = (u4) operando & 0x00000000FFFFFFFF;
 
     //empilha operando
-    push_operando(TAG_LONG, operando_lo, pilha_frames->first->operand_stack);
     push_operando(TAG_LONG, operando_hi, pilha_frames->first->operand_stack);
+    push_operando(TAG_LONG, operando_lo, pilha_frames->first->operand_stack);
 
 }
 
@@ -298,6 +312,7 @@ void fconst_2(stack_frames *pilha_frames) {
         stack_frames *pilha_frames --> ponteiro para a pilha de frames
 
     Obs.1: não incrementa o PC
+    Obs.2: primeiro guardo o higher e depois o lower
 
 */
 void dconst_0(stack_frames *pilha_frames) {
@@ -314,8 +329,8 @@ void dconst_0(stack_frames *pilha_frames) {
     u4 operando_lo = (u4) operando & 0x00000000FFFFFFFF;
 
     //empilha operando
-    push_operando(TAG_DOUBLE, operando_lo, pilha_frames->first->operand_stack);
     push_operando(TAG_DOUBLE, operando_hi, pilha_frames->first->operand_stack);
+    push_operando(TAG_DOUBLE, operando_lo, pilha_frames->first->operand_stack);
 
 }
 
@@ -327,6 +342,7 @@ void dconst_0(stack_frames *pilha_frames) {
         stack_frames *pilha_frames --> ponteiro para a pilha de frames
 
     Obs.1: não incrementa o PC
+    Obs.2: primeiro guardo o higher e depois o lower
 
 */
 void dconst_1(stack_frames *pilha_frames) {
@@ -343,8 +359,8 @@ void dconst_1(stack_frames *pilha_frames) {
     u4 operando_lo = (u4) operando & 0x00000000FFFFFFFF;
 
     //empilha operando
-    push_operando(TAG_DOUBLE, operando_lo, pilha_frames->first->operand_stack);
     push_operando(TAG_DOUBLE, operando_hi, pilha_frames->first->operand_stack);
+    push_operando(TAG_DOUBLE, operando_lo, pilha_frames->first->operand_stack);
 
 }
 
@@ -360,19 +376,19 @@ void dconst_1(stack_frames *pilha_frames) {
 */
 void bipush(stack_frames *pilha_frames) {
 
-    //incrementando pc
-    pilha_frames->first->pc++;
-
     //pegando pc
     u4 pc = pilha_frames->first->pc;
 
     //pegando o byte
     u1 byte = pilha_frames->first->code_info->code[pc];
 
-    u4 operando = (u4)byte;
+    u4 operando = (int8_t)byte;
 
     //empilha operando
     push_operando(TAG_INTEGER, operando, pilha_frames->first->operand_stack);
+
+    //incrementando pc mais uma vez para pegar o opcode
+    pilha_frames->first->pc++;
 }
 
 
@@ -383,7 +399,7 @@ void bipush(stack_frames *pilha_frames) {
         stack_frames *pilha_frames --> ponteiro para a pilha de frames
 
     Obs.1: incrementa o pc
-    Obs.2: funciona se primeiro ele tirar da pilha o higher e depois o lower
+    Obs.2: funciona se primeiro ele tirar da pilha o lower e depois o higher
 
 */
 void sipush(stack_frames *pilha_frames) {
@@ -392,30 +408,17 @@ void sipush(stack_frames *pilha_frames) {
     u4 operando = 0;
     u4 pc;
 
-    //incrementando pc
-    pilha_frames->first->pc++;
-
     //pegando pc
     pc = pilha_frames->first->pc;
 
-    //pegando o byte
-    u1 byte1 = pilha_frames->first->code_info->code[pc];
-
-    //incrementando pc mais uma vez
-    pilha_frames->first->pc++;
-
-    //pegando pc
-    pc = pilha_frames->first->pc;
-
-    //pegando o segundo byte
-    u1 byte2 = pilha_frames->first->code_info->code[pc];
-
-    //convertendo para 32bits
-    operando = operando | (byte1 << 8);
-    operando = operando | byte2;
+    //pegando o operando
+    operando = (int16_t)operando_u2(pilha_frames->first->code_info->code,pc);
 
     //empilha operando
     push_operando(TAG_INTEGER, operando, pilha_frames->first->operand_stack);
+
+    //incrementando pc
+    pilha_frames->first->pc+=2;
 }
 
 
@@ -436,8 +439,7 @@ void ldc(stack_frames *pilha_frames) {
     u4 pc;
     cp_info operando;
 
-    //incrementando pc
-    pilha_frames->first->pc++;
+    //pegando pc
     pc = pilha_frames->first->pc;
 
     //pegando o index
@@ -470,6 +472,9 @@ void ldc(stack_frames *pilha_frames) {
             printf("ldc ERRO\n");
             break;
     }
+
+    //incrementando pc mais uma vez para pegar o opcode
+    pilha_frames->first->pc++;
 }
 
 
@@ -490,20 +495,10 @@ void ldc_w(stack_frames *pilha_frames) {
     u4 pc;
     cp_info operando;
 
-    //incrementando pc
-    pilha_frames->first->pc++;
+    //pegando o pc
     pc = pilha_frames->first->pc;
 
-    //pegando o index
-    index = pilha_frames->first->code_info->code[pc];
-
-    //incrementando pc
-    pilha_frames->first->pc++;
-    pc = pilha_frames->first->pc;
-
-    //pegando o index
-    index = index << 8;
-    index = index | pilha_frames->first->code_info->code[pc];
+    index = operando_u2(pilha_frames->first->code_info->code,pc);
 
     //pegando operando
     operando = pilha_frames->first->pt_constant_pool[index];
@@ -533,6 +528,9 @@ void ldc_w(stack_frames *pilha_frames) {
             break;
     }
 
+   //incrementando pc mais uma vez para pegar o opcode
+    pilha_frames->first->pc+=2;
+
 }
 
 
@@ -544,7 +542,7 @@ void ldc_w(stack_frames *pilha_frames) {
         stack_frames *pilha_frames --> ponteiro para a pilha de frames
 
     Obs.1: incrementa o pc
-    Obs.2: primeiro guardo o lower e depois o higher
+    Obs.2: primeiro guardo o higher e depois o lower
 
 */
 void ldc2_w(stack_frames *pilha_frames) {
@@ -557,8 +555,7 @@ void ldc2_w(stack_frames *pilha_frames) {
     u4 operando_hi;
     u4 operando_lo;
 
-    //incrementando pc
-    pilha_frames->first->pc++;
+    //pegando o pc
     pc = pilha_frames->first->pc;
 
     //pegando o index
@@ -588,8 +585,8 @@ void ldc2_w(stack_frames *pilha_frames) {
             operando_lo = (u4) numero & 0x00000000FFFFFFFF;
 
             //empilha operando
-            push_operando(operando.tag, operando_lo, pilha_frames->first->operand_stack);
             push_operando(operando.tag, operando_hi, pilha_frames->first->operand_stack);
+            push_operando(operando.tag, operando_lo, pilha_frames->first->operand_stack);
             break;
 
         case 6:
@@ -602,36 +599,73 @@ void ldc2_w(stack_frames *pilha_frames) {
             operando_lo = (u4) numero & 0x00000000FFFFFFFF;
 
             //empilha operando
-            push_operando(operando.tag, operando_lo, pilha_frames->first->operand_stack);
             push_operando(operando.tag, operando_hi, pilha_frames->first->operand_stack);
+            push_operando(operando.tag, operando_lo, pilha_frames->first->operand_stack);
             break;
 
         default:
             printf("ldc2_w ERRO\n");
             break;
     }
+
+    //incrementando pc mais uma vez para pegar o opcode
+    pilha_frames->first->pc++;
 }
 
 
 /*
-    Instrução iload: pega dois bytes para index para o poll de constante se tiver combinado com WIDE, se nao pega so um. O index pode ser para um long, double.
-        Então ele empilha o oeprando que resgatar.
+    Instrução iload: pega dois bytes para index para o poll de constante se tiver combinado com WIDE, se nao pega so um. O index aponta para um int.
+        Então ele empilha na pilha de operandos o operando que resgatar.
 
     Parametros:
         stack_frames *pilha_frames --> ponteiro para a pilha de frames
 
     Obs.1: incrementa o pc
-    Obs.2: primeiro guardo o lower e depois o higher
-
+    Obs.2: primeiro tira o lower e depois o higher
 */
 void iload(stack_frames *pilha_frames) {
-    //precido do WIDE para fazer
+
+    //declarando variáveis
+    u2 index;
+    u4 pc;
+    u4 operando;
+
+    //pegando o pc
+    pc = pilha_frames->first->pc;
+
+    //pegando o index
+    index = pilha_frames->first->code_info->code[pc];
+
+    //se tiver sido setado a flag wide_ ele pega o segundo byte e forma um index
+    if (wide_)
+    {
+        pilha_frames->first->pc++;
+
+        //pegando o pc
+        pc = pilha_frames->first->pc;
+
+        //juntando os dois bytes para formar o index
+        index = index << 8;
+        index = index | pilha_frames->first->code_info->code[pc];
+
+        //mudando o valor da flag wide_
+        wide_ = 0;
+    }
+
+    //pegando o operando
+    operando = pilha_frames->first->array_variaveis_locais[index];
+
+    //empilha operando
+    push_operando(TAG_INTEGER, operando, pilha_frames->first->operand_stack);
+
+    //incrementando pc mais uma vez para pegar o opcode
+    pilha_frames->first->pc++;
 
 }
 
 
 /*
-    Instrução lload: pega dois bytes para index para o poll de constante se tiver combinado com WIDE, se nao pega so um. O index pode ser para um long, double.
+    Instrução lload: pega dois bytes para index para o poll de constante se tiver combinado com WIDE, se nao pega so um. O indexdeve ser long.
         Então ele empilha o oeprando que resgatar.
 
     Parametros:
@@ -639,16 +673,54 @@ void iload(stack_frames *pilha_frames) {
 
     Obs.1: incrementa o pc
     Obs.2: primeiro guardo o lower e depois o higher
+    Obs.3: primeiro guarda o higher e depois o lower
 
 */
 void lload(stack_frames *pilha_frames) {
-    //preciso do wide
+
+    //declarando variáveis
+    u2 index;
+    u4 pc;
+    u4 operando_lo, operando_hi;
+
+    //pegando o pc
+    pc = pilha_frames->first->pc;
+
+    //pegando o index
+    index = pilha_frames->first->code_info->code[pc];
+
+    //se tiver sido setado a flag wide_ ele pega o segundo byte e forma um index
+    if (wide_)
+    {
+        pilha_frames->first->pc++;
+
+        //pegando o pc
+        pc = pilha_frames->first->pc;
+
+        //juntando os dois bytes para formar o index
+        index = index << 8;
+        index = index | pilha_frames->first->code_info->code[pc];
+
+        //mudando o valor da flag wide_
+        wide_ = 0;
+    }
+
+    //pegando o operando
+    operando_hi = pilha_frames->first->array_variaveis_locais[index];
+    operando_lo = pilha_frames->first->array_variaveis_locais[index+1];
+
+    //empilha operando
+    push_operando(TAG_LONG, operando_hi, pilha_frames->first->operand_stack);
+    push_operando(TAG_LONG, operando_lo, pilha_frames->first->operand_stack);
+
+    //incrementando pc mais uma vez para pegar o opcode
+    pilha_frames->first->pc++;
 
 }
 
 
 /*
-    Instrução lload: recebe um índice do vetor de variaveis locais, que contem o operando que deve ser empilhado na pilha de parametros.
+    Instrução lload: recebe um índice do vetor de variaveis locais, que contem o operando float que deve ser empilhado na pilha de parametros.
         se tiver Wide combina dois bytes para saber o index, se nao combina apenas um.
 
     Parametros:
@@ -659,13 +731,48 @@ void lload(stack_frames *pilha_frames) {
 
 */
 void fload(stack_frames *pilha_frames) {
-    //precisa do wide
+
+    //declarando variáveis
+    u2 index;
+    u4 pc;
+    u4 operando;
+
+    //pegando o pc
+    pc = pilha_frames->first->pc;
+
+    //pegando o index
+    index = pilha_frames->first->code_info->code[pc];
+
+    //se tiver sido setado a flag wide_ ele pega o segundo byte e forma um index
+    if (wide_)
+    {
+        pilha_frames->first->pc++;
+
+        //pegando o pc
+        pc = pilha_frames->first->pc;
+
+        //juntando os dois bytes para formar o index
+        index = index << 8;
+        index = index | pilha_frames->first->code_info->code[pc];
+
+        //mudando o valor da flag wide_
+        wide_ = 0;
+    }
+
+    //pegando o operando
+    operando = pilha_frames->first->array_variaveis_locais[index];
+
+    //empilha operando
+    push_operando(TAG_FLOAT, operando, pilha_frames->first->operand_stack);
+
+    //incrementando pc mais uma vez para pegar o opcode
+    pilha_frames->first->pc++;
 
 }
 
 
 /*
-    Instrução dload: recebe um índice do vetor de variaveis locais, que contem o operando que deve ser empilhado na pilha de parametros.
+    Instrução dload: recebe um índice do vetor de variaveis locais, que contem o operando do tipo double que deve ser empilhado na pilha de parametros.
         se tiver Wide combina dois bytes para saber o index, se nao combina apenas um.
 
     Parametros:
@@ -676,7 +783,44 @@ void fload(stack_frames *pilha_frames) {
 
 */
 void dload(stack_frames *pilha_frames) {
-    //precisa do wide
+
+    //declarando variáveis
+    u2 index;
+    u4 pc;
+    u4 operando_hi, operando_lo;
+
+    //pegando o pc
+    pc = pilha_frames->first->pc;
+
+    //pegando o index
+    index = pilha_frames->first->code_info->code[pc];
+
+    //se tiver sido setado a flag wide_ ele pega o segundo byte e forma um index
+    if (wide_)
+    {
+        pilha_frames->first->pc++;
+
+        //pegando o pc
+        pc = pilha_frames->first->pc;
+
+        //juntando os dois bytes para formar o index
+        index = index << 8;
+        index = index | pilha_frames->first->code_info->code[pc];
+
+        //mudando o valor da flag wide_
+        wide_ = 0;
+    }
+
+    //pegando o operando
+    operando_hi = pilha_frames->first->array_variaveis_locais[index];
+    operando_lo = pilha_frames->first->array_variaveis_locais[index+1];
+
+    //empilha operando
+    push_operando(TAG_DOUBLE, operando_hi, pilha_frames->first->operand_stack);
+    push_operando(TAG_DOUBLE, operando_lo, pilha_frames->first->operand_stack);
+
+    //incrementando pc mais uma vez para pegar o opcode
+    pilha_frames->first->pc++;
 
 }
 
@@ -693,8 +837,42 @@ void dload(stack_frames *pilha_frames) {
 
 */
 void aload(stack_frames *pilha_frames) {
-    //wide
 
+    //declarando variáveis
+    u2 index;
+    u4 pc;
+    u4 operando;
+
+    //pegando o pc
+    pc = pilha_frames->first->pc;
+
+    //pegando o index
+    index = pilha_frames->first->code_info->code[pc];
+
+    //se tiver sido setado a flag wide_ ele pega o segundo byte e forma um index
+    if (wide_)
+    {
+        pilha_frames->first->pc++;
+
+        //pegando o pc
+        pc = pilha_frames->first->pc;
+
+        //juntando os dois bytes para formar o index
+        index = index << 8;
+        index = index | pilha_frames->first->code_info->code[pc];
+
+        //mudando o valor da flag wide_
+        wide_ = 0;
+    }
+
+    //pegando o operando
+    operando = pilha_frames->first->array_variaveis_locais[index];
+
+    //empilha operando
+    push_operando(TAG_ARRAY_REF, operando, pilha_frames->first->operand_stack);
+
+    //incrementando pc mais uma vez para pegar o opcode
+    pilha_frames->first->pc++;
 }
 
 
@@ -761,7 +939,6 @@ void iload_2(stack_frames *pilha_frames) {
 void iload_3(stack_frames *pilha_frames) {
 
     push_operando(TAG_INTEGER, pilha_frames->first->array_variaveis_locais[3], pilha_frames->first->operand_stack);
-
 }
 
 
@@ -776,10 +953,16 @@ void iload_3(stack_frames *pilha_frames) {
 
 */
 void lload_0(stack_frames *pilha_frames) {
+    u4 high_bytes = 0, low_bytes = 0;
 
-    push_operando(TAG_LONG, pilha_frames->first->array_variaveis_locais[1], pilha_frames->first->operand_stack);
-    push_operando(TAG_LONG, pilha_frames->first->array_variaveis_locais[0], pilha_frames->first->operand_stack);
+    // recupera os high bytes de um long do array de variáveis locais
+    high_bytes = pilha_frames->first->array_variaveis_locais[0];
+    // recupera os low bytes de um long do array de variáveis locais
+    low_bytes = pilha_frames->first->array_variaveis_locais[1];
 
+    // empilha big endian
+    push_operando(TAG_DOUBLE, high_bytes, pilha_frames->first->operand_stack);
+    push_operando(TAG_DOUBLE, low_bytes, pilha_frames->first->operand_stack);
 }
 
 
@@ -794,10 +977,16 @@ void lload_0(stack_frames *pilha_frames) {
 
 */
 void lload_1(stack_frames *pilha_frames) {
+    u4 high_bytes = 0, low_bytes = 0;
 
-    push_operando(TAG_LONG, pilha_frames->first->array_variaveis_locais[2], pilha_frames->first->operand_stack);
-    push_operando(TAG_LONG, pilha_frames->first->array_variaveis_locais[1], pilha_frames->first->operand_stack);
+    // recupera os high bytes de um long do array de variáveis locais
+    high_bytes = pilha_frames->first->array_variaveis_locais[1];
+    // recupera os low bytes de um long do array de variáveis locais
+    low_bytes = pilha_frames->first->array_variaveis_locais[2];
 
+    // empilha big endian
+    push_operando(TAG_DOUBLE, high_bytes, pilha_frames->first->operand_stack);
+    push_operando(TAG_DOUBLE, low_bytes, pilha_frames->first->operand_stack);
 }
 
 
@@ -812,10 +1001,16 @@ void lload_1(stack_frames *pilha_frames) {
 
 */
 void lload_2(stack_frames *pilha_frames) {
+    u4 high_bytes = 0, low_bytes = 0;
 
-    push_operando(TAG_LONG, pilha_frames->first->array_variaveis_locais[3], pilha_frames->first->operand_stack);
-    push_operando(TAG_LONG, pilha_frames->first->array_variaveis_locais[2], pilha_frames->first->operand_stack);
+    // recupera os high bytes de um long do array de variáveis locais
+    high_bytes = pilha_frames->first->array_variaveis_locais[2];
+    // recupera os low bytes de um long do array de variáveis locais
+    low_bytes = pilha_frames->first->array_variaveis_locais[3];
 
+    // empilha big endian
+    push_operando(TAG_DOUBLE, high_bytes, pilha_frames->first->operand_stack);
+    push_operando(TAG_DOUBLE, low_bytes, pilha_frames->first->operand_stack);
 }
 
 
@@ -831,18 +1026,18 @@ void lload_2(stack_frames *pilha_frames) {
 */
 void lload_3(stack_frames *pilha_frames) {
 
-    push_operando(TAG_LONG, pilha_frames->first->array_variaveis_locais[4], pilha_frames->first->operand_stack);
-    push_operando(TAG_LONG, pilha_frames->first->array_variaveis_locais[3], pilha_frames->first->operand_stack);
+    u4 high_bytes = 0, low_bytes = 0;
 
+    // recupera os high bytes de um long do array de variáveis locais
+    high_bytes = pilha_frames->first->array_variaveis_locais[3];
+    // recupera os low bytes de um long do array de variáveis locais
+    low_bytes = pilha_frames->first->array_variaveis_locais[4];
+
+    // empilha big endian
+    push_operando(TAG_DOUBLE, high_bytes, pilha_frames->first->operand_stack);
+    push_operando(TAG_DOUBLE, low_bytes, pilha_frames->first->operand_stack);
 }
 
-
-/*
-    Instrução fload_0: pega um float no array de variáveis locais com índice 0 e empilha na pilha de operandos
-
-    Parametros:
-        stack_frames *pilha_frames: ponteiro para a pilha de frames
-*/
 void fload_0(stack_frames *pilha_frames) {
     // Copia o valor do float na posição 0 do array de variáveis locais
     u4 value = pilha_frames->first->array_variaveis_locais[0];
@@ -851,13 +1046,6 @@ void fload_0(stack_frames *pilha_frames) {
     push_operando(TAG_FLOAT, value, pilha_frames->first->operand_stack);
 }
 
-
-/*
-    Instrução fload_1: pega um float no array de variáveis locais com índice 1 e empilha na pilha de operandos
-
-    Parametros:
-        stack_frames *pilha_frames: ponteiro para a pilha de frames
-*/
 void fload_1(stack_frames *pilha_frames) {
     // Copia o valor do float na posição 1 do array de variáveis locais
     u4 value = pilha_frames->first->array_variaveis_locais[1];
@@ -866,13 +1054,6 @@ void fload_1(stack_frames *pilha_frames) {
     push_operando(TAG_FLOAT, value, pilha_frames->first->operand_stack);
 }
 
-
-/*
-    Instrução fload_2: pega um float no array de variáveis locais com índice 2 e empilha na pilha de operandos
-
-    Parametros:
-        stack_frames *pilha_frames: ponteiro para a pilha de frames
-*/
 void fload_2(stack_frames *pilha_frames) {
     // Copia o valor do float na posição 2 do array de variáveis locais
     u4 value = pilha_frames->first->array_variaveis_locais[2];
@@ -881,13 +1062,6 @@ void fload_2(stack_frames *pilha_frames) {
     push_operando(TAG_FLOAT, value, pilha_frames->first->operand_stack);
 }
 
-
-/*
-    Instrução fload_3: pega um float no array de variáveis locais com índice 3 e empilha na pilha de operandos
-
-    Parametros:
-        stack_frames *pilha_frames: ponteiro para a pilha de frames
-*/
 void fload_3(stack_frames *pilha_frames) {
     // Copia o valor do float na posição 2 do array de variáveis locais
     u4 value = pilha_frames->first->array_variaveis_locais[3];
@@ -896,13 +1070,6 @@ void fload_3(stack_frames *pilha_frames) {
     push_operando(TAG_FLOAT, value, pilha_frames->first->operand_stack);
 }
 
-
-/*
-    Instrução dload_0: pega um double no array de variáveis locais com índice 0 e 1 e empilha na pilha de operandos
-
-    Parametros:
-        stack_frames *pilha_frames: ponteiro para a pilha de frames
-*/
 void dload_0(stack_frames *pilha_frames) {
     u4 high_bytes = 0, low_bytes = 0;
 
@@ -916,13 +1083,6 @@ void dload_0(stack_frames *pilha_frames) {
     push_operando(TAG_DOUBLE, low_bytes, pilha_frames->first->operand_stack);
 }
 
-
-/*
-    Instrução dload_1: pega um double no array de variáveis locais com índice 1 e 2 e empilha na pilha de operandos
-
-    Parametros:
-        stack_frames *pilha_frames: ponteiro para a pilha de frames
-*/
 void dload_1(stack_frames *pilha_frames) {
     u4 high_bytes = 0, low_bytes = 0;
 
@@ -936,13 +1096,6 @@ void dload_1(stack_frames *pilha_frames) {
     push_operando(TAG_DOUBLE, low_bytes, pilha_frames->first->operand_stack);
 }
 
-
-/*
-    Instrução dload_2: pega um double no array de variáveis locais com índice 2 e 3 e empilha na pilha de operandos
-
-    Parametros:
-        stack_frames *pilha_frames: ponteiro para a pilha de frames
-*/
 void dload_2(stack_frames *pilha_frames) {
     u4 high_bytes = 0, low_bytes = 0;
 
