@@ -12,16 +12,16 @@
    \author Ivan Sena                        10/0088031
    \author Laís Mendes Gonçalves            11/0033647
 */
+
+/**
+ * \addtogroup definicoes
+ * @{
+ */
+
 #ifndef MACROS_H
 #define MACROS_H
 
 #include "types.h"
-
-/**
- * \defgroup macros_flags Access Flags
- * Macros para manipulação de acess flags
- * @{
- */
 
 // Definição das macros de access flags do .class
 #define ACC_PUBLIC 0x0001       /** Declarada pública: pode ser acessada de fora do pacote. */
@@ -59,8 +59,6 @@
 #define ACC_INTERFACE 0x0200    /** É uma interface no fonte. */
 #define ACC_ABSTRACT 0x0400     /** Marcada abstract no fonte. Possui apenas métodos abstratos. Não pode ser instanciada. */
 
-/** @} */ // fim da definição de macros_flags
-
 #define CONST_VALUE "ConstantValue"         /** String que representa o atributo Constant Value. */
 #define CODE "Code"                         /** String que representa o atributo Code. */
 #define EXCEPTION "Exceptions"              /** String que representa o atributo Exceptions. */
@@ -93,32 +91,21 @@
 #define TAG_INVOKE_DYNAMIC 18           /** Tag que representa um Invoke Dynamic. */
 #define TAG_OBJECT_REF 19               /** Tag que representa um Object Ref. */
 #define TAG_NULL 20                     /** Tag que representa um tipo Null. */
-#define TAG_ARRAY_REF 21		/** Tag que representa um endereço de Array */
+#define TAG_ARRAY_REF 21                /** Tag que representa um endereço de Array */
 
 
 // Macros que definem os tipos de um array Java
-#define BOOLEAN_ARRAY 4			/** Tipo Boolean. */
-#define BYTE_ARRAY 8              	/** Tipo Byte. */
-#define CHAR_ARRAY 5             	/** Tipo Char. */
-#define SHORT_ARRAY 9             	/** Tipo Short. */
-#define INT_ARRAY 10               	/** Tipo Int. */
-#define LONG_ARRAY 11              	/** Tipo Long. */
-#define FLOAT_ARRAY 6           	/** Tipo Float. */
-#define DOUBLE_ARRAY 7           	/** Tipo Double. */
-#define OBJETO_ARRAY 0     		/** Tipo Array de Objetos. */
-#define ARRAY_ARRAY 1      		/** Tipo Array de Arrays. */
+#define BOOLEAN_ARRAY 4         /** Tipo Boolean. */
+#define BYTE_ARRAY 8            /** Tipo Byte. */
+#define CHAR_ARRAY 5            /** Tipo Char. */
+#define SHORT_ARRAY 9           /** Tipo Short. */
+#define INT_ARRAY 10            /** Tipo Int. */
+#define LONG_ARRAY 11           /** Tipo Long. */
+#define FLOAT_ARRAY 6           /** Tipo Float. */
+#define DOUBLE_ARRAY 7          /** Tipo Double. */
+#define OBJETO_ARRAY 0          /** Tipo Array de Objetos. */
+#define ARRAY_ARRAY 1           /** Tipo Array de Arrays. */
 
-
-#define BOOLEAN_ARRAY 4
-#define BYTE_ARRAY 8
-#define CHAR_ARRAY 5
-#define SHORT_ARRAY 9
-#define INT_ARRAY 10
-#define LONG_ARRAY 11
-#define FLOAT_ARRAY 6
-#define DOUBLE_ARRAY 7
-#define OBJETO_ARRAY 0
-#define ARRAY_ARRAY 1
 
  /*!
     \brief Exibe uma access flag das classes no formato "0x000 [ value ]."
@@ -156,3 +143,5 @@ void exibir_access_flag_field(u2 flag);
 void exibir_access_flag_inner_class(u2 flag);
 
 #endif /* MACROS_H */
+
+/** @} */ // fim da definição de definicoes

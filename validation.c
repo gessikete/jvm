@@ -1,4 +1,38 @@
+/*!
+   \file validation.c
+   \brief Implementação das funções que validam o .class.
+
+   Este arquivo contém as implementações das funções que validam o arquivo .class
+   passado como parâmetro de acordo com o .class gerado através do comando
+   <javac {arquivo.java} -source 1.2 -target 1.2>
+
+   \author Alisson Carvalho                 12/0072521
+   \author Ana Carolina Lopes               11/0107578
+   \author Géssica Neves Sodré da Silva     11/0146115
+   \author Ivan Sena                        10/0088031
+   \author Laís Mendes Gonçalves            11/0033647
+*/
 #include "validation.h"
+
+bool validar_nome(cp_info *constant_pool, u2 attributes_count, attribute_info *attributes, char *nome_arquivo) {
+        attribute_info *atributo = attributes;
+        int i;
+        
+        for(i=0; i<attributes_count; i++) {
+                if(atributo[i].attribute_tag==SOURCE_FILE_NUM) break;
+        }
+        source_file_attribute source_file = atributo[i].info.source_file_info;
+        u2 source_file_index = source_file.source_file_index;
+        char *nome_source = recupera_utf8(constant_pool, source_file_index);
+        char nome_java[strlen(nome_arquivo)+5];
+        
+        strcpy(nome_java,nome_arquivo);
+        strcat(nome_java,".java");
+ 
+        if(!strcmp(nome_source,nome_java)) return true;
+        return false;
+        
+}
 
 bool validar_magic(u4 magic){
 	if(magic == 0xCAFEBABE){

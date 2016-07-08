@@ -1,3 +1,16 @@
+/*!
+   \file leitor_atributos.c
+   \brief Implementação das funções que manipulam a leitura dos atributos.
+
+   Este arquivo contém as implementações das funções que manipulam a leitura dos
+   atributos.
+
+   \author Alisson Carvalho                 12/0072521
+   \author Ana Carolina Lopes               11/0107578
+   \author Géssica Neves Sodré da Silva     11/0146115
+   \author Ivan Sena                        10/0088031
+   \author Laís Mendes Gonçalves            11/0033647
+*/
 #include "leitor_atributos.h"
 
 void criar_constant_value_attribute(FILE *pt_arquivo, attribute_info attributes[], u2 index, cp_info constant_pool[],  u2 constant_pool_count) {

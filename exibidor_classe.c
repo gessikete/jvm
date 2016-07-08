@@ -1,5 +1,17 @@
-#include "exibidor_classe.h"
+/*!
+   \file exibidor_classe.c
+   \brief Implementação das funções de manipulação da exibição da classe.
 
+   Esse arquivo contém a implementação das funções que manipulam a exibição da
+   classe.
+
+   \author Alisson Carvalho                 12/0072521
+   \author Ana Carolina Lopes               11/0107578
+   \author Géssica Neves Sodré da Silva     11/0146115
+   \author Ivan Sena                        10/0088031
+   \author Laís Mendes Gonçalves            11/0033647
+*/
+#include "exibidor_classe.h"
 
 void exibir_classe(class_file* cp){
 

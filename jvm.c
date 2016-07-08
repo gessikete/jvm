@@ -1,51 +1,60 @@
-/*
- *  Universidade de Brasília
- *  Instituto de Ciencias Exatas
- *  Departamento de Ciência da Computação
+/*!
+   \file jvm.c
+   \brief Arquivo fonte principal.
+
+   Arquivo principal que contém a função main. Essa função é responsável por
+   parcear os parâmetros passados por linha de comando e executar a leitura e
+   exibição do arquivo class ou somente a leitura.
+
+   \author Alisson Carvalho                 12/0072521
+   \author Ana Carolina Lopes               11/0107578
+   \author Géssica Neves Sodré da Silva     11/0146115
+   \author Ivan Sena                        10/0088031
+   \author Laís Mendes Gonçalves            11/0033647
+*/
+
+/**
+ * \defgroup jvm Main
  *
- *  Software Básico - Turma A - 1/2016
+ *  Arquivo principal que contém o parseamento dos parâmetros passados para a
+ *	execução da JVM e a função principal main.
  *
- *  Projeto JVM
- *
- *  Grupo:
- *      - Alisson Carvalho              12/0072521
- *      - Ana Carolina Lopes            11/0107578
- *      - Géssica Neves Sodré da Silva  11/0146115
- *      - Ivan Sena                     10/0088031
- *		- Laís Mendes Gonçalves			11/0033647
- *
- *  Arquivo fonte principal "jvm.c"
- *
- *  Copyright © 2016 UnB. All rights reserved.
+ * @{
  */
 
 #include <stdio.h>
+#include "types.h"
 #include "leitor_classe.h"
 #include "exibidor_classe.h"
 #include "execucao_jvm.h"
+
+// #define DEBUG /** Descomentar caso deseje usar o modo debug */
 
 int main(int argc, char*argv[]){
 	class_file *pt_classe;
 
 	// verifica se o for informada a quantidade necessária de argumentos
-	if(argc != 3){
+	if(argc != 4){
 		printf("\nATENÇÃO\n");
 		printf("Para executar esse programa siga as seguintes instruções:\n");
 		printf("Para executar esse programa utilizando o terminal a partir da raiz do projeto execute:\n");
-		printf("$ ./jvm.exe { -e | -l } {arquivo.class}\n\n");
+		printf("$ ./jvm.exe { -e | -l } {path} {arquivo}\n\n");
 		printf("De forma que:\n");
 		printf("{ -e | -l }\n");
 		printf(" -e caso queira carregar o arquivo .class e escrever a saída no arquivo saida.txt\n");
 		printf(" -l caso queira somente carregar o arquivo .class");
-	}else{
-		char *nome_classe = argv[2];
+		printf("\n\nExemplo: ./jvm.exe -l path/ Arquivo\n\n");
+	} else{
+		path = argv[2];
+		char *nome_classe = argv[3];
 
 		// Carrega as informações do arquivo .class para a memória
 		pt_classe = carregar_classe(nome_classe);
 
 		if ((!strcmp(argv[1], "-l"))&&(pt_classe)){
-			printf("\nLeitura concluída com sucesso!\n");
-			inicializar_jvm(pt_classe);
+			//printf("\nLeitura concluída com sucesso!\n");
+			//inicializar_jvm(pt_classe,argc,argv);
+            inicializar_jvm(pt_classe);
 
 		} else if (!strcmp(argv[1], "-e")){
 			if(pt_classe) {
@@ -69,3 +78,5 @@ int main(int argc, char*argv[]){
 	}
     return 0;
 }
+
+/** @} */ // fim da definição de jvm

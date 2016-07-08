@@ -1,3 +1,16 @@
+/*!
+   \file recuperar_constant_pool.c
+   \brief Implementação das funções que recuperam elementos da constant pool.
+
+   Este arquivo contém as implementações das funções que recuperam elementos da
+   constant pool de acordo com o tipo do elemento.
+
+   \author Alisson Carvalho                 12/0072521
+   \author Ana Carolina Lopes               11/0107578
+   \author Géssica Neves Sodré da Silva     11/0146115
+   \author Ivan Sena                        10/0088031
+   \author Laís Mendes Gonçalves            11/0033647
+*/
 #include "recuperar_constant_pool.h"
 #include <string.h>
 

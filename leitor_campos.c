@@ -1,3 +1,16 @@
+/*!
+   \file leitor_campos.c
+   \brief Implementação das funções que manipulam a leitura dos campos.
+
+   Este arquivo contém as implementações das funções que manipulam a leitura dos
+   campos.
+
+   \author Alisson Carvalho                 12/0072521
+   \author Ana Carolina Lopes               11/0107578
+   \author Géssica Neves Sodré da Silva     11/0146115
+   \author Ivan Sena                        10/0088031
+   \author Laís Mendes Gonçalves            11/0033647
+*/
 #include "leitor_campos.h"
 
 field_info *carregar_fields(u2 fields_count, u2 constant_pool_count, cp_info *constant_pool, FILE *pt_arquivo){

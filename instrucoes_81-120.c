@@ -17,12 +17,10 @@
 void fastore(stack_frames *pilha_frames) {
 	t_frame *frame = pilha_frames->first;
 	u4 index;
-	float value;
 	t_array *array = NULL;
 
 	// Recupera o float a ser salvo
 	t_operand *operando_value = pop_operando(frame->operand_stack);
-	value = u4_to_float(operando_value->data);
 
 	// Recupera o índice onde o float será salvo
 	t_operand *operando_index = pop_operando(frame->operand_stack);
@@ -43,12 +41,8 @@ void fastore(stack_frames *pilha_frames) {
 		return;
 	}
 
-	// Salva o float na posição index do array de float
-	array->info.array_float[index] = value;
-
-
-	// Empilha endereço do array novamente para a próxima instrução
-	push_operando(TAG_ARRAY_REF,operando_endereco->data,frame->operand_stack);
+	// Salva float na posicao index
+	array->array_data[index] = operando_value->data;
 
 	// Desaloca operandos que foram desempilhados
 	free(operando_index);
@@ -59,14 +53,14 @@ void fastore(stack_frames *pilha_frames) {
 void dastore(stack_frames *pilha_frames) {
 	t_frame *frame = pilha_frames->first;
 	u4 index;
-	double value;
+	u8 value;
 	t_array *array = NULL;
 
 	// Recupera o double a ser salvo
 	t_operand *operando_low = pop_operando(frame->operand_stack);
 	t_operand *operando_high = pop_operando(frame->operand_stack);
 
-	value = u8_to_double(operando_low->data,operando_high->data);
+	value = (((u8)operando_high->data)<<32)|(operando_low->data);
 
 	// Recupera o índice onde o double será salvo
 	t_operand *operando_index = pop_operando(frame->operand_stack);
@@ -88,11 +82,7 @@ void dastore(stack_frames *pilha_frames) {
 	}
 
 	// Salva o double na posição index do array de double
-	array->info.array_double[index] = value;
-
-
-	// Empilha endereço do array novamente para a próxima instrução
-	push_operando(TAG_ARRAY_REF,operando_endereco->data,frame->operand_stack);
+	array->array_data[index] = value;
 
 	// Desaloca operandos que foram desempilhados
 	free(operando_index);
@@ -102,7 +92,40 @@ void dastore(stack_frames *pilha_frames) {
 }
 
 void aastore(stack_frames *pilha_frames) {
-	// TODO implementar instrução aastore
+	t_frame *frame = pilha_frames->first;
+	u4 index, value;
+	t_array *array = NULL;
+
+	// Recupera a referencia a ser salva
+	t_operand *operando_value = pop_operando(frame->operand_stack);
+	value = operando_value->data;
+
+	// Recupera o índice onde está a referencia
+	t_operand *operando_index = pop_operando(frame->operand_stack);
+	index = operando_index->data;
+
+	// Recupera o endereço da referência
+	t_operand *operando_endereco = pop_operando(frame->operand_stack);
+
+	array = (t_array*)(operando_endereco->data);
+
+	if (array == NULL) {
+		printf("\nNull Pointer Exception\n");
+		return;
+	}
+
+	if(index >= array->tamanho) {
+		printf("\n\nArrayIndexOutOfBoundsException: %d\n",index);
+		return;
+	}
+
+	// Salva o endereço na posição index do array de bytes
+	array->array_data[index] = value;
+
+	// Desaloca operandos que foram desempilhados
+	free(operando_index);
+	free(operando_value);
+	free(operando_endereco);
 }
 
 void bastore(stack_frames *pilha_frames) {
@@ -134,11 +157,7 @@ void bastore(stack_frames *pilha_frames) {
 	}
 
 	// Salva o byte na posição index do array de bytes
-	array->info.array_byte[index] = value;
-
-
-	// Empilha endereço do array novamente para a próxima instrução
-	push_operando(TAG_ARRAY_REF,operando_endereco->data,frame->operand_stack);
+	array->array_data[index] = value;
 
 	// Desaloca operandos que foram desempilhados
 	free(operando_index);
@@ -175,11 +194,7 @@ void castore(stack_frames *pilha_frames) {
 	}
 
 	// Salva o char na posição index do array de chars
-	array->info.array_char[index] = value;
-
-
-	// Empilha endereço do array novamente para a próxima instrução
-	push_operando(TAG_ARRAY_REF,operando_endereco->data,frame->operand_stack);
+	array->array_data[index] = value;
 
 	// Desaloca operandos que foram desempilhados
 	free(operando_index);
@@ -215,11 +230,8 @@ void sastore(stack_frames *pilha_frames) {
 		return;
 	}
 
-	// Salva o short na posição index do array de short
-	array->info.array_short[index] = value;
-
-	// Empilha endereço do array novamente para a próxima instrução
-	push_operando(TAG_ARRAY_REF,operando_endereco->data,frame->operand_stack);
+	// Salva o short na posição index do array
+	array->array_data[index] = value;
 
 	// Desaloca operandos que foram desempilhados
 	free(operando_index);
@@ -235,15 +247,17 @@ void pop(stack_frames *pilha_frames) {
 }
 
 void pop2(stack_frames *pilha_frames) {
-	t_operand *temp_operando = NULL;
+	t_operand *first = pop_operando(pilha_frames->first->operand_stack);
+	t_operand *second = pop_operando(pilha_frames->first->operand_stack);
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	free(temp_operando);
+	free(first);
+	free(second);
 }
 
 void dup(stack_frames *pilha_frames) {
-
+	t_operand *first = pilha_frames->first->operand_stack->first;
+  
+	push_operando(first->tag,first->data,pilha_frames->first->operand_stack);
 }
 
 void dup_x1(stack_frames *pilha_frames) {
@@ -255,7 +269,11 @@ void dup_x2(stack_frames *pilha_frames) {
 }
 
 void dup2(stack_frames *pilha_frames) {
-
+	t_operand *first = pilha_frames->first->operand_stack->first;
+	t_operand *second = first->next;
+  
+	push_operando(second->tag,second->data,pilha_frames->first->operand_stack);
+	push_operando(first->tag,first->data,pilha_frames->first->operand_stack);
 }
 
 void dup2_x1(stack_frames *pilha_frames) {
@@ -267,373 +285,430 @@ void dup2_x2(stack_frames *pilha_frames) {
 }
 
 void swap(stack_frames *pilha_frames) {
-
+	t_frame *frame = pilha_frames->first;
+  
+	
+	t_operand *temp = frame->operand_stack->first;
+	frame->operand_stack->first = frame->operand_stack->first->next;
+	frame->operand_stack->first->next = temp;
 }
 
 void iadd(stack_frames *pilha_frames) {
-	int32_t aux, aux1, result;
-	t_operand *temp_operando = NULL;
+	t_frame *frame = pilha_frames->first;
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	aux = (int32_t) temp_operando->data;
+	// Recupera segundo operando
+	t_operand *operando2 = pop_operando(frame->operand_stack);
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	aux1 = (int32_t) temp_operando->data;
+	// Recupera primeiro operando
+	t_operand *operando1 = pop_operando(frame->operand_stack);
 
-	result = aux + aux1;
-	push_operando(TAG_INTEGER, result, pilha_frames->first->operand_stack);
-	free(temp_operando);
+	int operando1_int;
+	int operando2_int;
+	u4 resultado;
+
+	// Transforma os operandos em ints
+	operando1_int = (int32_t)operando1->data;
+	operando2_int = (int32_t)operando2->data;
+
+	// Realiza operação de soma
+	resultado = operando1_int+operando2_int;
+
+	// Armazena o resultado na pilha de operandos
+	push_operando(TAG_INTEGER, resultado,frame->operand_stack);
+
+	// Desaloca operandos que foram desempilhados
+	free(operando1);
+	free(operando2);
 }
 
 void ladd(stack_frames *pilha_frames) {
-	int64_t aux, aux1, result;
-	u4 aux2, aux3;
-	t_operand *temp_operando = NULL;
+	t_frame *frame = pilha_frames->first;
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	aux2 = temp_operando->data;
+	// Recupera segundo operando
+	t_operand *operando2_low = pop_operando(frame->operand_stack);
+	t_operand *operando2_high = pop_operando(frame->operand_stack);
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	aux = temp_operando->data;
+	// Recupera primeiro operando
+	t_operand *operando1_low = pop_operando(frame->operand_stack);
+	t_operand *operando1_high = pop_operando(frame->operand_stack);
 
-	aux = aux << 32;
-	aux = aux | aux2;
+	long operando1_long;
+	long operando2_long;
+	u8 resultado;
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	aux3 = temp_operando->data;
+	// Transforma os operandos em longs
+	operando1_long = u8_to_long(operando1_low->data,operando1_high->data);
+	operando2_long = u8_to_long(operando2_low->data,operando2_high->data);
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	aux1 = temp_operando->data;
+	// Realiza operação soma
+	resultado = operando1_long+operando2_long;
 
-	aux1 = aux1 << 32;
-	aux1 = aux1 | aux3;
+	// Armazena resultado da soma na pilha de operandos
+	push_operando(TAG_LONG, resultado>>32,frame->operand_stack);
+	push_operando(TAG_LONG, resultado,frame->operand_stack);
 
-	result = aux + aux1;
-
-	aux2 = result >> 32;
-	push_operando(TAG_LONG, aux2, pilha_frames->first->operand_stack);
-
-	aux2 = result & 0xffffffff;
-	push_operando(TAG_LONG, aux2, pilha_frames->first->operand_stack);
-
-	free(temp_operando);
+	// Desaloca operandos que foram desempilhados
+	free(operando1_high);
+	free(operando1_low);
+	free(operando2_high);
+	free(operando2_low);
 }
 
 void fadd(stack_frames *pilha_frames) {
-	u4 *auxiliar3;
-	float *auxiliar1, *auxiliar2;
-	t_operand *temp_operando = NULL;
+	t_frame *frame = pilha_frames->first;
 
-	auxiliar3 = malloc(sizeof(u4));
+	// Recupera primeiro operando
+	t_operand *operando2 = pop_operando(frame->operand_stack);
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	*auxiliar3 = temp_operando->data;
+	// Recupera segundo operando
+	t_operand *operando1 = pop_operando(frame->operand_stack);
 
-	auxiliar1 = malloc(sizeof(float));
-	memcpy(auxiliar1, auxiliar3, sizeof(u4));
+	float operando1_float;
+	float operando2_float;
+	float resultado_float;
+	u4 resultado;
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	*auxiliar3 = temp_operando->data;
+	// Transforma os operandos em floats
+	operando1_float = u4_to_float(operando1->data);
+	operando2_float = u4_to_float(operando2->data);
 
-	auxiliar2 = malloc(sizeof(float));
-	memcpy(auxiliar2, auxiliar3, sizeof(u4));
-	*auxiliar1 = *auxiliar1 + *auxiliar2;
-	memcpy(auxiliar3, auxiliar1, sizeof(u4));
+	// Realiza operação de soma
+	resultado_float = operando1_float + operando2_float;
 
-	push_operando(TAG_FLOAT, *auxiliar3, pilha_frames->first->operand_stack);
+	// Transforma resultado da soma em u4
+	resultado = float_to_u4(resultado_float);
 
-	free(temp_operando);
+	// Armazena resultado na pilha de operandos
+	push_operando(TAG_FLOAT, resultado,frame->operand_stack);
+
+	// Desaloca operandos que foram desempilhados
+	free(operando1);
+	free(operando2);
 }
 
 void dadd(stack_frames *pilha_frames) {
-	u4 aux0, aux4;
-	int64_t *aux3;
-	double *aux1, *aux2=NULL;
-	t_operand *temp_operando = NULL;
+	t_frame *frame = pilha_frames->first;
 
-	aux3 = malloc(sizeof(int64_t));
+	// Recupera primeiro operando
+	t_operand *operando2_low = pop_operando(frame->operand_stack);
+	t_operand *operando2_high = pop_operando(frame->operand_stack);
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	aux4 = temp_operando->data;
+	// Recupera segundo operando
+	t_operand *operando1_low = pop_operando(frame->operand_stack);
+	t_operand *operando1_high = pop_operando(frame->operand_stack);
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	*aux3 = temp_operando->data;
+	double operando1_double;
+	double operando2_double;
+	double resultado_double;
+	u8 resultado;
 
-	*aux3 = *aux3 << 32;
-	*aux3 = *aux3 | aux4;
+	// Transforma os operandos em doubles
+	operando1_double = u8_to_double(operando1_low->data,operando1_high->data);
+	operando2_double = u8_to_double(operando2_low->data,operando2_high->data);
 
-	aux1 = malloc(sizeof(double));
-	memcpy(aux1, aux3, sizeof(double));
+	// Realiza soma
+	resultado_double = operando1_double+operando2_double;
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	aux4 = temp_operando->data;
+	// Transforma resultado da soma, um double, em um u8
+	resultado = double_to_u8(resultado_double);
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	*aux3 = temp_operando->data;
+	// Armazena resultado da soma na pilha de operandos
+	push_operando(TAG_DOUBLE, resultado>>32, frame->operand_stack);
+	push_operando(TAG_DOUBLE, resultado, frame->operand_stack);
 
-	*aux3 = *aux3 << 32;
-	*aux3 = *aux3 | aux4;
-
-	aux1 = malloc(sizeof(double));
-	memcpy(aux2, aux3, sizeof(double));
-
-	*aux1 = *aux1 + *aux2;
-
-	memcpy(aux3, aux1, sizeof(double));
-	aux0 = *aux3 >> 32;
-	push_operando(TAG_DOUBLE, aux0, pilha_frames->first->operand_stack);
-
-	aux0 = *aux3 & 0xffffffff;
-	push_operando(TAG_DOUBLE, aux0, pilha_frames->first->operand_stack);
-
-	free(temp_operando);
+	// Desaloca operandos que foram desempilhados
+	free(operando1_high);
+	free(operando1_low);
+	free(operando2_high);
+	free(operando2_low);
 }
 
 void isub(stack_frames *pilha_frames) {
-	int32_t result, value, value1;
-	t_operand *temp_operando = NULL;
+	t_frame *frame = pilha_frames->first;
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	value = (int32_t) temp_operando->data;
+	// Recupera segundo operando
+	t_operand *operando2 = pop_operando(frame->operand_stack);
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	value1 = (int32_t) temp_operando->data;
+	// Recupera primeiro operando
+	t_operand *operando1 = pop_operando(frame->operand_stack);
 
-	result = value1 - value;
+	int operando1_int;
+	int operando2_int;
+	u4 resultado;
 
-	push_operando(TAG_INTEGER, result, pilha_frames->first->operand_stack);
-	free(temp_operando);
+	// Transforma os operandos em ints
+	operando1_int = (int32_t)operando1->data;
+	operando2_int = (int32_t)operando2->data;
+
+	// Realiza operação de subtração
+	resultado = operando1_int-operando2_int;
+
+	// Armazena o resultado na pilha de operandos
+	push_operando(TAG_INTEGER, resultado,frame->operand_stack);
+
+	// Desaloca operandos que foram desempilhados
+	free(operando1);
+	free(operando2);
 }
 
 void lsub(stack_frames *pilha_frames) {
-	u4 aux4, aux3;
-	int64_t aux1, aux2;
-	t_operand *temp_operando = NULL;
+	t_frame *frame = pilha_frames->first;
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	aux3 = temp_operando->data;
+	// Recupera segundo operando
+	t_operand *operando2_low = pop_operando(frame->operand_stack);
+	t_operand *operando2_high = pop_operando(frame->operand_stack);
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	aux1 = (signed) temp_operando->data;
+	// Recupera primeiro operando
+	t_operand *operando1_low = pop_operando(frame->operand_stack);
+	t_operand *operando1_high = pop_operando(frame->operand_stack);
 
-	aux1 = aux1 << 32;
-	aux1 = aux1 | aux3;
+	long operando1_long;
+	long operando2_long;
+	u8 resultado;
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	aux3 = temp_operando->data;
+	// Transforma os operandos em longs
+	operando1_long = u8_to_long(operando1_low->data,operando1_high->data);
+	operando2_long = u8_to_long(operando2_low->data,operando2_high->data);
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	aux2 = (signed) temp_operando->data;
+	// Realiza operação de subtração
+	resultado = operando1_long-operando2_long;
 
-	aux2 = aux2 << 32;
-	aux2 = aux2 | aux3;
+	// Armazena resultado da subtração na pilha de operandos
+	push_operando(TAG_LONG, resultado>>32,frame->operand_stack);
+	push_operando(TAG_LONG, resultado,frame->operand_stack);
 
-	aux1 = aux2 - aux1;
-
-	aux4 = aux1 >> 32;
-	push_operando(TAG_LONG, aux4, pilha_frames->first->operand_stack);
-
-	aux4 = aux1 & 0xffffffff;
-	push_operando(TAG_LONG, aux4, pilha_frames->first->operand_stack);
-	free(temp_operando);
+	// Desaloca operandos que foram desempilhados
+	free(operando1_high);
+	free(operando1_low);
+	free(operando2_high);
+	free(operando2_low);
 }
 
 void fsub(stack_frames *pilha_frames) {
-	u4 *aux3;
-	float *aux1, *aux2;
-	t_operand *temp_operando = NULL;
+	t_frame *frame = pilha_frames->first;
 
-	aux3 = malloc(sizeof(u4));
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	*aux3 = temp_operando->data;
+	// Recupera primeiro operando
+	t_operand *operando2 = pop_operando(frame->operand_stack);
 
-	aux1 = malloc(sizeof(float));
-	memcpy(aux1, aux3, sizeof(u4));
+	// Recupera segundo operando
+	t_operand *operando1 = pop_operando(frame->operand_stack);
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	*aux3 = temp_operando->data;
+	float operando1_float;
+	float operando2_float;
+	float resultado_float;
+	u4 resultado;
 
-	aux2 = malloc(sizeof(float));
-	memcpy(aux2, aux3, sizeof(u4));
+	// Transforma os operandos em floats
+	operando1_float = u4_to_float(operando1->data);
+	operando2_float = u4_to_float(operando2->data);
 
-	*aux1 = *aux2 - *aux1;
-	memcpy(aux3, aux1, sizeof(u4));
-	push_operando(TAG_FLOAT, *aux3, pilha_frames->first->operand_stack);
-	free(temp_operando);
+	// Realiza operação de subtração
+	resultado_float = operando1_float-operando2_float;
+
+	// Transforma resultado da subtração em u4
+	resultado = float_to_u4(resultado_float);
+
+	// Armazena resultado na pilha de operandos
+	push_operando(TAG_FLOAT, resultado,frame->operand_stack);
+
+	// Desaloca operandos que foram desempilhados
+	free(operando1);
+	free(operando2);
 }
 
 void dsub(stack_frames *pilha_frames) {
-	u4 aux, aux4;
-	int64_t *aux3;
-	double *aux1, *aux2;
-	t_operand *temp_operando = NULL;
+	t_frame *frame = pilha_frames->first;
 
-	aux3 = malloc(sizeof(int64_t));
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	aux4 = temp_operando->data;
+	// Recupera primeiro operando
+	t_operand *operando2_low = pop_operando(frame->operand_stack);
+	t_operand *operando2_high = pop_operando(frame->operand_stack);
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	*aux3 = temp_operando->data;
+	// Recupera segundo operando
+	t_operand *operando1_low = pop_operando(frame->operand_stack);
+	t_operand *operando1_high = pop_operando(frame->operand_stack);
 
-	*aux3 = *aux3 << 32;
-	*aux3 = *aux3 | aux4;
+	double operando1_double;
+	double operando2_double;
+	double resultado_double;
+	u8 resultado;
 
-	aux1 = malloc(sizeof(double));
-	memcpy(aux1, aux3, (sizeof(double)));
+	// Transforma os operandos em doubles
+	operando1_double = u8_to_double(operando1_low->data,operando1_high->data);
+	operando2_double = u8_to_double(operando2_low->data,operando2_high->data);
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	aux4 = temp_operando->data;
+	// Realiza subtração
+	resultado_double = operando1_double-operando2_double;
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	*aux3 = temp_operando->data;
+	// Transforma resultado da subtração em u8
+	resultado = double_to_u8(resultado_double);
 
-	*aux3 = *aux3 << 32;
-	*aux3 = *aux3 | aux4;
+	// Armazena resultado da subtração na pilha de operandos
+	push_operando(TAG_DOUBLE, resultado>>32, frame->operand_stack);
+	push_operando(TAG_DOUBLE, resultado, frame->operand_stack);
 
-	aux2 = malloc(sizeof(double));
-	memcpy(aux2, aux3, (sizeof(double)));
-
-	*aux1 = *aux2 - *aux1;
-	memcpy(aux3, aux1, (sizeof(int64_t)));
-
-	aux = *aux3 >> 32;
-	push_operando(TAG_DOUBLE, aux, pilha_frames->first->operand_stack);
-
-	aux = *aux3 & 0xffffffff;
-	push_operando(TAG_DOUBLE, aux, pilha_frames->first->operand_stack);
-	free(temp_operando);
+	// Desaloca operandos que foram desempilhados
+	free(operando1_high);
+	free(operando1_low);
+	free(operando2_high);
+	free(operando2_low);
 }
 
 void imul(stack_frames *pilha_frames) {
-	int32_t value, value1;
-	t_operand *temp_operando = NULL;
+	t_frame *frame = pilha_frames->first;
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	value = (int32_t) temp_operando->data;
+	// Recupera segundo operando
+	t_operand *operando2 = pop_operando(frame->operand_stack);
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	value1 = (int32_t) temp_operando->data;
+	// Recupera primeiro operando
+	t_operand *operando1 = pop_operando(frame->operand_stack);
 
-	push_operando(TAG_INTEGER, value*value1, pilha_frames->first->operand_stack);
-	free(temp_operando);
+	int operando1_int;
+	int operando2_int;
+	u4 resultado;
+
+	// Transforma os operandos em ints
+	operando1_int = (int32_t)operando1->data;
+	operando2_int = (int32_t)operando2->data;
+
+	// Realiza operação de multiplicação
+	resultado = operando1_int*operando2_int;
+
+	// Armazena o resultado na pilha de operandos
+	push_operando(TAG_INTEGER, resultado,frame->operand_stack);
+
+	// Desaloca operandos que foram desempilhados
+	free(operando1);
+	free(operando2);
 }
 
 void lmul(stack_frames *pilha_frames) {
-	u4 aux, aux3;
-	int64_t aux1, aux2;
-	t_operand *temp_operando = NULL;
+	t_frame *frame = pilha_frames->first;
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	aux3 = temp_operando->data;
+	// Recupera segundo operando
+	t_operand *operando2_low = pop_operando(frame->operand_stack);
+	t_operand *operando2_high = pop_operando(frame->operand_stack);
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	aux1 = (signed) temp_operando->data;
+	// Recupera primeiro operando
+	t_operand *operando1_low = pop_operando(frame->operand_stack);
+	t_operand *operando1_high = pop_operando(frame->operand_stack);
 
-	aux1 = aux1 << 32;
-	aux1 = aux1 | aux3;
+	long operando1_long;
+	long operando2_long;
+	u8 resultado;
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	aux3 = temp_operando->data;
+	// Transforma os operandos em longs
+	operando1_long = u8_to_long(operando1_low->data,operando1_high->data);
+	operando2_long = u8_to_long(operando2_low->data,operando2_high->data);
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	aux2 = (signed) temp_operando->data;
+	// Realiza operação multiplicação
+	resultado = operando1_long*operando2_long;
 
-	aux2 = aux2 << 32;
-	aux2 = aux2 | aux3;
+	// Armazena resultado da multiplicação na pilha de operandos
+	push_operando(TAG_LONG, resultado>>32,frame->operand_stack);
+	push_operando(TAG_LONG, resultado,frame->operand_stack);
 
-	aux1 = aux1 * aux2;
-	aux = aux1 >> 32;
-	push_operando(TAG_LONG, aux, pilha_frames->first->operand_stack);
-
-	aux = aux1 & 0xffffffff;
-	push_operando(TAG_LONG, aux, pilha_frames->first->operand_stack);
-	free(temp_operando);
+	// Desaloca operandos que foram desempilhados
+	free(operando1_high);
+	free(operando1_low);
+	free(operando2_high);
+	free(operando2_low);
 }
 
 void fmul(stack_frames *pilha_frames) {
-	u4 *aux3;
-	float *aux1, *aux2;
-	t_operand *temp_operando = NULL;
+	t_frame *frame = pilha_frames->first;
 
-	aux3 = malloc(sizeof(u4));
+	// Recupera primeiro operando
+	t_operand *operando2 = pop_operando(frame->operand_stack);
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	*aux3 = temp_operando->data;
+	// Recupera segundo operando
+	t_operand *operando1 = pop_operando(frame->operand_stack);
 
-	aux1 = malloc(sizeof(float));
-	memcpy(aux1, aux3, sizeof(u4));
+	float operando1_float;
+	float operando2_float;
+	float resultado_float;
+	u4 resultado;
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	*aux3 = temp_operando->data;
+	// Transforma os operandos em floats
+	operando1_float = u4_to_float(operando1->data);
+	operando2_float = u4_to_float(operando2->data);
 
-	aux2 = malloc(sizeof(float));
-	memcpy(aux2, aux3, sizeof(u4));
+	// Realiza operação de multiplicação
+	resultado_float = operando1_float*operando2_float;
 
-	*aux1 = *aux1 * (*aux2);
-	memcpy(aux3, aux1, sizeof(u4));
+	// Transforma resultado da multiplicação em u4
+	resultado = float_to_u4(resultado_float);
 
-	push_operando(TAG_FLOAT, *aux3, pilha_frames->first->operand_stack);
-	free(temp_operando);
+	// Armazena resultado na pilha de operandos
+	push_operando(TAG_FLOAT, resultado,frame->operand_stack);
+
+	// Desaloca operandos que foram desempilhados
+	free(operando1);
+	free(operando2);
 }
 
 void dmul(stack_frames *pilha_frames) {
-	u4 aux, aux4;
-	int64_t *aux3;
-	double *aux1, *aux2;
-	t_operand *temp_operando = NULL;
+	t_frame *frame = pilha_frames->first;
 
-	aux3 =  malloc(sizeof(int64_t));
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	aux4 = temp_operando->data;
+	// Recupera primeiro operando
+	t_operand *operando2_low = pop_operando(frame->operand_stack);
+	t_operand *operando2_high = pop_operando(frame->operand_stack);
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	*aux3 = temp_operando->data;
+	// Recupera segundo operando
+	t_operand *operando1_low = pop_operando(frame->operand_stack);
+	t_operand *operando1_high = pop_operando(frame->operand_stack);
 
-	*aux3 = *aux3 << 32;
-	*aux3 = *aux3 | aux4;
+	double operando1_double;
+	double operando2_double;
+	double resultado_double;
+	u8 resultado;
 
-	aux1 = malloc(sizeof(double));
-	memcpy(aux1, aux3, sizeof(double));
+	// Transforma os operandos em doubles
+	operando1_double = u8_to_double(operando1_low->data,operando1_high->data);
+	operando2_double = u8_to_double(operando2_low->data,operando2_high->data);
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	aux4 = temp_operando->data;
+	// Realiza multiplicação
+	resultado_double = operando1_double*operando2_double;
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	*aux3 = temp_operando->data;
+	// Transforma resultado em u8
+	resultado = double_to_u8(resultado_double);
 
-	*aux3 = *aux3 << 32;
-	*aux3 = *aux3 | aux4;
+	// Armazena resultado da multiplicação na pilha de operandos
+	push_operando(TAG_DOUBLE, resultado>>32, frame->operand_stack);
+	push_operando(TAG_DOUBLE, resultado, frame->operand_stack);
 
-	aux2 = malloc(sizeof(double));
-	memcpy(aux2, aux3, sizeof(double));
-
-	*aux1 = *aux1 * (*aux2);
-	memcpy(aux3, aux1, sizeof(double));
-
-	aux = *aux3 >> 32;
-	push_operando(TAG_DOUBLE, aux, pilha_frames->first->operand_stack);
-
-	aux = *aux3 & 0xffffffff;
-	push_operando(TAG_DOUBLE, aux, pilha_frames->first->operand_stack);
-	free(temp_operando);
+	// Desaloca operandos que foram desempilhados
+	free(operando1_high);
+	free(operando1_low);
+	free(operando2_high);
+	free(operando2_low);
 }
 
 void idiv(stack_frames *pilha_frames) {
-	int32_t value, value1;
-	t_operand *temp_operando = NULL;
+	t_frame *frame = pilha_frames->first;
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	value = temp_operando->data;
+	// Recupera segundo operando
+	t_operand *operando2 = pop_operando(frame->operand_stack);
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	value1 = temp_operando->data;
+	// Recupera primeiro operando
+	t_operand *operando1 = pop_operando(frame->operand_stack);
 
-	if (value1 == 0){
-		printf("\nDivisao por 0.\n");
-		return;
-	}
-	push_operando(TAG_INTEGER, value/value1, pilha_frames->first->operand_stack);
-	free(temp_operando);
+	int operando1_int;
+	int operando2_int;
+	u4 resultado;
+
+	// Transforma os operandos em ints
+	operando1_int = (int32_t)operando1->data;
+	operando2_int = (int32_t)operando2->data;
+
+	// Realiza operação de divisão
+	resultado = operando1_int/operando2_int;
+
+	// Armazena o resultado na pilha de operandos
+	push_operando(TAG_INTEGER, resultado,frame->operand_stack);
+
+	// Desaloca operandos que foram desempilhados
+	free(operando1);
+	free(operando2);
 
 }
 

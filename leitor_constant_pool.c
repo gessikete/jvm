@@ -1,3 +1,16 @@
+/*!
+   \file leitor_constant_pool.c
+   \brief Implementação das funções que manipulam a leitura da constant pool.
+
+   Este arquivo contém as implementações das funções que manipulam a leitura da
+   constant pool.
+
+   \author Alisson Carvalho                 12/0072521
+   \author Ana Carolina Lopes               11/0107578
+   \author Géssica Neves Sodré da Silva     11/0146115
+   \author Ivan Sena                        10/0088031
+   \author Laís Mendes Gonçalves            11/0033647
+*/
 #include "leitor_constant_pool.h"
 
 void inicializar_vetor_funcoes(void (*funcoes_constant[]) (FILE*,cp_info[],u2,u1)) {

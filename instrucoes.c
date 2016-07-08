@@ -1,7 +1,25 @@
+/*!
+   \file instrucoes.c
+   \brief Implementação das funções que manipulam as instruções da Máquina Virtual
+   Java.
+
+   Esse arquivo contém as implementações das funções que manipulam as instruções
+   executadas pela JVM.
+
+   \author Alisson Carvalho                 12/0072521
+   \author Ana Carolina Lopes               11/0107578
+   \author Géssica Neves Sodré da Silva     11/0146115
+   \author Ivan Sena                        10/0088031
+   \author Laís Mendes Gonçalves            11/0033647
+*/
 #include "instrucoes.h"
 #include <string.h>
 
 t_instrucoes instrucoes[0xCB];
+
+float double_to_float(double numero_double){
+	return (float)numero_double;
+}
 
 u4 float_to_u4(float numero_float) {
 	u4 numero_u4;
@@ -9,6 +27,22 @@ u4 float_to_u4(float numero_float) {
 	memcpy(&numero_u4,&numero_float,sizeof(numero_u4));
 
 	return numero_u4;
+}
+
+int double_to_int(double numero_double){
+	int numero_int;
+	float numero_float = double_to_float(numero_double);
+
+	u4 nan_checker = (float_to_u4(numero_float) >> 23) & 0x0009;
+
+	if( nan_checker == 0x0008 || nan_checker == 0x0009){
+		numero_int = 0;
+	}
+	else{
+		numero_int = (int)numero_float ;
+	}
+
+	return numero_int;
 }
 
 u8 double_to_u8(double numero_double) {
@@ -319,67 +353,87 @@ char *primitive_array_info(u1 type_code) {
 	return type;
 }
 
+u2 tipo_descritor(char *descritor) {
+	switch(descritor[0]) {
+		case 'C': return TAG_UTF8;
+		case 'I': return TAG_INTEGER;
+		case 'F': return TAG_FLOAT;
+		case 'J': return TAG_LONG;
+		case 'D': return TAG_DOUBLE;
+		case 'L': return TAG_OBJECT_REF;
+		case '[': return TAG_ARRAY_REF;
+		default: {
+			printf("\nErro! Descritor desconhecido\n");
+			excecao = true;
+		}
+	}
+	return false;
+}
+
 u1 tipo_multiarray(char *class_name, u1 dimensao) {
 	u1 contador;
 	char colchetes[dimensao+2];
-		
+
 	for(contador=0; contador<dimensao; contador++) {
 		colchetes[contador] = '[';
 	}
 	colchetes[contador+1] = '\0';
-		
+
 	colchetes[contador] = 'Z'; //boolean
 	if(!strcmp(colchetes,class_name)) return BOOLEAN_ARRAY;
-	
+
 	colchetes[contador] = 'B';
 	if(!strcmp(colchetes,class_name)) return BYTE_ARRAY;
-	
+
 	colchetes[contador] = 'C';
 	if(!strcmp(colchetes,class_name)) return CHAR_ARRAY;
-	
+
 	colchetes[contador] = 'S';
 	if(!strcmp(colchetes,class_name)) return SHORT_ARRAY;
-	
+
 	colchetes[contador] = 'I';
 	if(!strcmp(colchetes,class_name)) return INT_ARRAY;
-	
-	colchetes[contador] = 'L';
+
+	colchetes[contador] = 'J';
 	if(!strcmp(colchetes,class_name)) return LONG_ARRAY;
-	
+
 	colchetes[contador] = 'F';
 	if(!strcmp(colchetes,class_name)) return FLOAT_ARRAY;
-	
+
 	colchetes[contador] = 'D';
 	if(!strcmp(colchetes,class_name)) return DOUBLE_ARRAY;
-	
-	else 
-	printf("Erro: tipo de multianewarray nao identificado\n");  
+
+	colchetes[contador] = 'L';
+	if(!strcmp(colchetes,class_name)) return OBJETO_ARRAY;
+
+	else
+	printf("Erro: tipo de multianewarray nao identificado\n");
 	return -1;
 }
 
 void for_array_multidimensional(u4 nivel, u4 tamanho[], t_array *subarray[], u1 tag) {
 	u4 i;
-  
+
 	//nivel é inicializado com dimensao-1 quando for_array_multidimensional() é chamado.
-	//O menor nível possível é zero, que correspone ao nível do subarray do tipo do 
+	//O menor nível possível é zero, que correspone ao nível do subarray do tipo do
 	//multiarray em si (int, float, etc); os demais níveis correspondem a arrays de arrays.
 	if(nivel<0) return;
 	for(i=0; i<tamanho[nivel]; i++) {
 		//cria-se um subarray no nível inferior. Esse subarray é criado diversas vezes,
 		//de acordo com o tamanho do array no nível atual (por isso o for varia de 0
-		//até tamanho[nivel], que é o tamanho do array do nível atual. 
+		//até tamanho[nivel], que é o tamanho do array do nível atual.
 		//Isso é necessário porque cada entrada da lista de arrays do array atual precisa
 		//receber um subarray.
 		if(nivel!=1) subarray[nivel-1] = criar_array(ARRAY_ARRAY,tamanho[nivel-1],nivel);
-		
-		// Caso o nível seja um, não será array de array e a tag deve ser a que foi 
+
+		// Caso o nível seja um, não será array de array e a tag deve ser a que foi
 		// encontrada anteriormente.
 		else subarray[nivel-1] = criar_array(tag,tamanho[nivel-1],nivel);
-		
+
 		//a posicao i do subarray do nivel atual recebe o subarray criado
-		subarray[nivel]->info.array_array[i] = *subarray[nivel-1];
-		
-		//Se não esteja no penúltimo subnível, chama-se for_array_multidimensional() novamente.
+		subarray[nivel]->array_data[i] = (u4)subarray[nivel-1];
+
+		//Caso não esteja no penúltimo subnível, chama-se for_array_multidimensional() novamente.
 		//Caso esteja no penúltimo subnível, esse é o for mais interno; não é necessário criar
 		//novos subarrays, pois o próximo nível corresponde ao nível do tipo em si (int, float, etc)
 		if(nivel!=1) for_array_multidimensional(nivel-1,tamanho,subarray,tag);

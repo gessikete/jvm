@@ -1,3 +1,16 @@
+/*!
+   \file exibidor_constant_pool.c
+   \brief Implementação das funções de manipulação da exibição da constant_pool.
+
+   Esse arquivo contém a implementação das funções que manipulam a exibição da
+   constant_pool.
+
+   \author Alisson Carvalho                 12/0072521
+   \author Ana Carolina Lopes               11/0107578
+   \author Géssica Neves Sodré da Silva     11/0146115
+   \author Ivan Sena                        10/0088031
+   \author Laís Mendes Gonçalves            11/0033647
+*/
 #include "exibidor_constant_pool.h"
 
 void inicializar_vetor_exibidor(void (*funcoes_constant[]) (cp_info*,u2)) {

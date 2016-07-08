@@ -1,3 +1,16 @@
+/*!
+   \file arquivos.c
+   \brief Implementação das funções de manipulação de arquivos.
+
+   Esse arquivo contém a implementação das funções que definem as manipulações de
+   arquivos.
+
+   \author Alisson Carvalho                 12/0072521
+   \author Ana Carolina Lopes               11/0107578
+   \author Géssica Neves Sodré da Silva     11/0146115
+   \author Ivan Sena                        10/0088031
+   \author Laís Mendes Gonçalves            11/0033647
+*/
 #include "arquivos.h"
 
 /* Manipulação de arquivo de leitura */
@@ -44,7 +57,6 @@ u2 ler_u2(FILE *pt_arquivo){
     segundo_byte = ler_u1(pt_arquivo);
 
     // muda de big endian para little endian
-    // muda mesmo? parece q ele está só shiftando pro começo D:
     retorno_u2 = retorno_u2 | (((u2) primeiro_byte) << 8);
     retorno_u2 = retorno_u2 | (((u2) segundo_byte));
 

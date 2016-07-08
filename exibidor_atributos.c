@@ -1,5 +1,17 @@
-#include "exibidor_atributos.h"
+/*!
+   \file exibidor_atributos.c
+   \brief Implementação das funções de manipulação da exibição de atributos.
 
+   Esse arquivo contém a implementação das funções que manipulam a exibição de
+   atributos.
+
+   \author Alisson Carvalho                 12/0072521
+   \author Ana Carolina Lopes               11/0107578
+   \author Géssica Neves Sodré da Silva     11/0146115
+   \author Ivan Sena                        10/0088031
+   \author Laís Mendes Gonçalves            11/0033647
+*/
+#include "exibidor_atributos.h"
 
 void exibir_generic_info(attribute_info atributo) {
 	//passa as informações do atributo para novas variáveis
@@ -38,7 +50,6 @@ void exibir_code_attribute_misc(attribute_info atributo) {
 	fprintf(arquivo_saida, "\n\tCode Length: %d\n",code_length);
 
 }
-
 
 void exibir_code_attribute_bytecode(attribute_info atributo, cp_info constant_pool[]) {
 	code_attribute code_info = atributo.info.code_info;
@@ -209,7 +220,6 @@ void exibir_constant_attribute(attribute_info atributo,  cp_info constant_pool[]
 	exibir_generic_info(atributo);
 	exibir_constant_value_index(atributo);
 }
-
 
 void exibe_table_switch(u1 code[], u4 *ref_index) {
 	u4 index = *ref_index+1;

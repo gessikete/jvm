@@ -1,3 +1,15 @@
+/*!
+   \file macros.c
+   \brief Implementação das funções que manipulam as macros utilizadas pela JVM.
+
+   Este arquivo contém as implementações das funções necessárias para manipulação.
+
+   \author Alisson Carvalho                 12/0072521
+   \author Ana Carolina Lopes               11/0107578
+   \author Géssica Neves Sodré da Silva     11/0146115
+   \author Ivan Sena                        10/0088031
+   \author Laís Mendes Gonçalves            11/0033647
+*/
 #include "macros.h"
 
 void exibir_access_flag_class(u2 flag){

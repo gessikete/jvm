@@ -1,6 +1,7 @@
 /*!
    \file instrucoes_41-80.h
-   \brief Protótipo das funções para o módulo de frames.
+   \brief Protótipo das funções que implementam as instruções da Máquina Virtual
+   Java.
 
    Esse arquivo contém os protótipos das funções que definem as instruções executadas
    pela JVM.
@@ -11,14 +12,19 @@
    \author Ivan Sena                        10/0088031
    \author Laís Mendes Gonçalves            11/0033647
 */
-
+/**
+ * \addtogroup instrucoes
+ * @{
+ */
 #ifndef INSTRUCOES_41_80_H
 #define INSTRUCOES_41_80_H
 
+// #define DEBUG /** Descomentar caso deseje usar o modo debug */
+
 #include "instrucoes.h"
-#include "pilha_frames.h"
+#include "estruturas_dados.h"
 #include "leitor_constant_pool.h"
-#include "resolve.h"
+#include "recuperar_classe.h"
 
 /*!
    \brief Instrução dload_3. Recupera um double no array de variáveis locais com
@@ -433,3 +439,5 @@ void iastore(stack_frames *pilha_frames);
 void lastore(stack_frames *pilha_frames);
 
 #endif /* INSTRUCOES_41_80_H */
+
+/** @} */ // fim da definição de instrucoes

@@ -38,7 +38,7 @@ $ make
 
 Para executar esse programa utilizando o terminal a partir da raiz do projeto execute:
 ```
-$ ./jvm.exe { -e | -l } {arquivo.class}
+$ ./jvm.exe { -e | -l } {path} {arquivo}
 ```
 
 De forma que:

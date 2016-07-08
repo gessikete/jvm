@@ -15,127 +15,150 @@
 #include "instrucoes_161-201.h"
 
 void if_icmplt(stack_frames *pilha_frames) {
+	t_frame *frame = pilha_frames->first;
 	tipo_int comp_1, comp_2;
 
-	t_operand *temp_operando = NULL;
-
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	comp_1 = (int)temp_operando->data;
-
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	comp_2 = (int)temp_operando->data;
-
-	if(comp_1 < comp_2){
-		u4 offset_2;
-		u4 offset_1;
-
-		pilha_frames->first->pc++;
-		offset_1 = pilha_frames->first->code_info->code[pilha_frames->first->pc];
-		pilha_frames->first->pc++;
-		offset_2 = pilha_frames->first->code_info->code[pilha_frames->first->pc];
-
-		tipo_short offset_16bit = 0;
-		//gera o offset para  pc
-		offset_16bit = (tipo_short)((offset_1 << 8) | offset_2);
-		//adiciona offset ao valor de pc
-		pilha_frames->first->pc = pilha_frames->first->pc + (tipo_int)offset_16bit;
+	
+	t_operand *temp_operando2 = pop_operando(frame->operand_stack);
+	
+	if(temp_operando2->tag!=TAG_INTEGER) {
+		printf("\nErro: Tipo invalido (esperado: int) \n");
+		excecao = true;
+		free(temp_operando2);
+		return;
 	}
+	comp_2 = (int)temp_operando2->data;
 
-	// desaloca operando que foi desempilhado
-	free(temp_operando);
+	
+	t_operand *temp_operando1 = pop_operando(frame->operand_stack);
+	
+	if(temp_operando2->tag!=TAG_INTEGER) {
+		printf("\nErro: Tipo invalido (esperado: int) \n");
+		excecao = true;
+		free(temp_operando1);
+		free(temp_operando2);
+		return;
+	}
+	comp_1 = (int)temp_operando1->data;
+
+	
+	if(comp_1 < comp_2){
+		tipo_short offset_16bit = operando_u2(frame->code_info->code,frame->pc);
+		frame->pc = frame->pc + (tipo_short)offset_16bit-1;
+	} else frame->pc += 2;
+
+	// desaloca operandos que foram desempilhados
+	free(temp_operando1);
+	free(temp_operando2);
 }
 
 void if_icmpge(stack_frames *pilha_frames) {
+	t_frame *frame = pilha_frames->first;
 	tipo_int comp_1, comp_2;
 
-	t_operand *temp_operando = NULL;
+	t_operand *temp_operando2 = pop_operando(frame->operand_stack);
+	
+	if(temp_operando2->tag!=TAG_INTEGER) {
+		printf("\nErro: Tipo invalido (esperado: int) \n");
+		excecao = true;
+		free(temp_operando2);
+		return;
+	}
+	comp_2 = (int)temp_operando2->data;
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	comp_1 = (int)temp_operando->data;
-
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	comp_2 = (int)temp_operando->data;
+	
+	t_operand *temp_operando1 = pop_operando(frame->operand_stack);
+	
+	if(temp_operando2->tag!=TAG_INTEGER) {
+		printf("\nErro: Tipo invalido (esperado: int) \n");
+		excecao = true;
+		free(temp_operando1);
+		free(temp_operando2);
+		return;
+	}
+	comp_1 = (int)temp_operando1->data;
+	
 
 	if(comp_1 >= comp_2){
-		u4 offset_2;
-		u4 offset_1;
+		tipo_short offset_16bit = operando_u2(frame->code_info->code,frame->pc);
+		frame->pc = frame->pc + (tipo_short)offset_16bit-1;
+	} else frame->pc += 2;
 
-		pilha_frames->first->pc++;
-		offset_1 = pilha_frames->first->code_info->code[pilha_frames->first->pc];
-		pilha_frames->first->pc++;
-		offset_2 = pilha_frames->first->code_info->code[pilha_frames->first->pc];
-
-		tipo_short offset_16bit = 0;
-		//gera o offset para  pc
-		offset_16bit = (tipo_short)((offset_1 << 8) | offset_2);
-		//adiciona offset ao valor de pc
-		pilha_frames->first->pc = pilha_frames->first->pc + (tipo_int)offset_16bit;
-	}
-
-	// desaloca operando que foi desempilhado
-	free(temp_operando);
+	// desaloca operandos que foram desempilhados
+	free(temp_operando1);
+	free(temp_operando2);
 }
 
 void if_icmpgt(stack_frames *pilha_frames) {
+	t_frame *frame = pilha_frames->first;
 	tipo_int comp_1, comp_2;
 
-	t_operand *temp_operando = NULL;
+	t_operand *temp_operando2 = pop_operando(frame->operand_stack);
+	
+	if(temp_operando2->tag!=TAG_INTEGER) {
+		printf("\nErro: Tipo invalido (esperado: int) \n");
+		excecao = true;
+		free(temp_operando2);
+		return;
+	}
+	comp_2 = (int)temp_operando2->data;
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	comp_1 = (int)temp_operando->data;
-
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	comp_2 = (int)temp_operando->data;
+	
+	t_operand *temp_operando1 = pop_operando(frame->operand_stack);
+	
+	if(temp_operando2->tag!=TAG_INTEGER) {
+		printf("\nErro: Tipo invalido (esperado: int) \n");
+		excecao = true;
+		free(temp_operando1);
+		free(temp_operando2);
+		return;
+	}
+	comp_1 = (int)temp_operando1->data;
 
 	if(comp_1 > comp_2){
-		u4 offset_2;
-		u4 offset_1;
+		tipo_short offset_16bit = operando_u2(frame->code_info->code,frame->pc);
+		frame->pc = frame->pc + (tipo_short)offset_16bit-1;
+	} else frame->pc += 2;
 
-		pilha_frames->first->pc++;
-		offset_1 = pilha_frames->first->code_info->code[pilha_frames->first->pc];
-		pilha_frames->first->pc++;
-		offset_2 = pilha_frames->first->code_info->code[pilha_frames->first->pc];
-
-		tipo_short offset_16bit = 0;
-		//gera o offset para  pc
-		offset_16bit = (tipo_short)((offset_1 << 8) | offset_2);
-		//adiciona offset ao valor de pc
-		pilha_frames->first->pc = pilha_frames->first->pc + (tipo_int)offset_16bit;
-	}
-
-	// desaloca operando que foi desempilhado
-	free(temp_operando);
+	// desaloca operandos que foram desempilhados
+	free(temp_operando1);
+	free(temp_operando2);
 }
 
 void if_icmple(stack_frames *pilha_frames) {
+	t_frame *frame = pilha_frames->first;
 	tipo_int comp_1, comp_2;
 
-	t_operand *temp_operando = NULL;
+	t_operand *temp_operando2 = pop_operando(frame->operand_stack);
+	
+	if(temp_operando2->tag!=TAG_INTEGER) {
+		printf("\nErro: Tipo invalido (esperado: int) \n");
+		excecao = true;
+		free(temp_operando2);
+		return;
+	}
+	comp_2 = (int)temp_operando2->data;
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	comp_1 = (int)temp_operando->data;
-
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	comp_2 = (int)temp_operando->data;
+	
+	t_operand *temp_operando1 = pop_operando(frame->operand_stack);
+	
+	if(temp_operando2->tag!=TAG_INTEGER) {
+		printf("\nErro: Tipo invalido (esperado: int) \n");
+		excecao = true;
+		free(temp_operando1);
+		free(temp_operando2);
+		return;
+	}
+	comp_1 = (int)temp_operando1->data;
 
 	if(comp_1 <= comp_2){
-		u4 offset_2;
-		u4 offset_1;
-
-		pilha_frames->first->pc++;
-		offset_1 = pilha_frames->first->code_info->code[pilha_frames->first->pc];
-		pilha_frames->first->pc++;
-		offset_2 = pilha_frames->first->code_info->code[pilha_frames->first->pc];
-
-		tipo_short offset_16bit = 0;
-		//gera o offset para  pc
-		offset_16bit = (tipo_short)((offset_1 << 8) | offset_2);
-		//adiciona offset ao valor de pc
-		pilha_frames->first->pc = pilha_frames->first->pc + (tipo_int)offset_16bit;
-	}
-
+		tipo_short offset_16bit = operando_u2(frame->code_info->code,frame->pc);
+		frame->pc = frame->pc + (tipo_short)offset_16bit-1;
+	} else frame->pc += 2;
+	
 	// desaloca operando que foi desempilhado
-	free(temp_operando);
+	free(temp_operando1);
+	free(temp_operando2);
 }
 
 void if_acmpeq(stack_frames *pilha_frames) {
@@ -195,40 +218,19 @@ void if_acmpne(stack_frames *pilha_frames) {
 }
 
 void goto_(stack_frames *pilha_frames) {
-	u4 offset_2;
-	u4 offset_1;
-
-	pilha_frames->first->pc++;
-	offset_1 = pilha_frames->first->code_info->code[pilha_frames->first->pc];
-	pilha_frames->first->pc++;
-	offset_2 = pilha_frames->first->code_info->code[pilha_frames->first->pc];
-
-	tipo_short offset_16bit = 0;
-	//gera o offset para  pc
-	offset_16bit = (tipo_short)((offset_1 << 8) | offset_2);
+	t_frame *frame = pilha_frames->first;
+  
+	int16_t offset_16bit = (int16_t)operando_u2(frame->code_info->code,frame->pc)-1;
+	
 	//adiciona offset ao valor de pc
 	pilha_frames->first->pc = pilha_frames->first->pc + (tipo_int)offset_16bit;
 }
 
 void jsr(stack_frames *pilha_frames) {
-	//code_attribute *next_code_info;
-
-	//empilha endereço de retorno da próxima instrução
-	//next_code_info = pilha_frames->first->next->code_info;
-	//TODO: tirar warning
-	//push_operando(pilha_frames->first->next->pt_constant_pool->tag, (u4)next_code_info, pilha_frames->first->operand_stack); // TODO falta empilhar o tipo do operando como referencia
-
-	u4 offset_2;
-	u4 offset_1;
-
-	pilha_frames->first->pc++;
-	offset_1 = pilha_frames->first->code_info->code[pilha_frames->first->pc];
-	pilha_frames->first->pc++;
-	offset_2 = pilha_frames->first->code_info->code[pilha_frames->first->pc];
-
-	tipo_short offset_16bit = 0;
-	//gera o offset para  pc
-	offset_16bit = (tipo_short)((offset_1 << 8) | offset_2);
+	t_frame *frame = pilha_frames->first;
+  
+	int16_t offset_16bit = (int16_t)operando_u2(frame->code_info->code,frame->pc)-1;
+	
 	//adiciona offset ao valor de pc
 	pilha_frames->first->pc = pilha_frames->first->pc + (tipo_int)offset_16bit;
 }
@@ -243,138 +245,98 @@ void ret(stack_frames *pilha_frames) {
 }
 
 void tableswitch(stack_frames *pilha_frames) {
-	u1 default_1, default_2, default_3, default_4;
-	u1 low_1, low_2, low_3, low_4;
-	u1 high_1, high_2, high_3, high_4;
-
-	t_operand *temp_operando = NULL;
-
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	tipo_int index = (tipo_int)temp_operando->data;
-
-	//setting default_t
-	//passing the byte padding for correct address
-
-	do{
-		pilha_frames->first->pc++;
-		if(pilha_frames->first->pc % 4 == 0){
-			default_1 = pilha_frames->first->code_info->code[pilha_frames->first->pc];
-		}
-	}while(pilha_frames->first->pc % 4 != 0);
-
-	pilha_frames->first->pc++;
-	default_2 = pilha_frames->first->code_info->code[pilha_frames->first->pc];
-	pilha_frames->first->pc++;
-	default_3 = pilha_frames->first->code_info->code[pilha_frames->first->pc];
-	pilha_frames->first->pc++;
-	default_4 = pilha_frames->first->code_info->code[pilha_frames->first->pc];
-
-	tipo_int default_t = 	(tipo_int)(((u4)default_1 << 24) | ((u4)default_2 << 16) | ((u4)default_3 << 8) | (u4)default_4);
-
-	//setting low_t
-	pilha_frames->first->pc++;
-	low_1 = pilha_frames->first->code_info->code[pilha_frames->first->pc];
-	pilha_frames->first->pc++;
-	low_2 = pilha_frames->first->code_info->code[pilha_frames->first->pc];
-	pilha_frames->first->pc++;
-	low_3 = pilha_frames->first->code_info->code[pilha_frames->first->pc];
-	pilha_frames->first->pc++;
-	low_4 = pilha_frames->first->code_info->code[pilha_frames->first->pc];
-
-	tipo_int low_t = 	(tipo_int)(((u4)low_1 << 24) | ((u4)low_2 << 16) | ((u4)low_3 << 8) | (u4)low_4);
-
-	//setting hight_t
-	pilha_frames->first->pc++;
-	high_1 = pilha_frames->first->code_info->code[pilha_frames->first->pc];
-	pilha_frames->first->pc++;
-	high_2 = pilha_frames->first->code_info->code[pilha_frames->first->pc];
-	pilha_frames->first->pc++;
-	high_3 = pilha_frames->first->code_info->code[pilha_frames->first->pc];
-	pilha_frames->first->pc++;
-	high_4 = pilha_frames->first->code_info->code[pilha_frames->first->pc];
-
-	tipo_int high_t = (tipo_int)(((u4)high_1 << 24) | ((u4)high_2 << 16) | ((u4)high_3 << 8) | (u4)high_4);
-
-	//comparison for jump in the table os jump offsets
-	if((index < low_t) || (index > high_t)){
-		pilha_frames->first->pc = pilha_frames->first->pc + default_t;
+	t_frame *frame = pilha_frames->first;
+	u1 *code = frame->code_info->code;
+  
+	u4 index = frame->pc;
+	u1 alinhamento = index % 4;
+	int32_t i;
+	int32_t offset_default;
+	int32_t offset;
+	int32_t indice_inferior;
+	int32_t indice_superior;
+	
+	// Quantidade de bytes que procedem o opcode de table switch
+	switch(alinhamento) {
+		case 1: index+=3; break;
+		case 2: index+=2; break;
+		case 3: index+=1; break;
 	}
-	else{
-		pilha_frames->first->pc = pilha_frames->first->pc + pilha_frames->first->code_info->code[index - low_t];
+	
+	// Recupera o offset do default
+	offset_default = operando_u4(code,index);
+
+	// Atualiza o valor de index
+	index+=4;
+
+	// Recupera o índice inferior do switch
+	indice_inferior = operando_u4(code,index);
+	index+=4;
+
+	// Recupera o índice superior do switch
+	indice_superior = operando_u4(code,index);
+	index+=4;
+	
+	
+	t_operand *operando = pop_operando(frame->operand_stack);
+	
+	// Percorre o code até terminar o switch ou o case ser igual ao operando
+	for(i=indice_inferior; i<=indice_superior; i++) {
+		offset = (int32_t)operando_u4(code,index);
+		if((operando->data)==i) {
+			frame->pc += offset-1;
+			break;
+		} 
+		index+=4;
 	}
-	// desaloca operando que foi desempilhado
-	free(temp_operando);
+	if (i>indice_superior) frame->pc += offset_default-1;
+	
+	free(operando);
+	
 }
 
 void lookupswitch(stack_frames *pilha_frames) {
-	u1 default_1, default_2, default_3, default_4;
-	u1 nvalue_1, nvalue_2, nvalue_3, nvalue_4;
-	int aux = 0;
+	t_frame *frame = pilha_frames->first;
+	u1 *code = frame->code_info->code;
+  
+	u4 index = frame->pc;
+	u1 alinhamento = index % 4;
+	int32_t i;
+	int32_t offset_default;
+	int32_t offset;
+	int32_t pair;
+	int32_t npairs;
 
-	//setting default_t
-	//passing the byte padding for correct address
+	// Quantidade de bytes que procedem o opcode de lookup switch
+	switch(alinhamento) {
+		case 1: index+=3; break;
+		case 2: index+=2; break;
+		case 3: index+=1; break;
+	}
+	
+	offset_default = operando_u4(code,index);
+	index+=4;
 
-	do{
-		pilha_frames->first->pc++;
-		if(pilha_frames->first->pc % 4 == 0){
-			default_1 = pilha_frames->first->code_info->code[pilha_frames->first->pc];
-		}
-	}while(pilha_frames->first->pc % 4 != 0);
+	npairs = operando_u4(code,index);
+	index+=4;
+	
+	t_operand *operando = pop_operando(frame->operand_stack);
+	
+	for(i=0; i<npairs; i++) {
+		pair = (int32_t)operando_u4(code,index);
+		index+=4;
+		offset = (int32_t)operando_u4(code,index);
+		index+=4;
 
-	pilha_frames->first->pc++;
-	default_2 = pilha_frames->first->code_info->code[pilha_frames->first->pc];
-	pilha_frames->first->pc++;
-	default_3 = pilha_frames->first->code_info->code[pilha_frames->first->pc];
-	pilha_frames->first->pc++;
-	default_4 = pilha_frames->first->code_info->code[pilha_frames->first->pc];
-
-	tipo_int default_t = 	(tipo_int)(((u4)default_1 << 24) | ((u4)default_2 << 16) | ((u4)default_3 << 8) | (u4)default_4);
-
-	//setting nvalue_t
-	pilha_frames->first->pc++;
-	nvalue_1 = pilha_frames->first->code_info->code[pilha_frames->first->pc];
-	pilha_frames->first->pc++;
-	nvalue_2 = pilha_frames->first->code_info->code[pilha_frames->first->pc];
-	pilha_frames->first->pc++;
-	nvalue_3 = pilha_frames->first->code_info->code[pilha_frames->first->pc];
-	pilha_frames->first->pc++;
-	nvalue_4 = pilha_frames->first->code_info->code[pilha_frames->first->pc];
-
-	tipo_int nvalue_t = (tipo_int)(((u4)nvalue_1 << 24) | ((u4)nvalue_2 << 16) | ((u4)nvalue_3 << 8) | (u4)nvalue_4);
-
-	//desempilha key value na operand stack
-	t_operand *temp_operando = NULL;
-
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	tipo_int key = (tipo_int)temp_operando->data;
-
-	while(aux <= nvalue_t){
-		u1 match_1, match_2, match_3, match_4;
-
-		pilha_frames->first->pc++;
-		match_1 = pilha_frames->first->code_info->code[pilha_frames->first->pc];
-		pilha_frames->first->pc++;
-		match_2 = pilha_frames->first->code_info->code[pilha_frames->first->pc];
-		pilha_frames->first->pc++;
-		match_3 = pilha_frames->first->code_info->code[pilha_frames->first->pc];
-		pilha_frames->first->pc++;
-		match_4 = pilha_frames->first->code_info->code[pilha_frames->first->pc];
-
-		tipo_int match_t = (tipo_int)(((u4)match_1 << 24) | ((u4)match_2 << 16) | ((u4)match_3 << 8) | (u4)match_4);
-
-		if( key != match_t){
-			aux++;
-		}
-		else{
-			pilha_frames->first->pc = pilha_frames->first->pc + pilha_frames->first->code_info->code[pilha_frames->first->pc];
+		if(operando->data==pair) {
+			frame->pc += offset-1;
+			break;
 		}
 	}
-	if(aux > nvalue_t){
-		pilha_frames->first->pc = pilha_frames->first->pc + default_t;
-	}
-
-	// desaloca operando que foi desempilhado
-	free(temp_operando);
+	if(i==npairs) frame->pc += offset_default-1;
+	
+	free(operando);
+	
 }
 
 void ireturn(stack_frames *pilha_frames) {
@@ -382,11 +344,19 @@ void ireturn(stack_frames *pilha_frames) {
 	t_operand *temp_operando = NULL;
 
 	temp_operando = pop_operando(pilha_frames->first->operand_stack);
+	
+	if (temp_operando->tag!=TAG_INTEGER) {
+		printf("\nErro: Tipo invalido (esperado: int) \n");
+		excecao = true;
+		
+		// desaloca operando que foi desempilhado
+		free(temp_operando);
+		return;
+	}
+	
 	u4 value = temp_operando->data;
 
-	t_frame *temp_frame = NULL;
-	temp_frame = pop_frame(pilha_frames);
-	free(temp_frame);
+	pop_frame(pilha_frames);
 
 	//adicionar tipo de value empilhado
 	push_operando(temp_operando->tag, value,pilha_frames->first->operand_stack);
@@ -396,27 +366,35 @@ void ireturn(stack_frames *pilha_frames) {
 }
 
 void lreturn(stack_frames *pilha_frames) {
-	//desempilha value da operand stack
-	t_operand *temp_operando = NULL;
+	
+	t_operand *temp_operando_low = pop_operando(pilha_frames->first->operand_stack);
+	t_operand *temp_operando_high = pop_operando(pilha_frames->first->operand_stack);
+	
+	
+	if((temp_operando_low->tag!=TAG_LONG)||(temp_operando_high->tag!=TAG_LONG)) {
+		printf("\nErro: Tipo invalido (esperado: long) \n");
+		excecao = true;
+		free(temp_operando_low);
+		free(temp_operando_high);
+		return;
+	}
+	
+	u4 value_1 = temp_operando_low->data;
+	u1 tag_1 = temp_operando_low->tag;
+	
+	u4 value_2 = temp_operando_high->data;
+	u1 tag_2 = temp_operando_high->tag;
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	u4 value_1 = temp_operando->data;
-	u1 tag_1 = temp_operando->tag;
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	u4 value_2 = temp_operando->data;
-	u1 tag_2 = temp_operando->tag;
-
-	t_frame *temp_frame = NULL;
-	temp_frame = pop_frame(pilha_frames);
-	free(temp_frame);
+	pop_frame(pilha_frames);
 
 	//adicionar tipo de value empilhado
 	push_operando(tag_2, value_2,pilha_frames->first->operand_stack);
 	//adicionar tipo de value empilhado
 	push_operando(tag_1, value_1,pilha_frames->first->operand_stack);
 
-	// desaloca operando que foi desempilhado
-	free(temp_operando);
+	// desaloca operando que foram desempilhados
+	free(temp_operando_low);
+	free(temp_operando_high);
 }
 
 void freturn(stack_frames *pilha_frames) {
@@ -424,12 +402,20 @@ void freturn(stack_frames *pilha_frames) {
 	t_operand *temp_operando = NULL;
 
 	temp_operando = pop_operando(pilha_frames->first->operand_stack);
+	
+	if (temp_operando->tag!=TAG_FLOAT) {
+		printf("\nErro: Tipo invalido (esperado: float) \n");
+		excecao = true;
+		
+		// desaloca operando que foi desempilhado
+		free(temp_operando);
+		return;
+	}
+	
 	u4 value = temp_operando->data;
 	u1 tag = temp_operando->tag;
 
-	t_frame *temp_frame = NULL;
-	temp_frame = pop_frame(pilha_frames);
-	free(temp_frame);
+	pop_frame(pilha_frames);
 
 	//adicionar tipo de value empilhado
 	push_operando(tag, value,pilha_frames->first->operand_stack);
@@ -440,18 +426,25 @@ void freturn(stack_frames *pilha_frames) {
 
 void dreturn(stack_frames *pilha_frames) {
 	//desempilha value da operand stack
-	t_operand *temp_operando = NULL;
 
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	u4 value_1 = temp_operando->data;
-	u1 tag_1 = temp_operando->tag;
-	temp_operando = pop_operando(pilha_frames->first->operand_stack);
-	u4 value_2 = temp_operando->data;
-	u1 tag_2 = temp_operando->tag;
+	t_operand *temp_operando_low = pop_operando(pilha_frames->first->operand_stack);
+	t_operand *temp_operando_high = pop_operando(pilha_frames->first->operand_stack);
+	
+	if((temp_operando_low->tag!=TAG_DOUBLE)||(temp_operando_high->tag!=TAG_DOUBLE)) {
+		printf("\nErro: Tipo invalido (esperado: double) \n");
+		excecao = true;
+		free(temp_operando_low);
+		free(temp_operando_high);
+		return;
+	}
+	
+	u4 value_1 = temp_operando_low->data;
+	u1 tag_1 = temp_operando_low->tag;
+	
+	u4 value_2 = temp_operando_high->data;
+	u1 tag_2 = temp_operando_high->tag;
 
-	t_frame *temp_frame = NULL;
-	temp_frame = pop_frame(pilha_frames);
-	free(temp_frame);
+	pop_frame(pilha_frames);
 
 	//adicionar tipo de value empilhado
 	push_operando(tag_2, value_2,pilha_frames->first->operand_stack);
@@ -459,7 +452,8 @@ void dreturn(stack_frames *pilha_frames) {
 	push_operando(tag_1, value_1,pilha_frames->first->operand_stack);
 
 	// desaloca operando que foi desempilhado
-	free(temp_operando);
+	free(temp_operando_low);
+	free(temp_operando_high);
 }
 
 void areturn(stack_frames *pilha_frames) {
@@ -468,12 +462,11 @@ void areturn(stack_frames *pilha_frames) {
 	t_operand *temp_operando = NULL;
 
 	temp_operando = pop_operando(pilha_frames->first->operand_stack);
+	
 	u4 object_ref = temp_operando->data;
 	u1 tag = temp_operando->tag;
 
-	t_frame *temp_frame = NULL;
-	temp_frame = pop_frame(pilha_frames);
-	free(temp_frame);
+	pop_frame(pilha_frames);
 
 	//adicionar tipo de value empilhado
 	push_operando(tag, object_ref, pilha_frames->first->operand_stack);
@@ -483,131 +476,509 @@ void areturn(stack_frames *pilha_frames) {
 }
 
 void return_(stack_frames *pilha_frames) {
-	t_frame *temp_frame = NULL;
-	temp_frame = pop_frame(pilha_frames);
-	free(temp_frame);
+	pop_frame(pilha_frames);
 }
 
-// TODO OBS: ESSA INSTRUÇÃO NÃO ESTÁ TODA IMPLEMENTADA!
+
 void getstatic(stack_frames *pilha_frames) {
 	t_frame *frame = pilha_frames->first;
-	u2 indice_constant_pool = operando_u2(frame->code_info->code,frame->pc);
-	char *name_field;
+	
+	// Processo para recuperar nome da classe, nome do field e descritor.
+	u2 field_index = operando_u2(frame->code_info->code,frame->pc);
+	u2 class_index = frame->pt_constant_pool[field_index].info.fieldref_info.class_index;
+	u2 name_and_type_index = frame->pt_constant_pool[field_index].info.fieldref_info.name_and_type_index;
+	u2 field_name_index = frame->pt_constant_pool[name_and_type_index].info.name_and_type_info.name_index;
+	u2 descriptor_index = frame->pt_constant_pool[name_and_type_index].info.name_and_type_info.descriptor_index;
+	
+	
+	char *class_name = recupera_class_name(frame->pt_constant_pool,class_index);
+	char *field_name = recupera_utf8(frame->pt_constant_pool,field_name_index);
+	char *descriptor = recupera_utf8(frame->pt_constant_pool,descriptor_index);
+	
 
 	// Incrementa pc para a próxima instrução
 	frame->pc += 2;
 
-	name_field = recupera_elemento_como_string_constant_pool(frame->pt_constant_pool,indice_constant_pool);
-
 	// Verificando se classe a ser carregada não é de System.out
-	if(!strcmp(name_field,"java/lang/System.out")) {
-		free(name_field);
+	if((!strcmp(class_name,"java/lang/System"))&&(!strcmp(field_name,"out"))) {
+		free(class_name);
+		free(field_name);
+		free(descriptor);
 		return;
+	} 
+			
+	class_file *classe = busca_classe(class_name,lista_classes);
+	t_field *field = NULL;
+	
+	if(classe!=frame->this_class) {
+		field = busca_field_classe_estatica(classe,frame,class_name,field_name,descriptor);
+	} else {
+		field = busca_field(frame->lista_fields,
+					     frame->this_class->fields_count,
+					     frame->pt_constant_pool,
+					     field_name,
+					     descriptor);
 	}
+	if(field) {
+		u4 value;
+			
+		switch(field->tag) {
+			case TAG_UTF8: value = field->field_data; break; 
+			case TAG_INTEGER: value = field->field_data; break;
+			case TAG_FLOAT: value = field->field_data; break;
+			case TAG_OBJECT_REF: value = (u4)field->field_data; break;
+			case TAG_ARRAY_REF: value = (u4)field->field_data; break;
+			case TAG_LONG: {
+				value = field->field_data;
+				u4 value_high = (field->field_data>>32);
+				push_operando(field->tag,value_high,frame->operand_stack);
+				
+				break;
+			}
+			case TAG_DOUBLE: {
+				value = field->field_data; 
+				u4 value_high = (field->field_data>>32);
+				push_operando(field->tag,value_high,frame->operand_stack);
+				break;
+			}
+			default: {
+				printf("\nErro (getstatic): tag desconhecida\n");
+				excecao = true;
+				return;
+			}
+		}
+			
+		push_operando(field->tag,value,frame->operand_stack);
+		
+	} 
 
-	free(name_field);
+	free(class_name);
+	free(field_name);
+	free(descriptor);
 }
 
 void putstatic(stack_frames *pilha_frames) {
+	t_frame *frame = pilha_frames->first;
+	t_operand *operando = pop_operando(frame->operand_stack);
+	
+	u4 value = operando->data;
+	
+	// Processo para recuperar nome da classe, nome do field e descritor.
+	u2 field_index = operando_u2(frame->code_info->code,frame->pc);
+	u2 class_index = frame->pt_constant_pool[field_index].info.fieldref_info.class_index;
+	
+	
+	u2 name_and_type_index = frame->pt_constant_pool[field_index].info.fieldref_info.name_and_type_index;
+	
+	u2 field_name_index = frame->pt_constant_pool[name_and_type_index].info.name_and_type_info.name_index;
+	u2 descriptor_index = frame->pt_constant_pool[name_and_type_index].info.name_and_type_info.descriptor_index;
+	
+	
+	char *class_name = recupera_class_name(frame->pt_constant_pool,class_index);
+	char *field_name = recupera_utf8(frame->pt_constant_pool,field_name_index);
+	char *descriptor = recupera_utf8(frame->pt_constant_pool,descriptor_index);
+	
+	frame->pc += 2;
+	
+	class_file *classe = busca_classe(class_name,lista_classes);
 
+	t_field *field = NULL;
+	
+	
+	if(classe!=frame->this_class) {
+		field = busca_field_classe_estatica(classe,frame,class_name,field_name,descriptor);
+	} else {
+		field = busca_field(frame->lista_fields,
+					     frame->this_class->fields_count,
+					     frame->pt_constant_pool,
+					     field_name,
+					     descriptor);
+	}
+	
+	if(field) {
+		u2 tag = tipo_descritor(descriptor);
+		field->tag = tag;
+		switch(tag) {
+			case TAG_UTF8: field->field_data = value; break; 
+			case TAG_INTEGER: field->field_data = value; break;
+			case TAG_FLOAT: field->field_data = value; break;
+			case TAG_OBJECT_REF: field->field_data = value; break;
+			case TAG_ARRAY_REF: field->field_data = value; break;
+			case TAG_LONG: {
+				t_operand *operando_high = pop_operando(frame->operand_stack);
+				field->field_data = (value|((((u8)operando_high->data)<<32)));
+				break;
+			}
+			case TAG_DOUBLE: {
+				t_operand *operando_high = pop_operando(frame->operand_stack);
+				field->field_data = (value|((((u8)operando_high->data)<<32))); 
+				break;
+			}
+			default: {
+				printf("\nErro (putstatic): tag desconhecida\n");
+				excecao = true;
+				return;
+			}
+		}
+	}
+	
+	free(operando);
+	free(class_name);
+	free(field_name);
+	free(descriptor);
 }
 
 void getfield(stack_frames *pilha_frames) {
+	t_frame *frame = pilha_frames->first;
+	
+	// Processo para recuperar nome da classe, nome do field e descritor.
+	u2 field_index = operando_u2(frame->code_info->code,frame->pc);
+	u2 name_and_type_index = frame->pt_constant_pool[field_index].info.fieldref_info.name_and_type_index;
+	u2 field_name_index = frame->pt_constant_pool[name_and_type_index].info.name_and_type_info.name_index;
+	u2 descriptor_index = frame->pt_constant_pool[name_and_type_index].info.name_and_type_info.descriptor_index;
+	
+	
+	char *field_name = recupera_utf8(frame->pt_constant_pool,field_name_index);
+	char *descriptor = recupera_utf8(frame->pt_constant_pool,descriptor_index);
+	
+	frame->pc+=2;
+	
+	// Pega operando que guarda o endereço do objeto
+	t_operand *operando_objeto = pop_operando(frame->operand_stack);
+	
+	// Recupera-se o objeto usando o endereço
+	t_objeto *objeto = (t_objeto*)operando_objeto->data;
+	
+	
+	// Busca-se o field que se deseja recuperar
+	t_field *field = busca_field(objeto->lista_fields,
+				     objeto->tamanho_lista_fields,
+				     objeto->pt_classe->constant_pool,
+				     field_name,descriptor);
+	
+	u2 tag = tipo_descritor(descriptor);
+	
+	// Caso seja double, deve-se fazer dois empilhamentos.
+	if ((tag==TAG_DOUBLE)||(tag==TAG_LONG)) {
+		push_operando(tag,field->field_data>>32,frame->operand_stack);
+	}
+	
+	push_operando(tag,field->field_data,frame->operand_stack);
 
+	// Desaloca-se o operando que foi desempilhado
+	free(operando_objeto);
 }
 
 void putfield(stack_frames *pilha_frames) {
+	t_frame *frame = pilha_frames->first;
+	
+	// Processo para recuperar nome da classe, nome do field e descritor.
+	u2 field_index = operando_u2(frame->code_info->code,frame->pc);
+	u2 name_and_type_index = frame->pt_constant_pool[field_index].info.fieldref_info.name_and_type_index;
+	u2 field_name_index = frame->pt_constant_pool[name_and_type_index].info.name_and_type_info.name_index;
+	u2 descriptor_index = frame->pt_constant_pool[name_and_type_index].info.name_and_type_info.descriptor_index;
+	
+	char *field_name = recupera_utf8(frame->pt_constant_pool,field_name_index);
+	char *descriptor = recupera_utf8(frame->pt_constant_pool,descriptor_index);
+	
+	frame->pc+=2;
+	
+	
+	// Recupera-se o valor que será colocado no field
+	t_operand *operando_value = pop_operando(frame->operand_stack);
+	u8 value = operando_value->data;
+	
+	u2 tag = tipo_descritor(descriptor);
+	
+	// Caso seja double ou long, deve-se desempilhar operando mais de uma vez
+	if ((tag==TAG_DOUBLE)||(tag==TAG_LONG)) {
+		t_operand *operando_value_high = pop_operando(frame->operand_stack);
+		value |= (((u8)operando_value_high->data)<<32);
+	}
+	
+	// Desempilha-se o endereço do objeto
+	t_operand *operando_objeto = pop_operando(frame->operand_stack);
 
+	// Recupera-se o objeto com o endereço desempilhado.
+	t_objeto *objeto = (t_objeto*)operando_objeto->data;
+	
+	// Busca-se o field
+	t_field *field = busca_field(objeto->lista_fields,
+				     objeto->tamanho_lista_fields,
+				     objeto->pt_classe->constant_pool,
+				     field_name,descriptor);
+	
+	// Field recebe o valor desempilhado da operand stack
+	field->field_data = value;
+	
+	// Desalocando operando desempilhados
+	free(operando_value);
+	free(operando_objeto);
 }
 
-// TODO OBS: ESSA INSTRUÇÃO NÃO ESTÁ TODA IMPLEMENTADA! SÓ FOI FEITA A PARTE DO PRINT
+
 void invokevirtual(stack_frames *pilha_frames) {
-	// Ponteiro para frame para facilitar acesso
 	t_frame *frame = pilha_frames->first;
+	
+	// Recuperando índices para obter o nome da classe, método e descritor
+	u2 methodref_index = operando_u2(frame->code_info->code,frame->pc);
+	u2 class_index = frame->pt_constant_pool[methodref_index].info.methodref_info.class_index;
+	u2 name_and_type_index = frame->pt_constant_pool[methodref_index].info.methodref_info.name_and_type_index;
+	u2 method_name_index = frame->pt_constant_pool[name_and_type_index].info.name_and_type_info.name_index;
+	u2 descriptor_index = frame->pt_constant_pool[name_and_type_index].info.name_and_type_info.descriptor_index;
+	
+	char *class_name = recupera_class_name(frame->pt_constant_pool,class_index);
+	char *method_name = recupera_utf8(frame->pt_constant_pool,method_name_index);
+	char *descriptor = recupera_utf8(frame->pt_constant_pool,descriptor_index);
 
-	// Indice do método na constant pool
-	u2 indice_metodo = operando_u2(frame->code_info->code,frame->pc);
-
-	// Acessa constant pool por meio de indice_metodo e encontra o índice de name_and_type_info
-	u2 indice_nome_tipo = frame->pt_constant_pool[indice_metodo].info.methodref_info.name_and_type_index;
-
-	// Descobre o índice para a string do descritor do método
-	u2 indice_descritor = frame->pt_constant_pool[indice_nome_tipo].info.name_and_type_info.descriptor_index;
-	char *nome_metodo;
-	char *descritor_metodo;
-
-
-	// Incrementa pc para a próxima instrução
-	frame->pc += 2;
-
-	// Recupera nome do método para checar se é o print
-	nome_metodo = recupera_elemento_como_string_constant_pool(frame->pt_constant_pool,indice_metodo);
-
-	// Recupera descritor para (caso seja o System.out.print) saber o tipo do
-	// elemento que será impresso
-	descritor_metodo = recupera_utf8(frame->pt_constant_pool,indice_descritor);
-
+	frame->pc+=2;
+	
 	// Descobre se o método é de imprimir na tela
-	if((!strcmp(nome_metodo,"java/io/PrintStream.println"))||(!strcmp(nome_metodo,"java/io/PrintStream.print"))) {
-		// Recupera o primeiro operando da operand_stack
-		t_operand *operando_1 = pop_operando(frame->operand_stack);
+	if(!strcmp(class_name,"java/io/PrintStream")) {
+		if(frame->operand_stack->first) {
+			// Recupera o primeiro operando da operand_stack
+			t_operand *operando_1 = pop_operando(frame->operand_stack);
 
-		// Elemento a ser impresso é um inteiro
-		if(!strcmp(descritor_metodo,"(I)V")) {
-			printf("\n%d",operando_1->data);
+			// Elemento a ser impresso é um inteiro
+			if(!strcmp(descriptor,"(I)V")) {
+				printf("\n%d",operando_1->data);
+			}
+
+			// Elemento a ser impresso é um float
+			else if (!strcmp(descriptor,"(F)V")) {
+				printf("\n%f",u4_to_float(operando_1->data));
+			}
+
+			// Elemento a ser impresso é um long
+			else if (!strcmp(descriptor,"(J)V")) {
+				t_operand *operando_2 =  pop_operando(frame->operand_stack);
+				printf("\n%li",u8_to_long(operando_1->data,operando_2->data));
+
+				free(operando_2);
+			}
+
+			// Elemento a ser impresso é um double
+			else if (!strcmp(descriptor,"(D)V")) {
+				t_operand *operando_2 =  pop_operando(frame->operand_stack);
+				printf("\n%f",u8_to_double(operando_1->data,operando_2->data));
+
+				free(operando_2);
+			}
+			
+			// Elemento a ser impresso é um boolean
+			else if(!strcmp(descriptor,"(Z)V")) {
+				if((operando_1->data)==true) printf("\ntrue");
+				else printf("\nfalse");
+			}
+
+			// Elemento a ser impresso é um char
+			else if (!strcmp(descriptor,"(C)V")) {
+				printf("\n%c",operando_1->data);
+			}
+
+			// Elemento a ser impresso é uma string
+			else if (!strcmp(descriptor,"(Ljava/lang/String;)V")) {
+				printf("\n%s",recupera_elemento_como_string_constant_pool(frame->pt_constant_pool,operando_1->data));
+			}
+
+			free(class_name);
+			free(method_name);
+			free(descriptor);
+			free(operando_1);
+		} else {
+			printf("\n");
 		}
-
-		// Elemento a ser impresso é um float
-		else if (!strcmp(descritor_metodo,"(F)V")) {
-			printf("\n%f",u4_to_float(operando_1->data));
-		}
-
-		// Elemento a ser impresso é um long
-		else if (!strcmp(descritor_metodo,"(J)V")) {
-			t_operand *operando_2 =  pop_operando(frame->operand_stack);
-			printf("\n%li",u8_to_long(operando_1->data,operando_2->data));
-
-			free(operando_2);
-		}
-
-		// Elemento a ser impresso é um double
-		else if (!strcmp(descritor_metodo,"(D)V")) {
-			t_operand *operando_2 =  pop_operando(frame->operand_stack);
-			printf("\n%f",u8_to_double(operando_1->data,operando_2->data));
-
-			free(operando_2);
-		}
-
-		// Elemento a ser impresso é um char
-		else if (!strcmp(descritor_metodo,"(C)V")) {
-			printf("\n%c",operando_1->data);
-		}
-
-		// Elemento a ser impresso é uma string
-		else if (!strcmp(descritor_metodo,"(Ljava/lang/String;)V")) {
-			printf("\n%s",recupera_elemento_como_string_constant_pool(frame->pt_constant_pool,operando_1->data));
-		}
-
-		free(nome_metodo);
-		free(descritor_metodo);
-		free(operando_1);
 		return;
 	}
+	
+	t_parameter_stack *pilha_parametros = carregar_parameter_stack(descriptor,frame->operand_stack);
+	
+	t_operand *operando = pop_operando(frame->operand_stack);
+		
+	t_objeto *objeto = (t_objeto*)operando->data;
+	
+	method_info *method = recupera_metodo(&(objeto->pt_classe),method_name,descriptor);
+	
+	if (pilha_parametros==NULL) pilha_parametros = alocar_parameter_stack(TAG_OBJECT_REF,(u4)objeto);
+	else push_parametro(TAG_OBJECT_REF,(u4)objeto,pilha_parametros);
+	
+	push_frame(objeto->pt_classe,
+		   objeto->classes_estaticas,
+		   objeto->lista_fields,
+		   pilha_parametros,method,
+		   objeto->pt_classe->constant_pool,
+		   pilha_frames);
 
-	free(nome_metodo);
-	free(descritor_metodo);
+	free(class_name);
+	free(method_name);
+	free(descriptor);
 }
 
 void invokespecial(stack_frames *pilha_frames) {
+	t_frame *frame = pilha_frames->first;
+	
+	// Recuperando índices para obter o nome da classe, método e descritor
+	u2 methodref_index = operando_u2(frame->code_info->code,frame->pc);
+	u2 class_index = frame->pt_constant_pool[methodref_index].info.methodref_info.class_index;
+	u2 name_and_type_index = frame->pt_constant_pool[methodref_index].info.methodref_info.name_and_type_index;
+	u2 method_name_index = frame->pt_constant_pool[name_and_type_index].info.name_and_type_info.name_index;
+	u2 descriptor_index = frame->pt_constant_pool[name_and_type_index].info.name_and_type_info.descriptor_index;
+	
+	char *class_name = recupera_class_name(frame->pt_constant_pool,class_index);
+	char *method_name = recupera_utf8(frame->pt_constant_pool,method_name_index);
+	char *descritor = recupera_utf8(frame->pt_constant_pool,descriptor_index);
+	
+	frame->pc+=2;
+	
+	t_objeto *objeto = NULL;
+	t_operand *operando = NULL;
+	
+	if(!strcmp(class_name,"java/lang/Object")) {
+		return;
+	}
+	
+	if(!strcmp(method_name,"<init>")) {
+		//Declara elementos para um novo frame
+		t_parameter_stack *pilha_parametros_init = carregar_parameter_stack(descritor,frame->operand_stack);
+		
+		operando = pop_operando(frame->operand_stack);
+		
+		objeto = (t_objeto*)operando->data;
+		
+		method_info *method_clinit = recupera_metodo(&(objeto->pt_classe),"<clinit>","()V");
+		if(method_clinit!=NULL) {
+			t_parameter_stack *pilha_parametros_clnit = alocar_parameter_stack(TAG_OBJECT_REF,(u4)(objeto->pt_classe));
+		
+			push_frame(objeto->pt_classe,objeto->classes_estaticas,objeto->lista_fields,
+				    pilha_parametros_clnit,method_clinit,objeto->pt_classe->constant_pool,
+				   pilha_frames);
+		}
+		
+		if (pilha_parametros_init==NULL) pilha_parametros_init = alocar_parameter_stack(TAG_OBJECT_REF,(u4)objeto);
+		else push_parametro(TAG_OBJECT_REF,(u4)objeto,pilha_parametros_init);
+		
+		method_info *method_init = recupera_metodo(&(objeto->pt_classe),method_name,descritor);
 
+		push_frame(objeto->pt_classe,objeto->classes_estaticas,objeto->lista_fields,
+				    pilha_parametros_init,method_init,objeto->pt_classe->constant_pool,
+				   pilha_frames);
+		
+		return;
+	}
+	
+	class_file *classe = busca_classe(class_name,lista_classes);
+	
+	//Caso em que invoca metodo private
+	if(classe==frame->this_class) {
+		t_parameter_stack *pilha_parametros = carregar_parameter_stack(descritor,frame->operand_stack);
+	
+		operando = pop_operando(frame->operand_stack);
+		objeto = (t_objeto*)operando->data; 
+		
+		method_info *metodo = recupera_metodo(&(objeto->pt_classe),method_name,descritor);
+		
+		push_frame(objeto->pt_classe,objeto->classes_estaticas,objeto->lista_fields,
+				    pilha_parametros,metodo,objeto->pt_classe->constant_pool,
+				   pilha_frames);
+		
+	} else printf("\nTentativa de acesso ilegal a metodo private\n");
+	
+	free(operando);
 }
 
 void invokestatic(stack_frames *pilha_frames) {
+	t_frame *frame = pilha_frames->first;
+	
+	// Recuperando índices para obter o nome da classe, método e descritor
+	u2 methodref_index = operando_u2(frame->code_info->code,frame->pc);
+	u2 class_index = frame->pt_constant_pool[methodref_index].info.methodref_info.class_index;
+	u2 name_and_type_index = frame->pt_constant_pool[methodref_index].info.methodref_info.name_and_type_index;
+	u2 method_name_index = frame->pt_constant_pool[name_and_type_index].info.name_and_type_info.name_index;
+	u2 descriptor_index = frame->pt_constant_pool[name_and_type_index].info.name_and_type_info.descriptor_index;
+	
+	char *class_name = recupera_class_name(frame->pt_constant_pool,class_index);
+	char *method_name = recupera_utf8(frame->pt_constant_pool,method_name_index);
+	char *descritor = recupera_utf8(frame->pt_constant_pool,descriptor_index);
+	
+	class_file *classe = busca_classe(class_name,lista_classes);
+	 
+	cp_info *constant_pool = classe->constant_pool;
+	
+	t_field *lista_fields = NULL;
+	lista_classes_estaticas *classes_estaticas = NULL;
+	
+
+	
+	// Verifica se a pilha de operandos está vazia ou se o primeiro elemento 
+	//é uma referência a objeto.
+	if((frame->operand_stack->first==NULL)||(frame->operand_stack->first->tag!=TAG_OBJECT_REF)) {
+		if(frame->this_class!=classe) {
+			classe_estatica *elemento_lista_classes_estaticas = 
+				 busca_classe_estatica (classe,frame->classes_estaticas->first);
+			
+			if(!elemento_lista_classes_estaticas) {
+				classes_estaticas = alocar_lista_classes_estaticas();
+			}
+			else {
+				classes_estaticas = elemento_lista_classes_estaticas->classes_estaticas;
+			}
+			
+		} else {
+			//Caso seja a mesma classe, mantém os fields e classes estáticas para o próximo frame
+			lista_fields = frame->lista_fields;
+			classes_estaticas = frame->classes_estaticas;
+		}
+	} else {
+		//TODO: caso seja um objeto
+	}
+	
+	method_info *metodo = recupera_metodo(&classe,method_name,descritor);
+	
+	t_parameter_stack *pilha_parametros = carregar_parameter_stack(descritor,frame->operand_stack);
+	
+	push_frame(classe,classes_estaticas,lista_fields,pilha_parametros,metodo,constant_pool,pilha_frames);
+	
+	frame->pc += 2;
+	
+	free(class_name);
+	free(method_name);
+	free(descritor);
 
 }
 
 void invokeinterface(stack_frames *pilha_frames) {
-
+	t_frame *frame = pilha_frames->first;
+	
+	// Recuperando índices para obter o nome da classe, método e descritor
+	u2 methodref_index = operando_u2(frame->code_info->code,frame->pc);
+	u2 name_and_type_index = frame->pt_constant_pool[methodref_index].info.methodref_info.name_and_type_index;
+	u2 method_name_index = frame->pt_constant_pool[name_and_type_index].info.name_and_type_info.name_index;
+	u2 descriptor_index = frame->pt_constant_pool[name_and_type_index].info.name_and_type_info.descriptor_index;
+	
+	char *method_name = recupera_utf8(frame->pt_constant_pool,method_name_index);
+	char *descritor = recupera_utf8(frame->pt_constant_pool,descriptor_index);
+	
+	frame->pc+=4;
+	
+	t_operand *operando = pop_operando(frame->operand_stack);
+	
+	t_objeto *objeto = (t_objeto*)operando->data;
+	
+	method_info *method = recupera_metodo(&(objeto->pt_classe),method_name,descritor);
+	
+	t_parameter_stack *pilha_parametros = carregar_parameter_stack(descritor,frame->operand_stack);
+	
+	if (pilha_parametros==NULL) {
+	  pilha_parametros = alocar_parameter_stack(TAG_OBJECT_REF,(u4)objeto);
+	}
+	else push_parametro(TAG_OBJECT_REF,(u4)objeto,pilha_parametros);
+	
+	push_frame(objeto->pt_classe,
+		   objeto->classes_estaticas,
+		   objeto->lista_fields,
+		   pilha_parametros,method,
+		   objeto->pt_classe->constant_pool,
+		   pilha_frames);
 }
 
 void unused(stack_frames *pilha_frames) {
@@ -615,7 +986,23 @@ void unused(stack_frames *pilha_frames) {
 }
 
 void new_(stack_frames *pilha_frames) {
+	t_frame *frame = pilha_frames->first;
+	
+	u2 class_index = operando_u2(frame->code_info->code,frame->pc);
+	
+	char *class_name = recupera_class_name(frame->pt_constant_pool,class_index);
+	
+	class_file *classe = busca_classe(class_name,lista_classes);
+	
+	t_objeto *objeto = novo_objeto(classe);
+	if(objeto->pt_classe==frame->this_class) {
+		free(objeto->lista_fields);
+		objeto->lista_fields = frame->lista_fields;
+	}
+	
+	push_operando(TAG_OBJECT_REF, (u4)objeto, frame->operand_stack);
 
+	frame->pc+=2;
 }
 
 void newarray(stack_frames *pilha_frames) {
@@ -650,7 +1037,26 @@ void newarray(stack_frames *pilha_frames) {
 }
 
 void anewarray(stack_frames *pilha_frames) {
+	t_frame *frame = pilha_frames->first;
+	
+	u2 class_index = operando_u2(frame->code_info->code,frame->pc);
+	
+	char *class_name = recupera_class_name(frame->pt_constant_pool,class_index);
+	
+	u2 dimensao = 0;
+	while(class_name[dimensao]=='[') dimensao++;
+	
+	frame->pc+=2;
+	
+	t_operand *operando = pop_operando(frame->operand_stack);
+	u2 tamanho_array = operando->data;
+		
+	t_array *array = criar_array(ARRAY_ARRAY,tamanho_array,dimensao);
+	
+	push_operando(TAG_ARRAY_REF,(u4)array,frame->operand_stack);
 
+	free(operando);
+	
 }
 
 void arraylength(stack_frames *pilha_frames) {
@@ -706,9 +1112,9 @@ void multianewarray(stack_frames *pilha_frames) {
 	// tag do último subarray (dimensão 1)
 	tag = tipo_multiarray(class_name,dimensao);
 
+	// Os tamanhos de cada dimensão do array são salvos em um vetor.
 	u4 tamanho[dimensao];
 
-	// Os tamanhos de cada dimensão do array são salvos em um vetor.
 	for(u1 i=0; i<dimensao; i++) {
 		// Retira-se cada tamanho dos operandos salvos na operand_stack
 		t_operand *operando = pop_operando(frame->operand_stack);
@@ -734,18 +1140,47 @@ void multianewarray(stack_frames *pilha_frames) {
 }
 
 void ifnull(stack_frames *pilha_frames) {
-
+	t_frame *frame = pilha_frames->first;
+  
+	t_operand *operando = pop_operando(frame->operand_stack);
+	
+	if(operando->data==0) {
+		int16_t offset_16bit = (int16_t)operando_u2(frame->code_info->code,frame->pc)-1;
+		
+		//adiciona offset ao valor de pc
+		pilha_frames->first->pc = pilha_frames->first->pc + (tipo_int)offset_16bit;
+	} else frame->pc+=2;
 }
 
 void ifnonnull(stack_frames *pilha_frames) {
-
+	t_frame *frame = pilha_frames->first;
+  
+	t_operand *operando = pop_operando(frame->operand_stack);
+	
+	if(operando->data!=0) {
+		int16_t offset_16bit = (int16_t)operando_u2(frame->code_info->code,frame->pc)-1;
+		
+		//adiciona offset ao valor de pc
+		pilha_frames->first->pc = pilha_frames->first->pc + (tipo_int)offset_16bit;
+	} else frame->pc+=2;
 }
 
 void goto_w(stack_frames *pilha_frames) {
-
+	t_frame *frame = pilha_frames->first;
+  
+	int32_t offset_32bit = (int32_t)operando_u4(frame->code_info->code,frame->pc)-1;
+	
+	//adiciona offset ao valor de pc
+	pilha_frames->first->pc = pilha_frames->first->pc + (tipo_int)offset_32bit;
 }
 
 void jsr_w(stack_frames *pilha_frames) {
+	t_frame *frame = pilha_frames->first;
+  
+	int32_t offset_32bit = (int32_t)operando_u4(frame->code_info->code,frame->pc)-1;
+	
+	//adiciona offset ao valor de pc
+	pilha_frames->first->pc = pilha_frames->first->pc + (tipo_int)offset_32bit;
 
 }
 

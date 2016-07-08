@@ -11,6 +11,16 @@
    \author Ivan Sena                        10/0088031
    \author Laís Mendes Gonçalves            11/0033647
 */
+
+/**
+ * \defgroup definicoes Definições
+ *
+ *  Módulo responsável pelas definições utilizadas pela JVM. Estruturas, typdefs
+ *  e macros além as funções que manipulam as macros.
+ *
+ * @{
+ */
+
 #ifndef LIB_TYPES
 #define LIB_TYPES
 
@@ -19,11 +29,9 @@
 // Inclui stdboll para uso de tipos booleanos
 #include <stdbool.h>
 
-/**
- * \defgroup int_class Inteiros para leitura do class file
+/*
  * Definindo as estruturas para manipulação de inteiros tamanhos 8bits, 16bits,
  * 32bits e 64bits da biblioteca stdint.h
- * @{
  */
 
 //! unsigned char
@@ -35,20 +43,16 @@ typedef uint8_t u1;
 typedef uint16_t u2;
 
 //! unsigned int
-/*! Define o tipo u2 como um uint16_t */
+/*! Define o tipo u2 como um uint32_t */
 typedef uint32_t u4;
 
 //! unsigned long long
-/*! Define o tipo u2 como um uint16_t */
+/*! Define o tipo u2 como um uint64_t */
 typedef uint64_t u8;
 
-/** @} */ // fim da definição de int_class
 
-
-/**
- * \defgroup tipos_var Tipos de variáveis Java
+/*
  * Estruturas para manipulação dos tipos das variáveis do Java.
- * @{
  */
 
 //! Boolean
@@ -83,13 +87,17 @@ typedef float tipo_float;
 /*! Define o tipo double */
 typedef double tipo_double;
 
-/** @} */ // fim da definição de tipos_var
 
-/**
- * \defgroup global_var Variáveis Globais
+/*
     Variáveis usadas globalmente por todo o programa.
- * @{
  */
+
+//! Diretório onde se encontram os arquivos .class
+/*!
+    Diretório onde se encontram os arquivos .class e serão executadas as procuras
+    pelos .class a medida que chamadas a métodos externos foram feitas.
+*/
+char *path;
 
 //! Arquivo de saída
 /*!
@@ -105,13 +113,16 @@ FILE *arquivo_saida;
 */
 u1 wide_;
 
-/** @} */ // fim da definição de global_var
+//! Flag de sinalização de exceção.
+/*!
+    Flag que sinaliza a ocorrência de uma exceção na execução da JVM. Uma vez
+    que uma exceção ocorre essa flag é sinalizada e a execução da JVM deve parar.
+*/
+bool excecao;
 
 
-/**
- * \defgroup const_pool Constant Pool
+/*
     Definições das estruturas da constant pool.
- * @{
  */
 
 /*! Representa uma classe ou interface. */
@@ -201,12 +212,9 @@ typedef struct {
 
  } cp_info;
 
-/** @} */ // Fim das definições de const_pool
 
- /**
-  * \defgroup def_atributos Atributos
+ /*
      Definições das estruturas dos atributos.
-  * @{
   */
 
  struct t_attribute_info;
@@ -275,12 +283,9 @@ typedef struct {
 
  } attribute_info;
 
- /** @} */ // Fim das definições de def_atributos
 
- /**
-  * \defgroup def_metodos Métodos
+ /*
      Definições das estruturas de métodos.
-  * @{
   */
  typedef struct {
  	u2 access_flags;
@@ -290,12 +295,9 @@ typedef struct {
  	attribute_info *attributes;			//attributes[attributes_count]
  } method_info;
 
- /** @} */ // Fim das definições de def_metodos
 
- /**
-  * \defgroup def_campos Campos
+ /*
      Definições das estruturas de campos.
-  * @{
   */
  typedef struct {
     u2 access_flags;
@@ -304,7 +306,6 @@ typedef struct {
     u2 attributes_count;
     attribute_info *attributes;  //attributes[attributes_count]
  } field_info;
- /** @} */ // Fim das definições de def_campos
 
  /*! Definição da estrutura do arquivo de classe. */
  typedef struct {
@@ -326,43 +327,13 @@ typedef struct {
      attribute_info *attributes;
  } class_file;
 
- /**
-  * \defgroup def_java Java
+
+ /*
      Definição de estruturas do Java.
-  * @{
   */
 
- /*! Estrutura que modela um tipo de variável em java. */
- typedef struct {
+ struct struct_field;
 
-     uint8_t tag; /*!< Representa o tipo especificado na union, conforme as macros definidas em macros.h. */
-
-     union {
-         tipo_boolean campo_boolean;
-         tipo_byte campo_byte;
-         tipo_short campo_short;
-         tipo_int campo_int;
-         tipo_long campo_long;
-         tipo_float campo_float;
-         tipo_double campo_double;
-     } info; /*!< Mapeia o campo em um dos tipos definidos acima, conforme o valor de tag. */
- } tipo_java;
-
- /*! Estrutura que modela um runtime field. */
- typedef struct {
-     tipo_java dados_field;
-     field_info *pt_field;
-     class_file *pt_classe;
- } runtime_field;
-
- /*! Estrutura que modela um objeto java. */
- typedef struct struct_objeto {
-     class_file *pt_classe;
-     u2 tamanho_lista_runtime_fields;
-     runtime_field *lista_runtime_fields;
-     u2 tamanho_lista_arrays;
-     struct struct_array *lista_arrays;
- } objeto;
 
  /*! Estrutura que modela um array em java. */
  typedef struct struct_array {
@@ -370,42 +341,28 @@ typedef struct {
      u1 tag;
      u4 tamanho;
      u1 dimensoes;
-
-     union {
-         tipo_boolean *array_boolean;
-         tipo_byte *array_byte;
-         tipo_char *array_char;
-         tipo_short *array_short;
-         tipo_int *array_int;
-         tipo_long *array_long;
-         tipo_float *array_float;
-         tipo_double *array_double;
-         struct struct_objeto *array_objeto;
-         struct struct_array *array_array;
-     } info;
-
+     u8 *array_data;
  } t_array;
+
+
+ /*! Estrutura que modela um field. */
+ typedef struct struct_field {
+     u1 tag;
+     field_info *pt_field;
+     u8 field_data;
+ } t_field;
 
 
  /*! Estrutura que modela uma tabela de classe. */
  typedef struct list_class{
   	class_file *pt_classe;
   	struct list_class *next;
+	struct list_class *last;
  }elemento_tabela_classes;
 
 
- /*! Estrutura que modela uma lista de objetos. */
- typedef struct struct_lista_objetos {
-     objeto *pt_objeto;
-     struct struct_lista_objetos *proximo;
- } elemento_lista_objetos;
-
- /** @} */ // Fim das definições de def_java
-
- /**
-  * \defgroup def_pilha Frames e Operandos
+ /*
      Definição das estruturas de frames e operandos.
-  * @{
   */
 
 /*! Estrutura que modela um operando. */
@@ -420,19 +377,56 @@ typedef struct operand_stack {
 	t_operand *first;
 } t_operand_stack;
 
+
+/*! Estrutura que modela um parâmetro. */
+typedef struct parameter {
+    u1 tag;
+    u4 data;
+    struct parameter *next;
+} t_parameter;
+
+/*! Estrutura que modela a pilha de parâmetros. */
+typedef struct parameter_stack {
+	t_parameter *first;
+} t_parameter_stack;
+
+struct struct_classe_estatica;
+
+typedef struct {
+	struct struct_classe_estatica *first;
+	struct struct_classe_estatica *last;
+} lista_classes_estaticas;
+
+ /*! Estrutura que modela um objeto java. */
+ typedef struct struct_objeto {
+     class_file *pt_classe;
+     u2 tamanho_lista_fields;
+     struct struct_field *lista_fields;
+     lista_classes_estaticas *classes_estaticas;
+ } t_objeto;
+
+typedef struct struct_classe_estatica {
+	class_file *pt_classe;
+	t_field *lista_fields;
+	u2 tamanho_lista_fields;
+	lista_classes_estaticas *classes_estaticas;
+	struct struct_classe_estatica *next;
+	struct struct_classe_estatica *last;
+} classe_estatica;
+
+
 /*! Estrutura que modela um frame. */
 typedef struct frame {
-	char *nome_metodo;
+	class_file *this_class;
 	method_info *pt_metodo;
 	u4 pc;
 	code_attribute *code_info;
 	u4 array_variaveis_locais_count;
 	u4 *array_variaveis_locais;
 	t_operand_stack *operand_stack;
-	u2 constant_pool_count;
 	cp_info *pt_constant_pool;
-	elemento_lista_objetos *lista_objetos;
-	u4 return_value;
+	lista_classes_estaticas *classes_estaticas;
+	t_field *lista_fields;
 	struct frame *next;
 } t_frame;
 
@@ -441,12 +435,8 @@ typedef struct {
     t_frame *first;
 } stack_frames;
 
-/** @} */ // Fim das definições de def_pilha
-
-/**
- * \defgroup def_instrucoes Instruções
+/*
     Definição das estruturas de instruções.
- * @{
  */
 
 /*! ponteiro para as funções que implementam as instruções. */
@@ -459,7 +449,10 @@ typedef struct {
 	u1 operando;
 } t_instrucoes;
 
-/** @} */ // Fim das definições de def_intrucoes
 
+// Array de lista de classes
+extern elemento_tabela_classes *lista_classes;
 
 #endif /* LIB_TYPES */
+
+/** @} */ // fim da definição de definicoes

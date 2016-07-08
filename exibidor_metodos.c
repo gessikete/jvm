@@ -1,3 +1,16 @@
+/*!
+   \file exibidor_metodos.c
+   \brief Implementação das funções de manipulação da exibição de métodos.
+
+   Esse arquivo contém a implementação das funções que manipulam a exibição de
+   métodos.
+
+   \author Alisson Carvalho                 12/0072521
+   \author Ana Carolina Lopes               11/0107578
+   \author Géssica Neves Sodré da Silva     11/0146115
+   \author Ivan Sena                        10/0088031
+   \author Laís Mendes Gonçalves            11/0033647
+*/
 #include "exibidor_metodos.h"
 
 void exibir_methods(method_info *methods, u2 methods_count, cp_info *const_pool){

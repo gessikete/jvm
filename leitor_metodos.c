@@ -1,3 +1,16 @@
+/*!
+   \file leitor_metodos.c
+   \brief Implementação das funções que manipulam a leitura dos métodos.
+
+   Este arquivo contém as implementações das funções que manipulam a leitura dos
+   métodos.
+
+   \author Alisson Carvalho                 12/0072521
+   \author Ana Carolina Lopes               11/0107578
+   \author Géssica Neves Sodré da Silva     11/0146115
+   \author Ivan Sena                        10/0088031
+   \author Laís Mendes Gonçalves            11/0033647
+*/
 #include "leitor_metodos.h"
 
 method_info *carregar_methods(u2 methods_count, u2 constant_pool_count, cp_info *constant_pool, FILE *pt_arquivo){

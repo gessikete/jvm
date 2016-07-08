@@ -1,65 +1,102 @@
+/*!
+   \file execucao_jvm.c
+   \brief Implementação das funções de execução da JVM.
+
+   Esse arquivo contém a implementação das funções que definem o execução da JVM.
+
+   \author Alisson Carvalho                 12/0072521
+   \author Ana Carolina Lopes               11/0107578
+   \author Géssica Neves Sodré da Silva     11/0146115
+   \author Ivan Sena                        10/0088031
+   \author Laís Mendes Gonçalves            11/0033647
+*/
 #include "execucao_jvm.h"
 
+elemento_tabela_classes *lista_classes;
+
+//void inicializar_jvm(class_file *pt_classe, int argc, char *argv[]) {
 void inicializar_jvm(class_file *pt_classe) {
-	method_info *methods;
-	cp_info *constant_pool;
-	char *init_method;
-	char *main_method;
-	u2 indice_init;
-	u2 indice_main;
-	u2 methods_count;
-	t_frame *frame = NULL;
-	stack_frames *pilha_frames = NULL;
+	stack_frames *pilha_frames;
+	cp_info *constant_pool = pt_classe->constant_pool;
+	method_info *init_method;
+	method_info *main_method;
+	method_info *clinit_method;
+	_Bool flag_args = false;
+	t_parameter_stack *pilha_parametros_main = NULL;
+	t_parameter_stack *pilha_parametros_init = NULL;
 
-	if(pt_classe->methods_count>1) {
-		methods = pt_classe->methods;
+	// Busca <clinit>
+	clinit_method = recupera_metodo(&pt_classe,"<clinit>","()V");
 
-		constant_pool = pt_classe->constant_pool;
+	// Busca <init>
+	init_method = recupera_metodo(&pt_classe,"<init>","()V");
 
-		// Strings recebem os nomes dos primeiros métodos para verificar se são init e main
-		indice_init = methods[0].name_index;
-		init_method = recupera_utf8(constant_pool,indice_init);
+	if(!init_method) {
+		printf("\nErro! Metodo <init> nao encontrado\n");
+		return;
+	}
 
-		methods_count = pt_classe->methods_count;
+	// Busca main
+	main_method = recupera_metodo(&pt_classe,"main","()V");
 
-		// Busca método main entre os métodos da classe
-		while(methods_count>1) {
-			indice_main = methods[methods_count-1].name_index;
-			main_method = recupera_utf8(constant_pool,indice_main);
+	// Verifica se encontrou método main sem argumentos.
+	if(!main_method) {
 
-			methods_count--;
-			if(!strcmp(main_method,"main")) break;
+		// Senão, procura main com argumentos.
+		main_method = recupera_metodo(&pt_classe,"main","([Ljava/lang/String;)V");
+
+		// Se não encontrar, exibe mensagem de erro.
+		if(!main_method) {
+			printf("\nErro! Metodo main nao encontrado\n");
+			return;
 		}
+		// Se encontrar, seta a flag de argumentos para true.
+		else flag_args = true;
+	}
+	
+	// Aloca lista de campos
+	t_field *lista_fields = alocar_lista_fields(pt_classe);
+	
+	// Aloca lista de classes estaticas 
+	lista_classes_estaticas *classes_estaticas = alocar_lista_classes_estaticas();
 
-		// Checa os primeiros métodos
-		if((!strcmp(init_method,"<init>")||(!strcmp(init_method,"<clinit>")))&&(!strcmp(main_method,"main"))) {
+	// Aloca pilha de parâmetros para init (que na prática será um ponteiro para a classe)
+	pilha_parametros_init = alocar_parameter_stack(TAG_OBJECT_REF,(u4)pt_classe);
 
-			// Aloca a pilha (que inicialmente estará vazia)
-			pilha_frames = alocar_stack_frames();
+	if (flag_args) {
+		// Aloca pilha de parâmetros para a main (args[])
+		//pilha_parametros_main = alocar_parameter_stack();
+		//TODO: quando main recebe args[] (pilha_parametros_main recebe args[])
+	}
 
-			// Aloca o primeiro frame (do método <init>)
-			frame = alocar_frame(&(methods[0]),constant_pool,NULL);
+	// Aloca a pilha de frames com a main como primeiro elemento
+	pilha_frames = alocar_stack_frames(pt_classe,classes_estaticas,lista_fields,pilha_parametros_main,main_method,constant_pool);
 
-			// Primeiro elemento da pilha recebe ponteiro para o frame de init
-			pilha_frames->first = frame;
+	if (clinit_method) {
+		// Push de clinit (caso exista)
+		push_frame(pt_classe,classes_estaticas,lista_fields,pilha_parametros_init,clinit_method,constant_pool,pilha_frames);
+	}
 
-			// Push do método main
-			push_frame(&(methods[methods_count]),constant_pool,pilha_frames);
+	// Inicializa lista de classes carregadas
+	lista_classes = nova_classe(pt_classe, NULL);
 
-			executar_jvm(pilha_frames);
-
-		} else printf("\nClasse informada nao pode ser inicializada (nao possui metodo <init> e/ou <main>)");
-	} else printf("\nClasse informada nao pode ser inicializada (nao possui main)");
-
-	free(init_method);
-	free(main_method);
+	executar_jvm(pilha_frames);
 }
 
 void executar_jvm(stack_frames *pilha_frames) {
+	// Inicializa vetor de instruções
 	init_instrucoes();
 
-	while (strcmp(pilha_frames->first->nome_metodo,"<init>")) {
-		instrucoes[pilha_frames->first->code_info->code[pilha_frames->first->pc++]].funcao_instrucao(pilha_frames);
+	// Inicializa a flag de exceção com false
+	excecao = false;
+
+	// Executa até a pilha de frames se esvaziar
+	while (pilha_frames->first) {
+		//printf("\n%s",instrucoes[pilha_frames->first->code_info->code[pilha_frames->first->pc]].nome);
+		if(!excecao)
+			instrucoes[pilha_frames->first->code_info->code[pilha_frames->first->pc++]].funcao_instrucao(pilha_frames);
+		else
+			break;
 	}
 	printf("\n");
 }

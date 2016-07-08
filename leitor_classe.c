@@ -1,12 +1,31 @@
+/*!
+   \file leitor_classe.c
+   \brief Implementação das funções que manipulam a leitura das classe.
+
+   Este arquivo contém as implementações das funções que manipulam a leitura das
+   classes.
+
+   \author Alisson Carvalho                 12/0072521
+   \author Ana Carolina Lopes               11/0107578
+   \author Géssica Neves Sodré da Silva     11/0146115
+   \author Ivan Sena                        10/0088031
+   \author Laís Mendes Gonçalves            11/0033647
+*/
 #include "leitor_classe.h"
 
 class_file *carregar_classe(char *nome_arquivo){
 	FILE *pt_arquivo = NULL;
 	class_file *pt_classe = NULL;
 
+	// Recupera nome do arquivo
+	char *nome_arquivo_completo = (char*)malloc(sizeof(char)*(strlen(nome_arquivo)+strlen(path)+7));
+	strcpy(nome_arquivo_completo,path);
+	strcat(nome_arquivo_completo,nome_arquivo);
+	strcat(nome_arquivo_completo,".class");
+
 	// Tenta abrir o arquivo passado para leitura
 	// caso não consiga, retorna falso e termina a execução
-	pt_arquivo = abrir_arquivo_leitura(nome_arquivo);
+	pt_arquivo = abrir_arquivo_leitura(nome_arquivo_completo);
 	if(pt_arquivo == NULL){
 		return NULL;
 	}
@@ -85,9 +104,13 @@ class_file *carregar_classe(char *nome_arquivo){
 	// contendo informações do atributo
 	pt_classe->attributes = carregar_atributos(pt_arquivo, pt_classe->attributes_count,
 							pt_classe->constant_pool, pt_classe->constant_pool_count);
+        // Valida o nome
+        // if(validar_nome(pt_classe->constant_pool, pt_classe->attributes_count, pt_classe->attributes, nome_arquivo)==false) {
+        //         printf("\nErro: Nome do source file diferente do arquivo informado.\n");
+        //         return NULL;
+        // }
 
-
-    // Tenta fechar o arquivo depois que a classe foi completamene carregada
+        // Tenta fechar o arquivo depois que a classe foi completamene carregada
 	fechar_arquivo(pt_arquivo);
 	return pt_classe;
 }
@@ -112,7 +135,6 @@ void desalocar_interfaces(u2 *pt_interfaces){
 		free(pt_interfaces);
 	}
 }
-
 
 void desalocar_classe(class_file *pt_classe){
 	if(pt_classe != NULL){
